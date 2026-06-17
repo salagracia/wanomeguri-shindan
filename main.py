@@ -206,7 +206,7 @@ def main():
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(
         output_dir,
-        f"45歳からの信頼される男診断_{test_input['name'].replace(' ', '')}_v1.3_{datetime.now().strftime('%Y%m%d')}.pdf",
+        f"45歳からの信頼される男診断_{test_input['name'].replace(' ', '')}_v1.4_{datetime.now().strftime('%Y%m%d')}.pdf",
     )
 
     print(f"\n=== PDF生成中: {output_path} ===")
