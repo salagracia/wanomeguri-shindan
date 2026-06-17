@@ -780,9 +780,12 @@ def generate_pdf(user_data: dict, result: dict, output_path: str):
         story.append(Paragraph(lp_deep.get('for_50s', ''), styles['quote']))
 
     # ============== 第8章：名前に宿る、あなたへの祝福 ==============
+    # v2.2: ニックネーム入力の場合は姓名判断章を丸ごとスキップ。
+    # 本名入力の方だけが姓名判断を含む詳細レポートを受け取る。
+    is_real_name = user_data.get('is_real_name', True)
     from calculations.narrative_generator import get_chapter8_narrative
-    ch8 = get_chapter8_narrative(user_data, result)
-    seimei = result.get('seimei', {})
+    ch8 = get_chapter8_narrative(user_data, result) if is_real_name else None
+    seimei = result.get('seimei', {}) if is_real_name else {}
 
     if ch8:
         story.append(Paragraph("第8章：名前に宿る、あなたへの祝福", styles['h1']))
