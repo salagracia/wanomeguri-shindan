@@ -128,21 +128,15 @@ for n in NARRATIVE_QUESTIONS:
     st.caption(f"💡 ヒント：{n['hint']}")
     ans = st.text_area(
         label=n['question'], key=f"n_{n['id']}",
-        label_visibility="collapsed", height=150,
+        label_visibility="collapsed", height=120,
         max_chars=n['max_length'],
-        placeholder="（200字以上を目安に、できるだけ具体的に）"
+        placeholder="（任意・書ける範囲で構いません）"
     )
     narrative_answers[n['id']] = ans
-    # 文字数カウンタ（入力済みの場合のみ）＋反映タイミングの説明
+    # 文字数カウンタ（柔らかいトーン）
     char_count = len((ans or '').strip())
-    if char_count == 0:
-        st.caption("📝 入力後、テキストボックスの外を一度クリックすると、文字数が反映されます")
-    elif char_count < 50:
-        st.caption(f"📝 現在 **{char_count}字** / 最低50字必要（入力後ボックス外をクリックで反映）")
-    elif char_count < 200:
-        st.caption(f"📝 現在 **{char_count}字** / 200字を目安にするとさらに深い診断になります")
-    else:
-        st.caption(f"✅ 現在 **{char_count}字** — 十分な分量です")
+    if char_count > 0:
+        st.caption(f"📝 {char_count}字 — 書いてくれた分だけ、レポートが深くなります")
     st.markdown("")
 
 
@@ -157,7 +151,7 @@ if not input_valid:
     if not (last_name and first_name and name_kana and birth_place):
         st.warning("⚠️ 基本情報（姓・名・カタカナ氏名・出生地）をすべて入力してください。")
     elif answered < 20:
-        st.warning(f"⚠️ 質問にあと {20 - answered} 問は回答してください（最低20問必須・精度向上のため）。")
+        st.info(f"あと {20 - answered} 問、答えていただくと診断できます（より正確な判定のため、20問以上を目安にしています）。")
 
 if st.button("🛡️ あなたの「信頼される男タイプ」を診断する", disabled=not input_valid):
     with st.spinner("あなたの占術データと性格を計算中... 🔮"):
