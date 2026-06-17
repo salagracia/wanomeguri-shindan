@@ -48,7 +48,7 @@ st.markdown("""
 🧭 **占術**：数秘・西洋占星術・九星気学・四柱推命・動物キャラ・算命学・帝王学・姓名判断
 🛡️ **独自診断**：**45歳からの 信頼される男 診断**（24問・4タイプ・メイン+隠れ）
 📈 **運勢**：天中殺・3年の立て直しサイクル
-✍️ **自由記述**：仕事の没頭体験・信念・妻への本音・空回りの正体（4問）
+✍️ **自由記述**：仕事の没頭体験・信念・妻への本音・空回りの正体（4問・**任意**）
 
 **所要時間：約10〜13分**　→ **個人設計図PDF**をメールでお届け
 """)
@@ -116,12 +116,12 @@ progress = st.progress(answered / len(KAIKA_QUESTIONS))
 st.caption(f"📊 進捗：{answered} / {len(KAIKA_QUESTIONS)} 問")
 
 
-# ========== Step 3: 自由記述（必須・4問） ==========
+# ========== Step 3: 自由記述（任意・4問） ==========
 st.divider()
-st.subheader("✍️ Step 3：自由記述（必須・4問）")
-st.caption("あなたの言葉が、診断の深さを決めます。200字以上、書ける範囲で具体的にお願いします。")
-st.info("💡 この4問から、あなたの **強みの核・信念・家族への本音・空回りの正体** が浮かび上がります。\n\n"
-        "⚠️ **入力後、テキストボックスの外を一度クリックすると文字数が反映されます**（Streamlitの仕様です）。")
+st.subheader("✍️ Step 3：自由記述（任意・4問／飛ばしてもOK）")
+st.caption("書ける範囲で構いません。1〜2問だけでも、書いた分だけレポートが深くなります。")
+st.info("💡 この4問は **書くと診断レポートに引用されますが、空欄でも診断は実行できます**。\n\n"
+        "時間がない方は、ここを飛ばして下のボタンへどうぞ。")
 
 narrative_answers = {}
 for n in NARRATIVE_QUESTIONS:
@@ -150,12 +150,9 @@ for n in NARRATIVE_QUESTIONS:
 # ========== 診断ボタン ==========
 st.divider()
 
-narrative_filled = all(len(narrative_answers.get(n['id'], '').strip()) >= 50
-                        for n in NARRATIVE_QUESTIONS)
-
+# v1.5: 自由記述は任意化（空欄でもOK）。書いた分だけレポートが深くなる仕様。
 input_valid = bool(last_name and first_name and name_kana and birth_place
-                   and email and "@" in email and answered >= 20
-                   and narrative_filled)
+                   and email and "@" in email and answered >= 20)
 
 if not input_valid:
     if not (last_name and first_name and name_kana and birth_place):
@@ -164,10 +161,6 @@ if not input_valid:
         st.warning("⚠️ メールアドレスを入力してください（診断結果のPDFをメールでお送りします）。")
     elif answered < 20:
         st.warning(f"⚠️ 質問にあと {20 - answered} 問は回答してください（最低20問必須・精度向上のため）。")
-    elif not narrative_filled:
-        st.warning("⚠️ 自由記述4問にそれぞれ50字以上ご記入ください。\n\n"
-                   "💡 **入力済みなのにこの警告が出ている場合**：テキストボックスの外を一度クリックしてください。"
-                   "Streamlitの仕様で、ボックスからフォーカスが外れて初めて文字数が反映されます。")
 
 if st.button("🛡️ あなたの「信頼される男タイプ」を診断する", disabled=not input_valid):
     with st.spinner("あなたの占術データと性格を計算中... 🔮"):
