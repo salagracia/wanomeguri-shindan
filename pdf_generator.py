@@ -1063,7 +1063,7 @@ def generate_pdf(user_data: dict, result: dict, output_path: str):
 
     story.append(Spacer(1, 8*mm))
     story.append(Paragraph(
-        f"45歳からの 信頼される男 診断 v3.0 ／ YouTube「信頼される男の流儀」公式診断<br/>"
+        f"45歳からの 信頼される男 診断 v4.0 ／ YouTube「信頼される男の流儀」公式診断<br/>"
         f"発行日：{datetime.now().strftime('%Y年%m月%d日')}",
         styles['small']
     ))
