@@ -160,6 +160,10 @@ def send_pdf():
         "subject": f"【わの巡り診断】あなたの診断結果「{type_name}」をお届けします",
         "text": body,
     }
+    # 管理者（サラさん）にも同じメール＋PDF添付をBCCで届ける（結果の控え）
+    admin_email = os.environ.get("ADMIN_EMAIL", "monthly@salagracia.com")
+    if admin_email and admin_email != email:
+        params["bcc"] = [admin_email]
     if pdf_b64:
         params["attachments"] = [{
             "filename": f"wa-meguri-shindan_{today}.pdf",
