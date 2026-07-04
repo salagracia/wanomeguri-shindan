@@ -846,6 +846,9 @@ function loadSeimei() {
     html += `<p><strong>◆ 総格（人生全体を貫く大運）：${s.gokaku.soukaku}画「${s.soukaku.name}」</strong><br>${s.soukaku.description}</p>`;
     html += `<p><strong>◆ 三才配置：${s.sansai.combo}</strong><br>${s.sansai.meaning}</p>`;
     html += `<p style="font-size:13px;color:#8a7a5c;">天格：${s.gokaku.tenkaku}画「${s.tenkaku.name}」／地格：${s.gokaku.chikaku}画「${s.chikaku.name}」／外格：${s.gokaku.gaikaku}画「${s.gaikaku.name}」</p>`;
+    if (d.approx) {
+      html += `<p style="font-size:12px;color:#8a7a5c;">※ お名前の一部の文字は概算の画数で計算しています。</p>`;
+    }
     document.getElementById('seimeiContent').innerHTML = html;
     document.getElementById('seimeiSection').classList.remove('hidden');
   }).catch(() => {});

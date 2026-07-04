@@ -28,9 +28,10 @@ except ImportError:
     resend = None
 
 try:
-    from calculations.seimei_handan import seimei_handan
+    from calculations.seimei_handan import seimei_handan, KANJI_KAKUSU, KANA_KAKUSU
 except Exception:
     seimei_handan = None
+    KANJI_KAKUSU, KANA_KAKUSU = {}, {}
 
 app = Flask(__name__, static_folder="static")
 app.config["MAX_CONTENT_LENGTH"] = 30 * 1024 * 1024  # PDF添付アップロード用に30MBまで許可
@@ -112,7 +113,10 @@ def seimei():
         return jsonify({"ok": False})
     try:
         result = seimei_handan(sei, mei)
-        return jsonify({"ok": True, "result": result})
+        # 画数辞書にない文字が含まれる場合は「概算」フラグを立てる（誠実な注記のため）
+        unknown = [c for c in (sei + mei)
+                   if c.strip() and c not in KANJI_KAKUSU and c not in KANA_KAKUSU]
+        return jsonify({"ok": True, "result": result, "approx": bool(unknown)})
     except Exception:
         return jsonify({"ok": False})
 
