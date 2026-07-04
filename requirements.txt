@@ -1,11 +1,3 @@
-streamlit
-reportlab
-openpyxl
-pillow
-requests
-pdfplumber
-lunar-python
-skyfield
+flask
+gunicorn
 resend
-matplotlib
-numpy

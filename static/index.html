@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>わの巡り診断 | あなたの巡りが止まる原因</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc4 100%);
+    color: #3a3428;
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.8;
+  }
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    background: #fdfaf3;
+    border-radius: 20px;
+    padding: 40px 30px;
+    box-shadow: 0 10px 40px rgba(90, 70, 40, 0.15);
+    position: relative;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #ddd0b8;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #5a4628;
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+  .header .subtitle {
+    font-size: 14px;
+    color: #8a7a5c;
+    letter-spacing: 0.15em;
+  }
+  .intro { padding: 20px 0 30px; text-align: center; }
+  .intro p { font-size: 16px; color: #5a4a3a; margin-bottom: 20px; }
+  .btn {
+    background: #7a5c3a;
+    color: #fdfaf3;
+    border: none;
+    padding: 16px 40px;
+    font-size: 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+  }
+  .btn:hover { background: #5a4628; transform: translateY(-2px); }
+  .btn:disabled { background: #b0a080; cursor: not-allowed; transform: none; }
+  .btn-secondary {
+    background: transparent;
+    color: #7a5c3a;
+    border: 2px solid #7a5c3a;
+  }
+  .btn-secondary:hover { background: #7a5c3a; color: #fdfaf3; }
+
+  .birthday-form { padding: 30px 0; text-align: center; }
+  .birthday-form h3 { font-size: 18px; color: #5a4628; margin-bottom: 8px; }
+  .birthday-form p { color: #8a7a5c; font-size: 14px; margin-bottom: 30px; }
+  .birthday-inputs { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+  .birthday-inputs select {
+    padding: 14px 18px;
+    border: 2px solid #ddd0b8;
+    border-radius: 12px;
+    background: #fdfaf3;
+    font-family: inherit;
+    font-size: 15px;
+    color: #3a3428;
+    cursor: pointer;
+  }
+
+  .gender-section { margin: 20px 0 30px; text-align: center; }
+  .gender-label { font-size: 14px; color: #7a5c3a; margin-bottom: 12px; letter-spacing: 0.1em; font-weight: 500; }
+  .gender-options { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .gender-btn {
+    padding: 12px 20px;
+    border: 2px solid #ddd0b8;
+    border-radius: 25px;
+    background: #fdfaf3;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    color: #5a4a3a;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .gender-btn input[type="radio"] { accent-color: #7a5c3a; }
+  .gender-btn:hover { border-color: #7a5c3a; background: #f5eddb; }
+  .gender-btn:has(input:checked) { background: #7a5c3a; color: #fdfaf3; border-color: #7a5c3a; }
+  .section-label { font-size: 14px; color: #7a5c3a; margin: 20px 0 10px; text-align: center; letter-spacing: 0.1em; font-weight: 500; }
+
+  .optional-section {
+    margin: 30px 0;
+    padding: 20px;
+    background: #f9f2df;
+    border-radius: 12px;
+    border: 1px dashed #ddd0b8;
+  }
+  .optional-title { font-size: 14px; color: #7a5c3a; margin-bottom: 6px; font-weight: 500; letter-spacing: 0.1em; }
+  .optional-hint { font-size: 12px; color: #8a7a5c; margin-bottom: 16px; line-height: 1.5; }
+  .text-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #ddd0b8;
+    border-radius: 12px;
+    background: #fdfaf3;
+    font-family: inherit;
+    font-size: 15px;
+    color: #3a3428;
+    margin-top: 12px;
+  }
+  .text-input:focus { outline: none; border-color: #7a5c3a; }
+
+  .progress-bar { width: 100%; height: 6px; background: #ede2c8; border-radius: 3px; margin-bottom: 30px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #b0895a, #7a5c3a); width: 0%; transition: width 0.4s ease; }
+  .progress-text { text-align: center; color: #8a7a5c; font-size: 13px; margin-bottom: 20px; letter-spacing: 0.1em; }
+  .question { padding: 30px 0; text-align: center; }
+  .question .q-text {
+    font-size: 20px;
+    color: #3a3428;
+    margin-bottom: 40px;
+    font-weight: 500;
+    line-height: 1.6;
+    padding: 0 10px;
+  }
+  .likert { display: flex; justify-content: space-between; gap: 8px; margin: 30px 0; }
+  .likert-btn {
+    flex: 1;
+    padding: 20px 8px;
+    border: 2px solid #ddd0b8;
+    background: #fdfaf3;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 15px;
+    color: #5a4a3a;
+    transition: all 0.2s ease;
+  }
+  .likert-btn:hover { border-color: #7a5c3a; background: #f5eddb; }
+  .likert-btn.selected { background: #7a5c3a; color: #fdfaf3; border-color: #7a5c3a; }
+  .likert-label { display: flex; justify-content: space-between; font-size: 12px; color: #8a7a5c; padding: 0 8px; }
+
+  /* メール入力画面 */
+  .email-screen { padding: 40px 0; text-align: center; }
+  .email-screen h3 { font-size: 22px; color: #5a4628; margin-bottom: 16px; }
+  .email-screen p { color: #5a4a3a; margin-bottom: 30px; line-height: 1.8; }
+  .email-input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #ddd0b8;
+    border-radius: 12px;
+    background: #fdfaf3;
+    font-family: inherit;
+    font-size: 16px;
+    color: #3a3428;
+    margin-bottom: 20px;
+  }
+  .email-input:focus { outline: none; border-color: #7a5c3a; }
+
+  /* 送信アニメーション */
+  .sending-screen { padding: 60px 0; text-align: center; }
+  .sending-icon {
+    font-size: 48px;
+    margin-bottom: 24px;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+  .sending-text { font-size: 18px; color: #5a4628; margin-bottom: 12px; }
+  .sending-sub { font-size: 14px; color: #8a7a5c; }
+
+  /* 結果画面 */
+  .result { padding: 30px 0; }
+  .result .type-label { text-align: center; color: #b0895a; font-size: 14px; letter-spacing: 0.2em; margin-bottom: 8px; }
+  .result .type-name {
+    text-align: center;
+    font-size: 32px;
+    color: #5a4628;
+    margin-bottom: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .result .zodiac {
+    text-align: center;
+    color: #8a7a5c;
+    font-size: 13px;
+    margin-bottom: 40px;
+    letter-spacing: 0.1em;
+    line-height: 1.6;
+  }
+  .result-section {
+    margin-bottom: 24px;
+    padding: 28px 25px;
+    background: #f9f2df;
+    border-radius: 12px;
+    border-left: 4px solid #b0895a;
+  }
+  .result-section h3 {
+    font-size: 17px;
+    color: #7a5c3a;
+    margin-bottom: 16px;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+  .result-section p {
+    font-size: 15px;
+    color: #3a3428;
+    line-height: 1.9;
+    margin-bottom: 12px;
+  }
+  .result-section p:last-child { margin-bottom: 0; }
+  .result-section ul { margin: 12px 0 12px 20px; }
+  .result-section ul li { font-size: 15px; color: #3a3428; line-height: 1.9; margin-bottom: 6px; }
+
+  .action-section {
+    margin-bottom: 24px;
+    padding: 28px 25px;
+    background: #f5eddb;
+    border-radius: 12px;
+    border-left: 4px solid #7a5c3a;
+  }
+  .action-section h3 { font-size: 17px; color: #5a4628; margin-bottom: 16px; letter-spacing: 0.1em; }
+  .action-item { margin-bottom: 16px; }
+  .action-item strong { color: #5a4628; font-size: 15px; }
+  .action-item p { font-size: 14px; color: #3a3428; line-height: 1.8; margin-top: 4px; }
+
+  .message-section {
+    margin-top: 40px;
+    padding: 30px 25px;
+    background: linear-gradient(135deg, #7a5c3a, #5a4628);
+    color: #fdfaf3;
+    border-radius: 12px;
+    text-align: center;
+  }
+  .message-section h3 { font-size: 17px; margin-bottom: 16px; letter-spacing: 0.1em; }
+  .message-section p { font-size: 15px; line-height: 1.9; opacity: 0.95; }
+
+  .action-buttons { display: flex; gap: 12px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
+  .hidden { display: none; }
+
+  @media (max-width: 480px) {
+    .container { padding: 30px 20px; }
+    .header h1 { font-size: 24px; }
+    .question .q-text { font-size: 17px; }
+    .result .type-name { font-size: 26px; }
+    .likert-btn { padding: 16px 4px; font-size: 14px; }
+    .result-section, .action-section, .message-section { padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>わの巡り診断</h1>
+    <div class="subtitle">あなたの巡りが止まっている原因</div>
+  </div>
+
+  <!-- 生年月日入力画面 -->
+  <div id="birthdayScreen" class="birthday-form">
+    <h3>まず、あなたのことを教えてください</h3>
+    <p>より正確な診断結果をお届けします</p>
+
+    <div class="gender-section">
+      <p class="gender-label">性別</p>
+      <div class="gender-options">
+        <label class="gender-btn"><input type="radio" name="gender" value="male"> 男性</label>
+        <label class="gender-btn"><input type="radio" name="gender" value="female"> 女性</label>
+        <label class="gender-btn"><input type="radio" name="gender" value="unspecified"> 答えたくない</label>
+      </div>
+    </div>
+
+    <p class="section-label">生年月日</p>
+    <div class="birthday-inputs">
+      <select id="birthYear"><option value="">年</option></select>
+      <select id="birthMonth"><option value="">月</option></select>
+      <select id="birthDay"><option value="">日</option></select>
+    </div>
+
+    <div class="optional-section">
+      <p class="optional-title">より深い診断のため（任意）</p>
+      <p class="optional-hint">生まれた時間・場所がわかる方は、月星座や上昇星座の分析ができます</p>
+      <div class="birthday-inputs">
+        <select id="birthHour"><option value="">時（任意）</option></select>
+        <select id="birthMinute"><option value="">分（任意）</option></select>
+      </div>
+      <input type="text" id="birthPlace" placeholder="生まれた場所（任意・例：東京都）" class="text-input">
+    </div>
+
+    <button class="btn" onclick="proceedToIntro()">次へ</button>
+  </div>
+
+  <!-- イントロ画面 -->
+  <div id="intro" class="intro hidden">
+    <p>順調に来ているはずなのに、<br>なぜか満たされない。</p>
+    <p>その原因を、24問の質問から<br>明らかにします。</p>
+    <p style="color:#8a7a5c;font-size:13px;margin-top:20px;">所要時間：約5分</p>
+    <button class="btn" onclick="startQuiz()">診断を始める</button>
+  </div>
+
+  <!-- 質問画面 -->
+  <div id="quiz" class="hidden">
+    <div class="progress-text"><span id="progressText">Q1 / 24</span></div>
+    <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+    <div class="question">
+      <div class="q-text" id="questionText"></div>
+      <div class="likert">
+        <button class="likert-btn" onclick="answer(1)">1</button>
+        <button class="likert-btn" onclick="answer(2)">2</button>
+        <button class="likert-btn" onclick="answer(3)">3</button>
+        <button class="likert-btn" onclick="answer(4)">4</button>
+        <button class="likert-btn" onclick="answer(5)">5</button>
+      </div>
+      <div class="likert-label"><span>全く違う</span><span>その通り</span></div>
+    </div>
+  </div>
+
+  <!-- 分析中画面 -->
+  <div id="analyzingScreen" class="sending-screen hidden">
+    <div class="sending-icon">🌀</div>
+    <div class="sending-text">あなたの回答を分析しています...</div>
+    <div class="sending-sub">24問の回答から、巡りの滞りポイントを特定しています</div>
+  </div>
+
+  <!-- メール入力画面 -->
+  <div id="emailScreen" class="email-screen hidden">
+    <h3>診断が完了しました</h3>
+    <p>あなたのタイプが判明しました。<br>結果の受け取り先を入力してください。</p>
+    <input type="email" id="userEmail" placeholder="メールアドレスを入力" class="email-input">
+    <button class="btn" onclick="sendResult()">診断結果を見る</button>
+    <p style="font-size:12px;color:#8a7a5c;margin-top:16px;">※ 結果はこのあと、すぐこの画面に表示されます。<br>アドレスは大切にお預かりします。</p>
+  </div>
+
+  <!-- 送信アニメーション画面 -->
+  <div id="sendingScreen" class="sending-screen hidden">
+    <div class="sending-icon">✉️</div>
+    <div class="sending-text">結果を送信しています...</div>
+    <div class="sending-sub">少々お待ちください</div>
+  </div>
+
+  <!-- 結果画面 -->
+  <div id="result" class="result hidden">
+    <div id="resultContent">
+      <div class="type-label">あなたのタイプは</div>
+      <div class="type-name" id="typeName"></div>
+      <div class="zodiac" id="zodiacDisplay"></div>
+
+      <div class="result-section">
+        <h3>《あなたの本質》</h3>
+        <div id="typeEssence"></div>
+      </div>
+
+      <div class="result-section">
+        <h3>《あなたの強み》</h3>
+        <div id="typeStrength"></div>
+      </div>
+
+      <div class="result-section">
+        <h3>《今、巡りが止まっている理由》</h3>
+        <div id="typeReason"></div>
+      </div>
+
+      <div class="result-section">
+        <h3>《このままだと訪れる未来》</h3>
+        <div id="typeFuture"></div>
+      </div>
+
+      <div class="result-section">
+        <h3>《本来のあなた》</h3>
+        <div id="typeReal"></div>
+      </div>
+
+      <div class="result-section">
+        <h3>《生年月日が示す、あなたの巡りの追い風》</h3>
+        <div id="typeFortune"></div>
+      </div>
+
+      <div class="action-section">
+        <h3>《今日、あなたに必要な整え方》</h3>
+        <div id="typeAction"></div>
+      </div>
+
+      <div class="message-section">
+        <h3>あなたへのメッセージ</h3>
+        <div id="typeMessage"></div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn" onclick="downloadPDF()">📄 結果をPDFで保存</button>
+      <button class="btn btn-secondary" onclick="restartQuiz()">もう一度診断する</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// 生年月日セレクト初期化
+function initBirthdaySelects() {
+  const yearSelect = document.getElementById('birthYear');
+  const currentYear = new Date().getFullYear();
+  for (let y = currentYear; y >= 1940; y--) {
+    const opt = document.createElement('option');
+    opt.value = y; opt.textContent = y + '年';
+    yearSelect.appendChild(opt);
+  }
+  const monthSelect = document.getElementById('birthMonth');
+  for (let m = 1; m <= 12; m++) {
+    const opt = document.createElement('option');
+    opt.value = m; opt.textContent = m + '月';
+    monthSelect.appendChild(opt);
+  }
+  const daySelect = document.getElementById('birthDay');
+  for (let d = 1; d <= 31; d++) {
+    const opt = document.createElement('option');
+    opt.value = d; opt.textContent = d + '日';
+    daySelect.appendChild(opt);
+  }
+  const hourSelect = document.getElementById('birthHour');
+  for (let h = 0; h <= 23; h++) {
+    const opt = document.createElement('option');
+    opt.value = h; opt.textContent = h + '時';
+    hourSelect.appendChild(opt);
+  }
+  const minuteSelect = document.getElementById('birthMinute');
+  [0, 15, 30, 45].forEach(min => {
+    const opt = document.createElement('option');
+    opt.value = min; opt.textContent = String(min).padStart(2,'0') + '分';
+    minuteSelect.appendChild(opt);
+  });
+}
+initBirthdaySelects();
+
+// 星座判定
+function getZodiac(month, day) {
+  if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return '牡羊座 ♈';
+  if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return '牡牛座 ♉';
+  if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return '双子座 ♊';
+  if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return '蟹座 ♋';
+  if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return '獅子座 ♌';
+  if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return '乙女座 ♍';
+  if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return '天秤座 ♎';
+  if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return 'さそり座 ♏';
+  if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) return '射手座 ♐';
+  if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) return '山羊座 ♑';
+  if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return '水瓶座 ♒';
+  if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return '魚座 ♓';
+  return '';
+}
+
+// ===== 占術（生年月日から自動算出・質問数ゼロ）=====
+
+// 数秘術ライフパスナンバー（マスターナンバー 11/22/33 は保持）
+function getLifePath(y, m, d) {
+  const digits = (String(y) + String(m).padStart(2,'0') + String(d).padStart(2,'0')).split('').map(Number);
+  let sum = digits.reduce((a,b)=>a+b,0);
+  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
+    sum = String(sum).split('').map(Number).reduce((a,b)=>a+b,0);
+  }
+  return sum;
+}
+
+// 九星気学 本命星（立春＝2/4前は前年扱いの簡易補正）
+function getKyusei(y, m, d) {
+  let year = y;
+  if (m < 2 || (m === 2 && d < 4)) year -= 1;
+  let s = String(year).split('').map(Number).reduce((a,b)=>a+b,0);
+  while (s > 9) s = String(s).split('').map(Number).reduce((a,b)=>a+b,0);
+  let num = 11 - s;
+  if (num > 9) num -= 9;
+  return num;
+}
+
+// 九星気学データ（年運は2026年＝一白水星中宮年。年替わりで要更新）
+const kyuseiData = {
+  1: { name:'一白水星', nature:'水のように柔らかく、どんな環境にも馴染む適応力の人。人の心の機微を感じ取る力に優れています。', care:'流されすぎて、自分を見失わないこと。', flow:'2026年は「転換と充実」の年。これまでの生き方を見直し、内側を整えるほど、次の大きな流れに乗れます。' },
+  2: { name:'二黒土星', nature:'大地のように人を支え、育てる力の人。コツコツ積み重ねる誠実さが信頼を生みます。', care:'尽くしすぎて、自分が空にならないこと。', flow:'2026年は「実りと多忙」の年。これまでの努力が形になる時。忙しさの中でも、自分の巡りを整える時間を。' },
+  3: { name:'三碧木星', nature:'春の雷のような行動力と発信力の人。新しいことを始めるエネルギーに溢れています。', care:'勢い任せで、足元の確認を忘れないこと。', flow:'2026年は「収穫と喜び」の年。楽しみながら人と関わるほど、お金とご縁の巡りが良くなります。' },
+  4: { name:'四緑木星', nature:'風のように人と人を繋ぐ調整力の人。信用とご縁を育てる天才です。', care:'周りに合わせすぎて、軸を失わないこと。', flow:'2026年は「変化・転換」の年。環境や役割が変わりやすい時。変化を恐れず、巡りに乗ってください。' },
+  5: { name:'五黄土星', nature:'中心に立つ帝王の星。逆境から立ち上がる底力と、周りを巻き込む器の大きさを持ちます。', care:'我の強さが、独善にならないこと。', flow:'2026年は「注目」の年。良くも悪くも表に出ます。誠実さを貫くほど、光があなたの味方になります。' },
+  6: { name:'六白金星', nature:'天のように高い理想と責任感の人。リーダーとして人を導く力があります。', care:'完璧を求めすぎて、心が固くならないこと。', flow:'2026年は「充電と基礎固め」の年。焦らず内側を整え、学びを深めるほど、翌年以降の飛躍に繋がります。' },
+  7: { name:'七赤金星', nature:'実りの秋のような愛嬌と社交性の人。人を楽しませる天性の魅力があります。', care:'楽しさに流れて、大切なものを後回しにしないこと。', flow:'2026年は「土台作り」の年。コツコツ積み重ねる地味な時間が、数年後の大輪の花になります。' },
+  8: { name:'八白土星', nature:'山のようにどっしり構え、変化を成し遂げる人。継続と再生の力を持ちます。', care:'頑固さで、チャンスを逃さないこと。', flow:'2026年は「発展・スタート」の年。新しいことを始める絶好の追い風。動き出すなら、今年です。' },
+  9: { name:'九紫火星', nature:'太陽のような華やかさと直感力の人。美意識と先見性に優れています。', care:'感情の火が、燃え上がりすぎないこと。', flow:'2026年は「ご縁が整う」年。信用が育ち、縁が広がる時。人との繋がりを丁寧に扱うほど、巡りが加速します。' }
+};
+
+// 数秘ライフパスナンバー・輝きポイント
+const lifePathData = {
+  1: '「切り拓く人」。先頭に立ち、ゼロから道を作る時に最も輝きます。誰かの後ろではなく、自分の旗を立ててください。',
+  2: '「繋ぐ人」。人と人の間に立ち、調和を生む時に最も輝きます。その繊細さは弱さではなく、才能です。',
+  3: '「表現する人」。楽しさ・言葉・創造で人を明るくする時に最も輝きます。遊び心を封印しないでください。',
+  4: '「築く人」。コツコツと確かなものを積み上げる時に最も輝きます。あなたの誠実さは、何よりの信用です。',
+  5: '「自由に動く人」。変化と冒険の中で最も輝きます。安定の檻に入りすぎると、巡りが止まります。',
+  6: '「愛で支える人」。人を守り、育てる時に最も輝きます。ただし、自分を後回しにしすぎないこと。',
+  7: '「探求する人」。物事の本質を深く掘り下げる時に最も輝きます。一人の時間は、あなたの充電器です。',
+  8: '「実現する人」。目標を形にし、豊かさを生む時に最も輝きます。力を独り占めせず、循環させてください。',
+  9: '「与える人」。誰かのため、世界のために動く時に最も輝きます。理想を語ることを、恐れないでください。',
+  11: '「感じ取る人」（マスターナンバー）。直感とインスピレーションで人を導く時に最も輝きます。感受性の強さは、選ばれた才能です。',
+  22: '「大きく築く人」（マスターナンバー）。理想を現実の形にする大器です。スケールの大きな夢を、恐れずに。',
+  33: '「無条件に愛する人」（マスターナンバー）。存在そのものが人を癒します。まず、自分を満たすことから。'
+};
+
+// 星座別・巡りの武器
+const zodiacData = {
+  '牡羊座': '火の星座。始める勇気があなたの武器。直感で動き出した時、巡りが加速します。',
+  '牡牛座': '地の星座。五感と継続力があなたの武器。心地よさを大切にするほど、巡りが安定します。',
+  '双子座': '風の星座。好奇心と言葉があなたの武器。軽やかに動きながら、一つの軸を持つと最強です。',
+  '蟹座': '水の星座。共感と守る力があなたの武器。心を許せる居場所が、あなたの巡りの源です。',
+  '獅子座': '火の星座。存在感と創造力があなたの武器。堂々と輝くことを自分に許した時、巡りが動きます。',
+  '乙女座': '地の星座。分析力と丁寧さがあなたの武器。完璧より「調える」を意識すると、巡りが軽くなります。',
+  '天秤座': '風の星座。バランス感覚と美意識があなたの武器。他人軸ではなく、自分の美学で選ぶこと。',
+  'さそり座': '水の星座。深い集中と絆の力があなたの武器。握りしめず、信じて手放した時に巡りが起きます。',
+  '射手座': '火の星座。冒険心と楽観性があなたの武器。遠くを目指しながら、足元のご縁も大切に。',
+  '山羊座': '地の星座。責任感と達成力があなたの武器。頑張りすぎず、受け取ることも仕事のうちです。',
+  '水瓶座': '風の星座。独創性と俯瞰力があなたの武器。孤高になりすぎず、仲間と繋がると巡りが広がります。',
+  '魚座': '水の星座。想像力と優しさがあなたの武器。境界線を引くことを覚えると、優しさが枯れません。'
+};
+
+function buildFortuneHTML() {
+  const lp = getLifePath(userY, userM, userD);
+  const ks = getKyusei(userY, userM, userD);
+  const kd = kyuseiData[ks];
+  const zName = userZodiac.split(' ')[0];
+  const zText = zodiacData[zName] || '';
+  return `
+    <p><strong>◆ 星座：${userZodiac}</strong><br>${zText}</p>
+    <p><strong>◆ 数秘ライフパスナンバー：${lp}</strong><br>${lifePathData[lp]}</p>
+    <p><strong>◆ 九星気学：${kd.name}</strong><br>${kd.nature}<br>気を付けたいこと——${kd.care}<br>${kd.flow}</p>
+    <p style="font-size:13px;color:#8a7a5c;">※ 生まれた時刻・場所を使った、さらに詳しい数年の流れの鑑定は、講座の中でお届けしています。</p>
+  `;
+}
+
+let userZodiac = '', userBirthday = '', userTime = '', userPlace = '', userGender = '', userEmail = '';
+let userY = 0, userM = 0, userD = 0;
+let currentQuestion = 0;
+let scores = Array(13).fill(0);
+let winnerType = 1;
+
+function proceedToIntro() {
+  const genderInput = document.querySelector('input[name="gender"]:checked');
+  if (!genderInput) { alert('性別を選択してください'); return; }
+  userGender = genderInput.value;
+
+  const y = document.getElementById('birthYear').value;
+  const m = document.getElementById('birthMonth').value;
+  const d = document.getElementById('birthDay').value;
+  if (!y || !m || !d) { alert('生年月日を選択してください'); return; }
+  userY = parseInt(y); userM = parseInt(m); userD = parseInt(d);
+  userZodiac = getZodiac(userM, userD);
+  userBirthday = `${y}年${m}月${d}日`;
+
+  const h = document.getElementById('birthHour').value;
+  const min = document.getElementById('birthMinute').value;
+  userTime = (h !== '' && min !== '') ? `${h}時${String(min).padStart(2,'0')}分` : '';
+  userPlace = document.getElementById('birthPlace').value || '';
+
+  document.getElementById('birthdayScreen').classList.add('hidden');
+  document.getElementById('intro').classList.remove('hidden');
+}
+
+// 24問
+const questions = [
+  { type: 1, text: "頼まれごとを断るのが苦手だ" },
+  { type: 1, text: "自分の悩みを人に相談するのが苦手だ" },
+  { type: 2, text: "自分の欲求より、周りを優先しがちだ" },
+  { type: 2, text: "「自分のため」に時間やお金を使うことに罪悪感を感じる" },
+  { type: 3, text: "完成しても、まだ足りない気がして手を止められない" },
+  { type: 3, text: "「これで良い」と自分に言うのが苦手だ" },
+  { type: 4, text: "SNSや周囲を見て、他人と自分を比べてしまう" },
+  { type: 4, text: "自分の位置や価値に、自信を持ちきれない" },
+  { type: 5, text: "本音で話せる相手が少ない" },
+  { type: 5, text: "弱さや弱音を人に見せるのが苦手だ" },
+  { type: 6, text: "成功しているのに、自分はまだ足りないと感じる" },
+  { type: 6, text: "褒められると「そんなことない」と否定してしまう" },
+  { type: 7, text: "自分の判断は概ね正しいと思っている" },
+  { type: 7, text: "他人のアドバイスをあまり必要としない" },
+  { type: 8, text: "自分の成功や機会を他人と分け合うのが苦手だ" },
+  { type: 8, text: "大切なもの・人を失いたくないと強く思う" },
+  { type: 9, text: "パートナーとゆっくり話す時間が減っている" },
+  { type: 9, text: "家族や近しい人との深い会話を最後にしたのがいつか思い出せない" },
+  { type: 10, text: "常に次の一手を考えている" },
+  { type: 10, text: "プロセスより結果を優先しがちだ" },
+  { type: 11, text: "変化より安定を求める" },
+  { type: 11, text: "新しいことを始めるのに時間がかかる" },
+  { type: 12, text: "興味が次々と移り変わる" },
+  { type: 12, text: "一つのことを深く掘り下げるのが苦手だ" }
+];
+
+// 12タイプの詳細結果データ
+const typeResults = {
+  1: {
+    name: "与え上手型",
+    essence: `<p>あなたは、与えることが得意な人。</p><p>「頼まれたら断れない」——多くの人はそう思っています。でも本当の本質は違います。あなたは「頼まれた」からやっているのではなく、「頼られること」自体があなたのエネルギー源。頼られると、心の奥深くから力が湧いてくる。それがあなたの本質です。</p><p>でも、その裏には——「甘えたら見捨てられる」「弱さを見せたら価値がなくなる」という、どこかで学んだ深い記憶があるのかもしれません。だから、常に「与える側」に立ち続ける。それが、あなたの安全地帯になっている。</p><p>行政で750件以上の経営者・支援対象者を見てきました。この「与え上手型」の方々は、組織や家庭の中で必ず「柱」として存在しています。でも、その柱が疲弊し始める瞬間——それは、必ず訪れます。あなたはもう、その入口に立っているかもしれません。</p>`,
+    strength: `<ul><li>与える力が飛び抜けている</li><li>責任感で組織や家族を支える柱</li><li>「あの人がいれば大丈夫」と言われる存在</li><li>気配りと配慮の天才</li><li>頼られると力を発揮する</li><li>誰よりも周りを見ている</li></ul><p>これは、あなたが人生をかけて培ってきた「才能」です。この才能があるからこそ、あなたは今の位置に立っています。</p>`,
+    reason: `<p>あなたは今、「与える→与える→与える」の一方通行。受け取らないから、循環が起きていません。</p><p>一方通行の水路には、水が溜まらず、流れも止まる。どんなに強い流れも、出口だけで入口がなければ、いずれ枯れる。それと同じことが、あなたの中で起きています。</p><p><strong>具体的な症状：</strong></p><ul><li>「私が休むと回らない」という重圧</li><li>誰にも本音を言えない孤独</li><li>感情が突然爆発する</li><li>体調が崩れる</li><li>「なぜ私ばかり」という深い疲れ</li></ul><p>これは、あなたが弱いから起きているのではありません。あなたの巡りが、片方向になっているから起きているだけです。</p>`,
+    future: `<p>もし今のまま続けたら——</p><p>3年後、あなたは今の役割を続けているでしょうか。もしかしたら、燃え尽きて何もかも投げ出したくなるかもしれません。もしかしたら、体が悲鳴を上げて、動けなくなるかもしれません。</p><p>周りの人たちとの関係も、少しずつ変わってきます。「あの人はいつも与えてくれる人」から、「あの人はもう与えられない人」へと。周りの人たちは、あなたの疲弊に気づかないまま、あなたに頼り続けるでしょう。</p><p>でも、これは避けられる未来です。今、巡りを整え始めれば。</p>`,
+    real: `<p>本来のあなたは、その責任感で「みんなで巡らす」ことができる人です。</p><p>一人で抱えるのではなく、その大きな与える力を「共に巡らせる」方向に使えた時——組織も、家族も、そしてあなた自身も、全く違う次元に到達します。</p><p>想像してください。周りの人たちが、あなたに頼るだけでなく、あなたに返す関係。あなたが与えたエネルギーが、循環して、あなたに戻ってくる。それが「わの巡り」の姿です。</p><p>あなたの与える力は、循環の中で使われた時、真に発揮されます。その時、あなた自身も「与えるだけの人」から「巡らせる人」へと進化します。</p>`,
+    action: `<div class="action-item"><strong>◆ 1. 「受け取る練習」を始める</strong><p>今日、「ありがとう」と言われたら、「そんなことないよ」と返さず、「うれしい」と受け取ってみてください。たった一言、変えるだけです。この小さな一歩が、あなたの巡りの入口です。</p></div><div class="action-item"><strong>◆ 2. 「頼る」を1回試す</strong><p>今週中に、誰かに小さなことを一つ頼んでみてください。「ちょっとこれ、手伝ってもらえる？」たったこれだけ。抵抗を感じるかもしれません。でも、その抵抗こそが、あなたの巡りを止めている壁の姿です。</p></div><div class="action-item"><strong>◆ 3. 自分だけの時間を10分作る</strong><p>毎日10分、自分だけの時間を作ってください。お茶を淹れる、好きな音楽を聴く、深呼吸する。この時間は、あなたが「受け取る」練習の場所です。誰にも与えない、自分に与える時間です。</p></div>`,
+    message: `<p>行政で750件以上の経営者・支援対象者を見てきて、私は確信しています。「与え上手型」の方々こそ、この社会を支える本物の力を持っています。ただし、その力を「循環」の中で使えた時に限ります。</p><p>あなたの巡りが動き始めた時、周りの人たちも、そしてあなた自身も、全く違う世界を見ることになります。私はその変化を、何度も見てきました。</p><p>あなたの巡り、動き出しましょう。</p>`
+  },
+  2: {
+    name: "献身型",
+    essence: `<p>あなたは、周りを大切にする献身の人。</p><p>「私さえ我慢すれば」——家族や職場のために、自分を後回しにしてきた。それがあなたの生き方でした。周りからは「本当に優しい人」と言われる。でも、心のどこかで、疲れているのを感じているのではないでしょうか。</p><p>本当の本質は——「自分を大切にしていい」という許可が、自分自身に降りていないこと。「自分のため」に時間やお金を使うと、罪悪感が湧いてくる。「私だけ楽していいのか」という声が、心の奥から聞こえてくる。</p><p>行政で数多くの方を見てきましたが、この「献身型」の方々は、周りが気づかないうちに、心の泉が涸れ始めています。あなたも、その入口に立っているかもしれません。</p>`,
+    strength: `<ul><li>深い献身と忍耐力</li><li>周りへの本物の優しさ</li><li>家族や組織を支える柱</li><li>誰よりも空気を読む力</li><li>相手のために動ける本物の愛</li></ul><p>これは、他の誰にも真似できない、あなたの魂の質です。</p>`,
+    reason: `<p>自分の願いを飲み込むたびに、生命の泉が涸れていく。「与えるだけ」の巡りは、必ず止まります。</p><p>あなたは「自分を大切にする」ことを、罪悪感なしにできません。だから、いつも自分を後回しにする。でも、後回しにされた自分は、確実に消耗しています。</p><p><strong>具体的な症状：</strong></p><ul><li>気づけば自分の時間がゼロ</li><li>心が枯れて、笑えなくなる</li><li>ある日、突然の爆発</li><li>誰にも分かってもらえない孤独</li><li>「私の人生って何だったんだろう」という虚しさ</li></ul>`,
+    future: `<p>もしこのまま続けたら——</p><p>あなたの心の泉は、確実に涸れていきます。5年後、10年後、あなたは自分を見て「あの頃の私はどこに行ったの」と思うかもしれません。</p><p>周りの人たちは、あなたが我慢してくれることに慣れきってしまいます。あなたの本当の願いを聞いてくれる人が、いなくなります。</p><p>でも、これは避けられる未来です。今、「私を大切にしていい」という許可を、自分に出せば。</p>`,
+    real: `<p>「私を大切にしていい」と自分に許可を出せた時、周りにも本物の優しさが循環します。あなたの献身は、自分を大切にした先で、もっと深く届きます。</p><p>本来のあなたは、満たされた状態で与えられる人。空っぽで与えるのではなく、豊かに満ちた状態から溢れ出るように与えられる人です。</p><p>その時、周りの人たちは、あなたから受け取るだけでなく、あなたを大切にしたくなります。それが本物の巡りです。</p>`,
+    action: `<div class="action-item"><strong>◆ 1. 「今日は私」の10分</strong><p>毎日10分でいい。自分だけのために使う時間を作ってください。お茶を淹れる、好きな音楽、深呼吸。これが「許可」の第一歩です。</p></div><div class="action-item"><strong>◆ 2. 罪悪感が湧いたら、その声に「ありがとう、でも大丈夫」と返す</strong><p>「私だけ楽していいのか」という声は、あなたを守ろうとしていた古い声。「ありがとう、でも大丈夫」と優しく返してあげてください。</p></div><div class="action-item"><strong>◆ 3. 自分の願いを一つだけ、口に出す</strong><p>今週中に、あなたの小さな願いを一つ、周りの人に伝えてみてください。「これがしたい」「これがほしい」と。抵抗を感じるかもしれません。それが壁の姿です。</p></div>`,
+    message: `<p>「献身型」の方々の優しさは、この世界の宝です。でもその宝が輝くのは、あなた自身が満たされている時だけ。</p><p>「私を大切にする」ことは、周りを大切にすることと同じです。むしろ、自分を大切にできて初めて、本物の優しさが周りに届きます。</p><p>あなたの巡り、動き出しましょう。</p>`
+  },
+  3: {
+    name: "磨き上げ型",
+    essence: `<p>あなたは、こだわり抜く美意識の人。</p><p>「完璧」を求める。何をやっても、「まだ足りない」という声が聞こえてくる。周りが「もう十分」と言っても、あなたには納得できない。それが、あなたの高い基準です。</p><p>でも、その裏には——「不完全な自分を、愛されたことがない」という深い記憶があるのかもしれません。完璧を求めるのは、実は「不完全なままだと価値がない」という怖さの裏返し。</p><p>行政で見てきた「磨き上げ型」の方々は、素晴らしい成果を出し続けます。でも、達成しても心が満たされない。次の完璧を求めて、また走り出す。その繰り返しの中で、いつか疲れ果ててしまいます。</p>`,
+    strength: `<ul><li>高い基準・繊細な感性</li><li>妥協しない美意識</li><li>誰よりも細部を見る目</li><li>こだわり抜く力</li><li>成果を出し続ける実力</li></ul><p>この「磨き上げる力」は、あなたの真の強みです。</p>`,
+    reason: `<p>「完璧じゃないと価値がない」という思い込みが、不完全な自分と繋がることを止めています。手を止められないから、循環が起きない。</p><p>あなたは、常に「もっと」を求めます。それが疲弊の原因です。</p><p><strong>具体的な症状：</strong></p><ul><li>達成しても満足できない</li><li>他人にも厳しくなってしまう</li><li>常に緊張している</li><li>「これでいい」と言えない</li><li>心の底で自分を許せていない</li></ul>`,
+    future: `<p>もしこのまま続けたら——</p><p>あなたは疲弊し続けます。他人にも厳しくなり、周りの人が離れていくかもしれません。達成しても満足できない人生が、5年、10年と続きます。</p><p>気づいた時には、「何のためにこんなに頑張ってきたのか」と自問することになるかもしれません。</p>`,
+    real: `<p>「70点の自分を許す」勇気が、真の美しさと巡りを生みます。完璧を捨てた時、初めて本物の輝きが現れます。</p><p>本来のあなたは、繊細な感性を「創造」に使える人。完璧を追う中で消耗するのではなく、余裕の中で美しいものを生み出せる人です。</p><p>「これで十分」と言えた時、あなたの巡りは動き始めます。</p>`,
+    action: `<div class="action-item"><strong>◆ 1. 「これで十分」を口に出す</strong><p>今日、何か一つ、「これで十分」と自分に言ってみてください。抵抗があっても、口に出すこと。それが解放の始まりです。</p></div><div class="action-item"><strong>◆ 2. 70点で世に出す実験</strong><p>今週中に、何か一つを「70点で世に出す」実験をしてみてください。完璧じゃなくても、意外な反応があることを体験してください。</p></div><div class="action-item"><strong>◆ 3. 何もしない時間を持つ</strong><p>毎日15分、何もしない時間を作ってください。完璧を目指さない時間。それがあなたの心を癒します。</p></div>`,
+    message: `<p>「磨き上げ型」の繊細な感性は、この世界を美しくする力です。でも、その力を発揮するには、自分を許すことが先です。</p><p>不完全なあなたも、完璧なあなたも、価値は同じ。むしろ、不完全さの中にこそ、あなたの本当の美しさがあります。</p><p>あなたの巡り、動き出しましょう。</p>`
+  },
+  4: {
+    name: "観察型",
+    essence: `<p>あなたは、周りをよく見ている観察者。</p><p>SNSを見ては、他人と自分を比べてしまう。同期の成功、友人の充実、他人の輝き——それらを見るたびに、心がざわつく。それがあなたの日常かもしれません。</p><p>でも、その裏には——「自分の価値を、自分で決められない」という深い問題があります。他人の反応や評価が、常に気になってしまう。それはあなたの「敏感さ」の裏返しでもあります。</p><p>周りをよく見えるのは、あなたの才能です。でもその目が、自分ではなく他人ばかりに向いていると、自分の巡りは止まってしまいます。</p>`,
+    strength: `<ul><li>他者への高い感度</li><li>共感力・社会性</li><li>場を読む力</li><li>順応性の高さ</li><li>敏感な観察力</li></ul>`,
+    reason: `<p>他人の円を追いかけて、自分の円が動かなくなる。物差しを他人に預けているから、いつも比較の中で疲れます。</p><p>SNSを見るたびに、あなたのエネルギーは他人の方向に流れていきます。自分の内側は、置き去りになる。</p><p><strong>具体的な症状：</strong></p><ul><li>SNSを見ると焦りを感じる</li><li>「私だけ取り残されている」感覚</li><li>自分の判断に自信が持てない</li><li>他人の評価が気になりすぎる</li><li>本当の自分の願いが分からない</li></ul>`,
+    future: `<p>もしこのまま続けたら——</p><p>あなたは常に「他人の物差し」で自分を測り続けます。誰かの成功を見るたびに焦り、比較で疲弊し、本当の自分を見失っていきます。</p><p>10年後、あなたは「自分の人生を、自分で選んだ実感がない」と感じるかもしれません。</p>`,
+    real: `<p>「自分の物差しは自分で決める」と気づいた時、他者と競わなくても自然と輝ける。あなたの観察力は、自分軸の上で真価を発揮します。</p><p>本来のあなたは、他人の輝きを見て「素敵だな」と純粋に感動できる人。自分と比較せず、他人の光を祝福できる人です。</p><p>その時、あなた自身の光も、静かに輝き始めます。</p>`,
+    action: `<div class="action-item"><strong>◆ 1. SNS断食を1時間</strong><p>今日、1時間だけSNSを見ない時間を作ってください。その間、自分の内側の声を聞いてみてください。</p></div><div class="action-item"><strong>◆ 2. 「自分の物差し」を一つ決める</strong><p>他人の評価ではなく、自分が「これが大切」と思う物差しを一つ、明文化してください。それがあなたの軸になります。</p></div><div class="action-item"><strong>◆ 3. 他人の成功を祝福する練習</strong><p>SNSで誰かの成功を見たら、比較せず「素晴らしい」と心の中で祝福してください。それが自分軸の練習です。</p></div>`,
+    message: `<p>あなたの「観察力」は、本来、世界を豊かに見る力です。その目を、自分にも向けてください。</p><p>他人の輝きは他人のもの。あなたには、あなたにしかない光があります。</p><p>あなたの巡り、動き出しましょう。</p>`
+  },
+  5: {
+    name: "独立型",
+    essence: `<p>あなたは、自立して物事を成し遂げる強さの人。</p><p>一人で問題を解決してきた。誰かに頼らずに、自分の力で切り拓いてきた。それがあなたの誇りです。周りからは「強い人」と見られています。</p><p>でも、その裏には——「弱さを見せると壊れる・見捨てられる」という深い恐れがあるのかもしれません。だから、常に強くあろうとしてきた。頂点の孤独は、あなただけが知っています。</p><p>本音を話せる相手が少ない。弱音を吐ける場所がない。それが、あなたの巡りを止めています。</p>`,
+    strength: `<ul><li>独立心・強さ</li><li>自立して物事を成し遂げる力</li><li>リーダーシップ</li><li>信念を貫く力</li><li>自己完結できる能力</li></ul>`,
+    reason: `<p>弱さを見せないから、深い繋がりの共鳴が起きない。一人で立とうとするほど、共鳴の相手がいなくなります。</p><p>あなたは強いから、周りが頼ってきます。でも、あなたが頼れる人は、どこにいますか。</p><p><strong>具体的な症状：</strong></p><ul><li>本音で話せる相手がゼロ</li><li>心の底に深い孤独</li><li>「私だけ違う」感覚</li><li>頼れないから抱え込む</li><li>頂点の孤独感</li></ul>`,
+    future: `<p>もしこのまま続けたら——</p><p>あなたは孤独の中で強くあり続けます。でも、心の底で「本当は誰かに分かってほしい」という願いが、静かに大きくなっていきます。</p><p>10年後、あなたは「強いことに疲れた」と感じるかもしれません。</p>`,
+    real: `<p>弱さを見せた時、初めて相手も心を開く。深い共鳴の巡りが始まる。強さと弱さの両方を持てた時、本当の意味で強くなれます。</p><p>本来のあなたは、強さも弱さも受け入れられる人。一人で完結する強さから、他者と共鳴する強さへ進化できる人です。</p>`,
+    action: `<div class="action-item"><strong>◆ 1. 小さな弱さを一つ見せる</strong><p>今日、一番信頼できる人に、あなたの小さな弱さを一つだけ見せてみてください。それがあなたの巡りの入口です。</p></div><div class="action-item"><strong>◆ 2. 「助けて」を1回言う</strong><p>今週中に、誰かに「ちょっと助けて」と言ってみてください。小さなことでいい。頼るという経験を作ってください。</p></div><div class="action-item"><strong>◆ 3. 弱音を吐ける場所を一つ作る</strong><p>信頼できる人、日記、カウンセラー——弱音を吐ける場所を一つ確保してください。孤独は共鳴のない状態です。</p></div>`,
+    message: `<p>あなたの強さは、本物です。でも、本物の強さは、弱さを受け入れられる強さです。</p><p>一人で立ち続けなくていい。共鳴の中に立つ強さを、体験してください。</p><p>あなたの巡り、動き出しましょう。</p>`
+  },
+  6: {
+    name: "謙虚型",
+    essence: `<p>あなたは、深い謙虚さを持つ人。</p><p>成功しているのに「自分はまだ足りない」と感じる。褒められても「そんなことない」と否定してしまう。周りから見れば十分な位置にいるのに、あなた自身がそれを認められない。</p><p>本質は——「ありのままの自分が愛される自信がない」こと。だから、常に「もっと」を求める。インポスター症候群のような感覚があなたの中にあります。</p><p>謙虚さは美徳。でも、それが「自己否定」に変わった時、あなたの巡りは止まります。</p>`,
+    strength: `<ul><li>謙虚さ・繊細さ</li><li>他者への思いやり</li><li>自己を客観視する力</li><li>成長への意欲</li><li>控えめな品格</li></ul>`,
+    reason: `<p>自分を映す鏡を割ってしまうから、内側からの巡りが起きない。「私はダメ」と思い続けるほど、光が入ってこない。</p><p>あなたは、成功しても「これは運が良かっただけ」と思ってしまう。認められても「私なんて」と受け取れない。それが巡りを止めています。</p><p><strong>具体的な症状：</strong></p><ul><li>成功しても満たされない</li><li>褒められても素直に受け取れない</li><li>「私なんて」が口癖</li><li>失敗を過剰に恐れる</li><li>他人と比べて自分を下げる</li></ul>`,
+    future: `<p>もしこのまま続けたら——</p><p>あなたはどんなに成功しても、心の底の「私はダメ」を消せません。10年経っても、20年経っても、満たされない感覚が続きます。</p>`,
+    real: `<p>「ありのままの自分に価値がある」と受け入れた時、内側から静かな光が湧く。謙虚さと自己受容の両立が、あなたの本来の姿です。</p><p>本来のあなたは、謙虚でありながら、自分の価値も認められる人。両方を持てるのがあなたの真の姿です。</p>`,
+    action: `<div class="action-item"><strong>◆ 1. 鏡の前で「私はこれでいい」と3回言う</strong><p>今日、鏡の前で「私はこれでいい」と3回言ってみてください。最初は違和感があっても、それが受容の始まりです。</p></div><div class="action-item"><strong>◆ 2. 褒められたら「ありがとう」だけ返す</strong><p>「そんなことない」を封印。褒められたら「ありがとう」だけ返す練習をしてください。</p></div><div class="action-item"><strong>◆ 3. 自分の良いところを毎日3つ書く</strong><p>寝る前に、自分の良いところを3つ書き出してください。1週間続けると、自己受容の巡りが動き始めます。</p></div>`,
+    message: `<p>謙虚さは尊いものです。でも、自分を否定する謙虚さは、あなた自身を消耗させます。</p><p>あなたには、本当に価値があります。それを認められた時、本物の巡りが動き始めます。</p><p>あなたの巡り、動き出しましょう。</p>`
+  },
+  7: {
+    name: "信念型",
+    essence: `<p>あなたは、自分の道を切り拓く信念の人。</p><p>自分の判断を信じ、他人の意見に流されず、自分の道を進んできた。それがあなたの生き方です。周りからは「頼れるリーダー」と見られています。</p><p>でも、その裏には——「人に心を開くと壊れる」という恐れがあるのかもしれません。だから、自分だけで判断する。他人のアドバイスをあまり必要としない。</p><p>その結果、気づけば周りが離れていることに、あなたは気づいていないかもしれません。信念は素晴らしい。でも、それが「独断」に変わった時、巡りは止まります。</p>`,
+    strength: `<ul><li>決断力・リーダーシップ</li><li>自分の道を切り拓く力</li><li>信念を貫く強さ</li><li>独立独歩の精神</li><li>ブレない軸</li></ul>`,
+    reason: `<p>他者と融合できないから、自分だけの円に閉じこもる。周りの意見が入ってこないから、視野が狭くなります。</p><p>あなたは強い信念で立っています。でも、その信念が周りを排除する方向に働いていないでしょうか。</p><p><strong>具体的な症状：</strong></p><ul><li>周りの意見を聞かない</li><li>気づけば孤立している</li><li>視野が狭くなっている</li><li>部下や家族が本音を言わない</li><li>「自分は正しい」が口癖</li></ul>`,
+    future: `<p>もしこのまま続けたら——</p><p>あなたは孤高のリーダーになります。でも、誰もついてこないリーダーになるかもしれません。判断ミスに気づけなくなる可能性もあります。</p>`,
+    real: `<p>「人を信じてみる」勇気が、想像を超える一円融合の巡りを生む。あなたの信念に、他者の知恵が加わった時、本物の力になります。</p><p>本来のあなたは、信念を持ちながら、他者と共鳴できる人。一人で立つ強さと、共に歩む柔らかさを両立できる人です。</p>`,
+    action: `<div class="action-item"><strong>◆ 1. 身近な人の意見を最後まで聞く</strong><p>今日、身近な人の意見を一つ、最後まで否定せずに聞いてみてください。「なるほど」と口に出すだけでも、巡りが動きます。</p></div><div class="action-item"><strong>◆ 2. 「教えてください」を1回言う</strong><p>今週中に、誰かに「教えてください」と言ってみてください。小さなことでいい。頼るという経験を作ってください。</p></div><div class="action-item"><strong>◆ 3. 自分と違う意見に感謝する</strong><p>あなたと違う意見を持つ人に、「別の視点、ありがとう」と伝える練習をしてください。融合の第一歩です。</p></div>`,
+    message: `<p>あなたの信念は、本物です。でも、本物の信念は、他者を排除しません。</p><p>他者の知恵を受け入れられる時、あなたの信念はもっと強くなります。</p><p>あなたの巡り、動き出しましょう。</p>`
+  },
+  8: {
+    name: "深愛型",
+    essence: `<p>あなたは、深く愛する情熱の人。</p><p>大切なものを、深く愛する。守りたい人、守りたい仕事、守りたい成果——それらへの情熱があなたの原動力です。</p><p>でも、その裏には——「失うことへの深い恐れ」があるのかもしれません。「大切だから離したくない」——その気持ちが、逆に巡りを止めているかもしれません。</p><p>握った拳では、新しいものを受け取ることも、古いものを与えることもできません。あなたの深い愛が、独占という形になった時、巡りは止まります。</p>`,
+    strength: `<ul><li>深い愛情・情熱</li><li>大切なものを守り抜く力</li><li>忠誠心・献身</li><li>深い絆を作る力</li><li>本気で人を大切にする力</li></ul>`,
+    reason: `<p>与えないから返らない。自分だけの円に固執し、他者と融合できない。握った拳では、循環が起きません。</p><p>あなたは大切なものを、握りしめすぎているかもしれません。それが逆に、失う原因になります。</p><p><strong>具体的な症状：</strong></p><ul><li>執着・嫉妬が湧く</li><li>大切な人が離れていく</li><li>成功や機会を独占しがち</li><li>失うことへの強い恐れ</li><li>心が休まらない</li></ul>`,
+    future: `<p>もしこのまま続けたら——</p><p>握りしめれば握りしめるほど、大切なものは指の間からこぼれていきます。5年後、10年後、あなたが握りしめてきたものが、逆に失われている可能性があります。</p>`,
+    real: `<p>「手放しても大丈夫」と気づいた時、思いがけないものが循環して戻ってくる。深い愛は、握るのではなく、開くことで完成します。</p><p>本来のあなたは、深く愛しながらも、自由に手放せる人。開いた掌で、循環を生み出せる人です。</p>`,
+    action: `<div class="action-item"><strong>◆ 1. 「私が持っていなくても大丈夫」と信じる</strong><p>今日、大切な何か・誰かに対して、「私が持っていなくても、この人は大丈夫」と一度信じてみてください。</p></div><div class="action-item"><strong>◆ 2. 一つ、譲る実験</strong><p>今週中に、あなたが握りしめていた何かを、一つだけ譲ってみてください。小さなことでいい。譲るという体験を作ってください。</p></div><div class="action-item"><strong>◆ 3. 感謝を口に出す</strong><p>大切な人に「ありがとう」と口に出してください。所有ではなく、感謝で繋がる関係へ。</p></div>`,
+    message: `<p>あなたの深い愛は、本物です。でも、その愛が「独占」になった時、逆に大切なものを失います。</p><p>手を開く勇気が、あなたの愛を完成させます。</p><p>あなたの巡り、動き出しましょう。</p>`
+  },
+  9: {
+    name: "集中型",
+    essence: `<p>あなたは、仕事や役割に深く集中できる人。</p><p>目の前のことに没頭できる。責任を持って役割を果たす。それがあなたの強みです。周りからも「頼れる人」として認められています。</p><p>でも、その裏には——「本音で繋がる・情緒を扱うことへの不慣れ」があるのかもしれません。パートナーや家族との距離が、少しずつ広がっていることに、気づいているのに手が出せないのかもしれません。</p><p>仕事は根っこじゃない。仕事は葉です。根っこは、一番近い人との関係。その根っこが枯れると、葉も枯れます。</p>`,
+    strength: `<ul><li>仕事や役割で人を支える力</li><li>実務能力・責任感</li><li>集中力・成果を出す力</li><li>信頼される存在感</li><li>プロフェッショナリズム</li></ul>`,
+    reason: `<p>一番近い人との根っこが枯れているのに、遠くの葉ばかり茂らせる。家庭の巡りが止まると、仕事の巡りも根から枯れていきます。</p><p><strong>具体的な症状：</strong></p><ul><li>パートナーとの会話が減っている</li><li>家族との深い会話をいつしたか思い出せない</li><li>家庭が「仮眠場所」になっている</li><li>本音を話す場所がない</li><li>感情を扱うのが苦手</li></ul>`,
+    future: `<p>もしこのまま続けたら——</p><p>仕事は続けられても、家庭は形骸化します。ある日、パートナーから「もう話すこともない」と言われるかもしれません。仕事の成功と、家庭の崩壊が同時に来ます。</p>`,
+    real: `<p>家庭という根っこを整えれば、仕事の葉も自然と繁る。あなたの集中力は、本音で繋がる勇気と両立できます。</p><p>本来のあなたは、仕事も家庭も両立できる人。深く集中する力を、大切な人との繋がりにも使える人です。</p>`,
+    action: `<div class="action-item"><strong>◆ 1. 「最近どう？」と3分聞く</strong><p>今日、パートナーや家族に「最近どう？」と3分だけ聞いてみてください。答えを最後まで聞くだけで、巡りが動きます。</p></div><div class="action-item"><strong>◆ 2. 感情を言葉にする</strong><p>「嬉しい」「悲しい」「疲れた」——今日、自分の感情を一つ、大切な人に言葉で伝えてください。</p></div><div class="action-item"><strong>◆ 3. スマホを置いた10分の対話</strong><p>週に1回、スマホを置いて、大切な人と10分だけ対話する時間を作ってください。それが根っこを育てます。</p></div>`,
+    message: `<p>仕事の成功は、家庭の犠牲の上に成り立つものではありません。むしろ、家庭を整えた人が、真の成功者になります。</p><p>あなたの集中力を、本当に大切なものにも向けてください。</p><p>あなたの巡り、動き出しましょう。</p>`
+  },
+  10: {
+    name: "先回り型",
+    essence: `<p>あなたは、先を読む天才。</p><p>常に次の一手を考えている。リスクを予測し、準備を怠らない。それがあなたの強みです。仕事でも人生でも、あなたは「先回り」で結果を出してきました。</p><p>でも、その裏には——「今の自分では足りない」という焦りが、常に次を求めさせているのかもしれません。走り続けるあなたは、「今、ここ」を味わえていないのかもしれません。</p><p>先を見る力は素晴らしい。でも、その目が「今」を見なくなった時、あなたの巡りは止まります。</p>`,
+    strength: `<ul><li>先読み力・準備の速さ</li><li>チャンスを掴む機転</li><li>リスクへの敏感さ</li><li>次の一手を打つ天才</li><li>戦略的思考</li></ul>`,
+    reason: `<p>「今」に居られないから、循環の第一段「受け取る」が起きない。次、次、次を追いかけるうちに、今の恵みを取りこぼしています。</p><p><strong>具体的な症状：</strong></p><ul><li>プロセスを楽しめない</li><li>達成しても次の焦り</li><li>燃え尽き感</li><li>「今」を味わえない</li><li>常に緊張している</li></ul>`,
+    future: `<p>もしこのまま続けたら——</p><p>あなたは走り続けます。でも、走り疲れて、ある日突然、動けなくなる可能性があります。今を味わえないまま、人生が過ぎていきます。</p>`,
+    real: `<p>「今の自分で十分」と気づいた時、真の推進力が生まれる。先を読む力は、今を味わう力と両立してこそ、本物になります。</p><p>本来のあなたは、先を見ながらも今を楽しめる人。準備しながらも、プロセスを味わえる人です。</p>`,
+    action: `<div class="action-item"><strong>◆ 1. 5分、スマホを置く</strong><p>今日、5分だけスマホを置いて、今この瞬間の音・光・感触を味わってみてください。それが「今、ここ」の巡りの入口です。</p></div><div class="action-item"><strong>◆ 2. 「今の自分で十分」と言う</strong><p>朝、鏡の前で「今の自分で十分」と言ってください。焦りが湧いたら、また言ってください。</p></div><div class="action-item"><strong>◆ 3. プロセスを楽しむ実験</strong><p>今週、結果より過程を楽しむ実験をしてください。目的地ではなく、道中を味わう。それが人生の質を変えます。</p></div>`,
+    message: `<p>先を読む力は、本物の才能です。でも、その才能を「今」も見られるようになった時、あなたは真の力を発揮します。</p><p>今の自分で、十分です。</p><p>あなたの巡り、動き出しましょう。</p>`
+  },
+  11: {
+    name: "地に足型",
+    essence: `<p>あなたは、地に足の着いた安定感の人。</p><p>変化より安定を求める。堅実に、確実に、物事を進める。それがあなたの生き方です。周りからは「信頼できる人」と見られています。</p><p>でも、その裏には——「変わった先の自分を信じられない」という恐れがあるのかもしれません。今の場所が心地よくても、そこに留まり続けることが、実は巡りを止めているかもしれません。</p><p>安定は美徳。でも、それが「停滞」に変わった時、巡りは止まります。</p>`,
+    strength: `<ul><li>安定感・継続力</li><li>地に足の着いた実務</li><li>忠誠心・信頼される存在感</li><li>堅実な判断力</li><li>継続する力</li></ul>`,
+    reason: `<p>動かないと、水は淀む。淀んだ水は生命を育てられない。「変化＝危険」という思い込みが、本来のあなたを閉じ込めています。</p><p><strong>具体的な症状：</strong></p><ul><li>新しいことを始めるのに時間がかかる</li><li>変化を恐れる</li><li>チャンスを逃す</li><li>時代に取り残される焦り</li><li>「このままでいい」と自分に言い聞かせている</li></ul>`,
+    future: `<p>もしこのまま続けたら——</p><p>時代は動いています。あなたが動かない間に、周りは変わっていきます。5年後、10年後、あなたは「取り残された」と感じるかもしれません。</p>`,
+    real: `<p>「変わっても、私は私」と信じた時、安定と変化の融合が起きる。あなたの土台の強さは、変化を恐れずに済むための資本です。</p><p>本来のあなたは、変化の中でも軸を保てる人。安定と柔軟性を両立できる人です。</p>`,
+    action: `<div class="action-item"><strong>◆ 1. 小さな変化を一つ</strong><p>今日、小さくていいので、いつもと違うことを一つしてみてください。違うカフェに入る、違う道を歩く。それが変化の巡りの入口です。</p></div><div class="action-item"><strong>◆ 2. 「変わっても私は私」と唱える</strong><p>変化への恐れが湧いたら、「変わっても私は私」と自分に言ってください。土台は動かないから、周りは自由に変えられます。</p></div><div class="action-item"><strong>◆ 3. 新しいことを月1つ始める</strong><p>月に1つ、新しいことを始める習慣を作ってください。小さくてもいい。変化への免疫を育てます。</p></div>`,
+    message: `<p>あなたの安定感は、この社会に必要な力です。でも、動かないことは安定ではなく、停滞です。</p><p>本物の安定は、変化の中でも軸を保てること。それがあなたの本来の姿です。</p><p>あなたの巡り、動き出しましょう。</p>`
+  },
+  12: {
+    name: "柔軟型",
+    essence: `<p>あなたは、しなやかな好奇心を持つ人。</p><p>興味が次々と移り変わる。新しいものに飛びつく。それがあなたの活力です。周りからは「多才な人」と見られています。</p><p>でも、その裏には——「一つに定まると自分が失われる」という恐れがあるのかもしれません。だから広く浅くなってしまう。あなたの多才さは、深さと引き換えになっているのかもしれません。</p><p>好奇心は素晴らしい。でも、それが「散漫」に変わった時、巡りは止まります。</p>`,
+    strength: `<ul><li>好奇心・柔軟性</li><li>多角的な視点</li><li>機敏さ・適応力</li><li>新しいものへの感度</li><li>変化を楽しむ力</li></ul>`,
+    reason: `<p>エネルギーが分散して、どの井戸も深く掘れない。あちこちで始めるけれど、どれも完成しないまま次に移ります。</p><p><strong>具体的な症状：</strong></p><ul><li>一つに集中できない</li><li>始めたことが完成しない</li><li>深さが足りない</li><li>成果に繋がらない</li><li>自分が何者か分からない</li></ul>`,
+    future: `<p>もしこのまま続けたら——</p><p>あなたはたくさんのことに手を出して、どれも中途半端で終わります。10年後、「あの時、一つに絞っていれば」と後悔するかもしれません。</p>`,
+    real: `<p>一つに絞っても、自分は失われない。むしろ深さの中に真の自由がある。あなたの柔軟性は、深さを持った時、本物の武器になります。</p><p>本来のあなたは、多才でありながら、深さも持てる人。柔軟性と一貫性を両立できる人です。</p>`,
+    action: `<div class="action-item"><strong>◆ 1. 今週の一つを決める</strong><p>今日、いくつも進めている中で、一つだけ「今週はこれに集中する」と決めてみてください。深さの中の自由を体験する第一歩です。</p></div><div class="action-item"><strong>◆ 2. 完成を体験する</strong><p>今月中に、何か一つを「完成」させてください。中途半端で終わっているものを、最後まで仕上げる体験を作ってください。</p></div><div class="action-item"><strong>◆ 3. 「深く掘る楽しさ」を知る</strong><p>一つのテーマを2週間掘り続けてください。表面では見えなかった深さが、あなたを変えます。</p></div>`,
+    message: `<p>あなたの好奇心は、本物の宝です。でも、その宝が輝くのは、一つに絞れた時です。</p><p>深さの中にも、真の自由があります。それを体験してください。</p><p>あなたの巡り、動き出しましょう。</p>`
+  }
+};
+
+function startQuiz() {
+  currentQuestion = 0;
+  scores = Array(13).fill(0);
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[currentQuestion];
+  document.getElementById('questionText').textContent = q.text;
+  document.getElementById('progressText').textContent = `Q${currentQuestion + 1} / 24`;
+  document.getElementById('progressFill').style.width = ((currentQuestion) / 24) * 100 + '%';
+  document.querySelectorAll('.likert-btn').forEach(btn => btn.classList.remove('selected'));
+}
+
+function answer(score) {
+  const q = questions[currentQuestion];
+  scores[q.type] += score;
+  document.querySelectorAll('.likert-btn')[score - 1].classList.add('selected');
+  setTimeout(() => {
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+      showQuestion();
+    } else {
+      showEmailScreen();
+    }
+  }, 300);
+}
+
+function showEmailScreen() {
+  // タイプ判定
+  let maxScore = 0;
+  winnerType = 1;
+  for (let i = 1; i <= 12; i++) {
+    if (scores[i] > maxScore) { maxScore = scores[i]; winnerType = i; }
+  }
+  document.getElementById('quiz').classList.add('hidden');
+  document.getElementById('analyzingScreen').classList.remove('hidden');
+  window.scrollTo(0, 0);
+  setTimeout(() => {
+    document.getElementById('analyzingScreen').classList.add('hidden');
+    document.getElementById('emailScreen').classList.remove('hidden');
+  }, 2500);
+}
+
+function sendResult() {
+  const email = document.getElementById('userEmail').value;
+  if (!email || !email.includes('@')) {
+    alert('メールアドレスを正しく入力してください');
+    return;
+  }
+  userEmail = email;
+  // サーバーへ記録（失敗しても結果表示は止めない）
+  try {
+    fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: userEmail,
+        gender: userGender,
+        birthday: userBirthday,
+        birthtime: userTime,
+        birthplace: userPlace,
+        type: typeResults[winnerType].name
+      })
+    }).catch(() => {});
+  } catch (e) {}
+  document.getElementById('emailScreen').classList.add('hidden');
+  document.getElementById('sendingScreen').classList.remove('hidden');
+  window.scrollTo(0, 0);
+  // 送信演出（3秒）
+  setTimeout(() => {
+    document.getElementById('sendingScreen').classList.add('hidden');
+    showResult();
+  }, 3000);
+}
+
+function showResult() {
+  const result = typeResults[winnerType];
+  document.getElementById('result').classList.remove('hidden');
+  document.getElementById('typeName').textContent = result.name;
+  let zodiacText = userZodiac ? `星座：${userZodiac}` : '';
+  if (userTime) zodiacText += `　／　生まれた時刻：${userTime}`;
+  if (userPlace) zodiacText += `　／　生まれた場所：${userPlace}`;
+  document.getElementById('zodiacDisplay').textContent = zodiacText;
+  document.getElementById('typeEssence').innerHTML = result.essence;
+  document.getElementById('typeStrength').innerHTML = result.strength;
+  document.getElementById('typeReason').innerHTML = result.reason;
+  document.getElementById('typeFuture').innerHTML = result.future;
+  document.getElementById('typeReal').innerHTML = result.real;
+  document.getElementById('typeAction').innerHTML = result.action;
+  document.getElementById('typeMessage').innerHTML = result.message;
+  document.getElementById('typeFortune').innerHTML = buildFortuneHTML();
+  window.scrollTo(0, 0);
+}
+
+function downloadPDF() {
+  const element = document.getElementById('resultContent');
+  window.scrollTo(0, 0);
+  const opt = {
+    margin: 10,
+    filename: `わの巡り診断_${new Date().toISOString().slice(0,10)}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, backgroundColor: '#fdfaf3' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['css', 'legacy'], avoid: ['.result-section', '.action-section', '.message-section'] }
+  };
+  setTimeout(() => { html2pdf().set(opt).from(element).save(); }, 200);
+}
+
+function restartQuiz() {
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('birthdayScreen').classList.remove('hidden');
+  document.querySelectorAll('input[name="gender"]').forEach(r => r.checked = false);
+  document.getElementById('birthYear').value = '';
+  document.getElementById('birthMonth').value = '';
+  document.getElementById('birthDay').value = '';
+  document.getElementById('birthHour').value = '';
+  document.getElementById('birthMinute').value = '';
+  document.getElementById('birthPlace').value = '';
+  document.getElementById('userEmail').value = '';
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
