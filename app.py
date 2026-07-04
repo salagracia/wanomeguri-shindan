@@ -27,6 +27,11 @@ try:
 except ImportError:
     resend = None
 
+try:
+    from calculations.seimei_handan import seimei_handan
+except Exception:
+    seimei_handan = None
+
 app = Flask(__name__, static_folder="static")
 app.config["MAX_CONTENT_LENGTH"] = 30 * 1024 * 1024  # PDF添付アップロード用に30MBまで許可
 
@@ -62,6 +67,7 @@ def submit():
     """メール入力直後に呼ばれる。管理者通知（リード記録）のみ。"""
     data = request.get_json(force=True, silent=True) or {}
     email = (data.get("email") or "").strip()
+    name = (data.get("name") or "").strip()
     gender = GENDER_LABELS.get(data.get("gender"), "回答なし")
     birthday = (data.get("birthday") or "").strip()
     birthtime = (data.get("birthtime") or "").strip()
@@ -77,10 +83,11 @@ def submit():
             resend.Emails.send({
                 "from": f"わの巡り診断 <{admin_from}>",
                 "to": [admin_email],
-                "subject": f"【わの巡り診断】新しい診断: {type_name} ({email})",
+                "subject": f"【わの巡り診断】新しい診断: {name or '名前未入力'} / {type_name} ({email})",
                 "text": (
                     "わの巡り診断で新しい診断が完了しました。\n\n"
                     f"日時　　　: {now}\n"
+                    f"お名前　　: {name or '未入力'}\n"
                     f"メール　　: {email}\n"
                     f"性別　　　: {gender}\n"
                     f"生年月日　: {birthday}\n"
@@ -95,11 +102,27 @@ def submit():
     return jsonify({"ok": True})
 
 
+@app.route("/api/seimei", methods=["POST"])
+def seimei():
+    """本名（漢字）入力時のみ呼ばれる。姓名判断（五格・数霊・三才）を返す。"""
+    data = request.get_json(force=True, silent=True) or {}
+    sei = (data.get("sei") or "").strip()
+    mei = (data.get("mei") or "").strip()
+    if not (seimei_handan and sei and mei):
+        return jsonify({"ok": False})
+    try:
+        result = seimei_handan(sei, mei)
+        return jsonify({"ok": True, "result": result})
+    except Exception:
+        return jsonify({"ok": False})
+
+
 @app.route("/api/send-pdf", methods=["POST"])
 def send_pdf():
     """結果表示後にブラウザから呼ばれる。診断結果PDFを添付してお客様へ送信。"""
     data = request.get_json(force=True, silent=True) or {}
     email = (data.get("email") or "").strip()
+    name = (data.get("name") or "").strip()
     type_name = (data.get("type") or "").strip()
     pdf_b64 = (data.get("pdf_base64") or "").strip()
 
@@ -110,8 +133,10 @@ def send_pdf():
     from_name = os.environ.get("FROM_NAME", "わの巡り診断")
     today = datetime.now(JST).strftime("%Y-%m-%d")
 
+    greeting = f"{name}さん\n\n" if name else ""
     if pdf_b64:
         body = (
+            f"{greeting}"
             "わの巡り診断をご利用いただき、ありがとうございます。\n\n"
             f"あなたの診断タイプは——「{type_name}」でした。\n\n"
             "詳しい診断結果を、このメールにPDFで添付しています。\n"
@@ -121,6 +146,7 @@ def send_pdf():
         )
     else:
         body = (
+            f"{greeting}"
             "わの巡り診断をご利用いただき、ありがとうございます。\n\n"
             f"あなたの診断タイプは——「{type_name}」でした。\n\n"
             "詳しい結果は、診断画面にすべて表示されています。\n\n"

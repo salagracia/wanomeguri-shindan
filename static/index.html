@@ -278,6 +278,18 @@
     <p>より正確な診断結果をお届けします</p>
 
     <div class="gender-section">
+      <p class="gender-label">お名前</p>
+      <div class="birthday-inputs" style="margin-bottom:8px;">
+        <input type="text" id="userSei" placeholder="姓" class="text-input" style="margin-top:0; flex:1;">
+        <input type="text" id="userMei" placeholder="名" class="text-input" style="margin-top:0; flex:1;">
+      </div>
+      <p class="optional-hint" style="margin-bottom:10px;">ニックネームでも大丈夫です（その場合は「名」だけでOK）</p>
+      <label class="gender-btn" style="font-size:13px;">
+        <input type="checkbox" id="isRealName"> 本名（漢字）で入力しました — 姓名判断を結果に追加
+      </label>
+    </div>
+
+    <div class="gender-section">
       <p class="gender-label">性別</p>
       <div class="gender-options">
         <label class="gender-btn"><input type="radio" name="gender" value="male"> 男性</label>
@@ -389,6 +401,11 @@
       <div class="result-section">
         <h3>《生年月日が示す、あなたの巡りの追い風》</h3>
         <div id="typeFortune"></div>
+      </div>
+
+      <div class="result-section hidden" id="seimeiSection">
+        <h3>《お名前が示す、あなたの運命の設計図》</h3>
+        <div id="seimeiContent"></div>
       </div>
 
       <div class="action-section">
@@ -546,13 +563,20 @@ function buildFortuneHTML() {
   `;
 }
 
-let userZodiac = '', userBirthday = '', userTime = '', userPlace = '', userGender = '', userEmail = '';
+let userZodiac = '', userBirthday = '', userTime = '', userPlace = '', userGender = '', userEmail = '', userName = '';
+let userSei = '', userMei = '', isRealName = false;
 let userY = 0, userM = 0, userD = 0;
 let currentQuestion = 0;
 let scores = Array(13).fill(0);
 let winnerType = 1;
 
 function proceedToIntro() {
+  userSei = (document.getElementById('userSei').value || '').trim();
+  userMei = (document.getElementById('userMei').value || '').trim();
+  isRealName = document.getElementById('isRealName').checked;
+  if (!userSei && !userMei) { alert('お名前を入力してください（ニックネームでも大丈夫です）'); return; }
+  if (isRealName && (!userSei || !userMei)) { alert('姓名判断のためには、姓と名の両方をご入力ください'); return; }
+  userName = userMei || userSei;
   const genderInput = document.querySelector('input[name="gender"]:checked');
   if (!genderInput) { alert('性別を選択してください'); return; }
   userGender = genderInput.value;
@@ -786,6 +810,7 @@ function sendResult() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: userEmail,
+        name: (userSei + ' ' + userMei).trim(),
         gender: userGender,
         birthday: userBirthday,
         birthtime: userTime,
@@ -801,8 +826,29 @@ function sendResult() {
   setTimeout(() => {
     document.getElementById('sendingScreen').classList.add('hidden');
     showResult();
-    setTimeout(sendPdfByEmail, 800);
+    // 姓名判断（本名入力時のみ）を読み込んでから、PDFを生成してメール送信
+    loadSeimei().finally(() => setTimeout(sendPdfByEmail, 800));
   }, 2000);
+}
+
+// 姓名判断をサーバーから取得して結果に追加（本名チェック時のみ）
+function loadSeimei() {
+  if (!(isRealName && userSei && userMei)) return Promise.resolve();
+  return fetch('/api/seimei', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sei: userSei, mei: userMei })
+  }).then(r => r.json()).then(d => {
+    if (!d.ok) return;
+    const s = d.result;
+    let html = `<p>${(s.intro || '').replace(/\n/g, '<br>')}</p>`;
+    html += `<p><strong>◆ 人格（あなたの本質・主運）：${s.gokaku.jinkaku}画「${s.jinkaku.name}」</strong><br>${s.jinkaku.description}</p>`;
+    html += `<p><strong>◆ 総格（人生全体を貫く大運）：${s.gokaku.soukaku}画「${s.soukaku.name}」</strong><br>${s.soukaku.description}</p>`;
+    html += `<p><strong>◆ 三才配置：${s.sansai.combo}</strong><br>${s.sansai.meaning}</p>`;
+    html += `<p style="font-size:13px;color:#8a7a5c;">天格：${s.gokaku.tenkaku}画「${s.tenkaku.name}」／地格：${s.gokaku.chikaku}画「${s.chikaku.name}」／外格：${s.gokaku.gaikaku}画「${s.gaikaku.name}」</p>`;
+    document.getElementById('seimeiContent').innerHTML = html;
+    document.getElementById('seimeiSection').classList.remove('hidden');
+  }).catch(() => {});
 }
 
 // 結果PDFを生成してメールに添付送信（バックグラウンド・失敗しても画面表示には影響しない）
@@ -824,6 +870,7 @@ function sendPdfByEmail() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: userEmail,
+          name: userName,
           type: typeResults[winnerType].name,
           pdf_base64: base64
         })
@@ -835,6 +882,7 @@ function sendPdfByEmail() {
 function showResult() {
   const result = typeResults[winnerType];
   document.getElementById('result').classList.remove('hidden');
+  document.querySelector('#result .type-label').textContent = userName ? `${userName}さんのタイプは` : 'あなたのタイプは';
   document.getElementById('typeName').textContent = result.name;
   let zodiacText = userZodiac ? `星座：${userZodiac}` : '';
   if (userTime) zodiacText += `　／　生まれた時刻：${userTime}`;
@@ -868,6 +916,11 @@ function downloadPDF() {
 function restartQuiz() {
   document.getElementById('result').classList.add('hidden');
   document.getElementById('birthdayScreen').classList.remove('hidden');
+  document.getElementById('userSei').value = '';
+  document.getElementById('userMei').value = '';
+  document.getElementById('isRealName').checked = false;
+  document.getElementById('seimeiSection').classList.add('hidden');
+  document.getElementById('seimeiContent').innerHTML = '';
   document.querySelectorAll('input[name="gender"]').forEach(r => r.checked = false);
   document.getElementById('birthYear').value = '';
   document.getElementById('birthMonth').value = '';
