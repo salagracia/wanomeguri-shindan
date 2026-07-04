@@ -1,11 +1,12 @@
 """
-わの巡り診断 Webアプリ（Flask）v1.0
+わの巡り診断 Webアプリ（Flask）v1.1
 
 構成:
-- GET  /            : 診断アプリ本体（static/index.html）を配信
-- POST /api/submit  : メールアドレス入力時に呼ばれる。
-                      サラさんへ管理者通知（リード記録）＋お客様へ確認メールを送信。
-                      メール送信に失敗しても必ず ok を返し、結果表示を止めない。
+- GET  /              : 診断アプリ本体（static/index.html）を配信
+- POST /api/submit    : メールアドレス入力時に呼ばれる。
+                        サラさんへ管理者通知（リード記録）のみ送信。
+- POST /api/send-pdf  : 結果表示後、ブラウザが生成したPDFを受け取り、
+                        お客様へ「診断結果PDF添付メール」を送信。
 
 環境変数（Render に設定済みのものを再利用）:
   RESEND_API_KEY     Resend の APIキー
@@ -27,6 +28,7 @@ except ImportError:
     resend = None
 
 app = Flask(__name__, static_folder="static")
+app.config["MAX_CONTENT_LENGTH"] = 30 * 1024 * 1024  # PDF添付アップロード用に30MBまで許可
 
 JST = timezone(timedelta(hours=9))
 
@@ -35,6 +37,14 @@ GENDER_LABELS = {
     "female": "女性",
     "unspecified": "回答なし",
 }
+
+
+def _resend_ready():
+    api_key = os.environ.get("RESEND_API_KEY", "")
+    if resend and api_key:
+        resend.api_key = api_key
+        return True
+    return False
 
 
 @app.route("/")
@@ -49,6 +59,7 @@ def health():
 
 @app.route("/api/submit", methods=["POST"])
 def submit():
+    """メール入力直後に呼ばれる。管理者通知（リード記録）のみ。"""
     data = request.get_json(force=True, silent=True) or {}
     email = (data.get("email") or "").strip()
     gender = GENDER_LABELS.get(data.get("gender"), "回答なし")
@@ -57,16 +68,11 @@ def submit():
     birthplace = (data.get("birthplace") or "").strip()
     type_name = (data.get("type") or "").strip()
 
-    api_key = os.environ.get("RESEND_API_KEY", "")
-    if resend and api_key and email:
-        resend.api_key = api_key
+    if _resend_ready() and email:
         from_email = os.environ.get("FROM_EMAIL", "onboarding@resend.dev")
-        from_name = os.environ.get("FROM_NAME", "わの巡り診断")
         admin_from = os.environ.get("ADMIN_FROM_EMAIL", from_email)
         admin_email = os.environ.get("ADMIN_EMAIL", "monthly@salagracia.com")
         now = datetime.now(JST).strftime("%Y-%m-%d %H:%M")
-
-        # 1) 管理者通知（サラさんのリード記録）
         try:
             resend.Emails.send({
                 "from": f"わの巡り診断 <{admin_from}>",
@@ -86,26 +92,59 @@ def submit():
         except Exception:
             pass
 
-        # 2) お客様への確認メール
-        try:
-            resend.Emails.send({
-                "from": f"{from_name} <{from_email}>",
-                "to": [email],
-                "subject": f"【わの巡り診断】あなたのタイプは「{type_name}」です",
-                "text": (
-                    "わの巡り診断をご利用いただき、ありがとうございます。\n\n"
-                    f"あなたの診断タイプは——「{type_name}」でした。\n\n"
-                    "詳しい結果は、診断画面にすべて表示されています。\n"
-                    "画面下の「結果をPDFで保存」ボタンから、\n"
-                    "いつでも読み返せる形で保存いただけます。\n\n"
-                    "あなたの巡りが、今日から動き出しますように。\n\n"
-                    "わの巡り診断\n"
-                ),
-            })
-        except Exception:
-            pass
-
     return jsonify({"ok": True})
+
+
+@app.route("/api/send-pdf", methods=["POST"])
+def send_pdf():
+    """結果表示後にブラウザから呼ばれる。診断結果PDFを添付してお客様へ送信。"""
+    data = request.get_json(force=True, silent=True) or {}
+    email = (data.get("email") or "").strip()
+    type_name = (data.get("type") or "").strip()
+    pdf_b64 = (data.get("pdf_base64") or "").strip()
+
+    if not (_resend_ready() and email):
+        return jsonify({"ok": False})
+
+    from_email = os.environ.get("FROM_EMAIL", "onboarding@resend.dev")
+    from_name = os.environ.get("FROM_NAME", "わの巡り診断")
+    today = datetime.now(JST).strftime("%Y-%m-%d")
+
+    if pdf_b64:
+        body = (
+            "わの巡り診断をご利用いただき、ありがとうございます。\n\n"
+            f"あなたの診断タイプは——「{type_name}」でした。\n\n"
+            "詳しい診断結果を、このメールにPDFで添付しています。\n"
+            "いつでも、何度でも、読み返してください。\n\n"
+            "あなたの巡りが、今日から動き出しますように。\n\n"
+            "わの巡り診断\n"
+        )
+    else:
+        body = (
+            "わの巡り診断をご利用いただき、ありがとうございます。\n\n"
+            f"あなたの診断タイプは——「{type_name}」でした。\n\n"
+            "詳しい結果は、診断画面にすべて表示されています。\n\n"
+            "あなたの巡りが、今日から動き出しますように。\n\n"
+            "わの巡り診断\n"
+        )
+
+    params = {
+        "from": f"{from_name} <{from_email}>",
+        "to": [email],
+        "subject": f"【わの巡り診断】あなたの診断結果「{type_name}」をお届けします",
+        "text": body,
+    }
+    if pdf_b64:
+        params["attachments"] = [{
+            "filename": f"wa-meguri-shindan_{today}.pdf",
+            "content": pdf_b64,
+        }]
+
+    try:
+        resend.Emails.send(params)
+        return jsonify({"ok": True})
+    except Exception:
+        return jsonify({"ok": False})
 
 
 if __name__ == "__main__":

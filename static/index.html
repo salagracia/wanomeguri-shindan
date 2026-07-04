@@ -797,11 +797,39 @@ function sendResult() {
   document.getElementById('emailScreen').classList.add('hidden');
   document.getElementById('sendingScreen').classList.remove('hidden');
   window.scrollTo(0, 0);
-  // 送信演出（3秒）
+  // 送信演出（2秒）→ 結果表示 → 裏でPDFを生成してメール添付送信
   setTimeout(() => {
     document.getElementById('sendingScreen').classList.add('hidden');
     showResult();
-  }, 3000);
+    setTimeout(sendPdfByEmail, 800);
+  }, 2000);
+}
+
+// 結果PDFを生成してメールに添付送信（バックグラウンド・失敗しても画面表示には影響しない）
+function sendPdfByEmail() {
+  try {
+    const element = document.getElementById('resultContent');
+    const opt = {
+      margin: 10,
+      image: { type: 'jpeg', quality: 0.9 },
+      html2canvas: { scale: 1.5, useCORS: true, scrollY: 0, scrollX: 0, backgroundColor: '#fdfaf3' },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'], avoid: ['.result-section', '.action-section', '.message-section'] }
+    };
+    html2pdf().set(opt).from(element).outputPdf('datauristring').then(function (dataUri) {
+      const base64 = (dataUri.split(',')[1]) || '';
+      if (!base64) return;
+      fetch('/api/send-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: userEmail,
+          type: typeResults[winnerType].name,
+          pdf_base64: base64
+        })
+      }).catch(() => {});
+    }).catch(() => {});
+  } catch (e) {}
 }
 
 function showResult() {
