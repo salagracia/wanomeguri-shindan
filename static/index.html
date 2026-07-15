@@ -128,7 +128,7 @@
     margin: 20px 0 26px; padding: 20px 22px; background: #e3eef4; border-radius: 14px;
     text-align: center; font-size: 15px; color: #1f3d54; line-height: 1.9; font-weight: 600;
   }
-  .score-meter { font-size: 13px; color: #3d7ca3; letter-spacing: 1px; margin-left: 8px; }
+  .score-meter { display: block; font-size: 13px; color: #3d7ca3; letter-spacing: 1px; margin-top: 2px; }
   .result-tag { text-align: center; font-size: 12px; color: #7f9db2; margin-bottom: 24px; }
 
   .score-section { margin-bottom: 26px; padding: 24px 22px; background: #eef5f9; border-radius: 14px; }
@@ -137,7 +137,11 @@
   .score-label { width: 96px; flex-shrink: 0; font-size: 13px; color: #1f3d54; letter-spacing: 0.02em; }
   .score-bar { flex: 1; height: 14px; background: #eef5f9; border: 1px solid #d7e7f0; border-radius: 7px; overflow: hidden; margin: 0 12px; }
   .score-fill { height: 100%; border-radius: 7px; }
-  .score-val { width: 72px; flex-shrink: 0; font-size: 12px; color: #5b7c93; text-align: right; }
+  .score-val {
+    width: 96px; flex-shrink: 0; font-size: 12px; color: #5b7c93; text-align: right;
+    word-break: keep-all; overflow-wrap: normal;
+  }
+  .score-val .score-text { white-space: nowrap; }
 
   .bottleneck-card {
     margin-bottom: 20px; padding: 26px 22px; border-radius: 14px;
@@ -358,13 +362,9 @@
       </div>
 
       <div class="cta-section">
-        <h3>一緒に、次の90日を設計しませんか</h3>
-        <p>診断だけでは、改善の方向性は分かっても、あなたの商品にそのまま当てはまるとは限りません。個別セッションでは、あなたの商品、発信、顧客、人材、時間の使い方を確認しながら、一緒に次の90日を設計します。</p>
-        <a class="line-btn" href="https://lin.ee/VaRyFWg" target="_blank" rel="noopener">個別セッションの詳細を見る</a>
-      </div>
-
-      <div class="action-buttons">
-        <button class="btn btn-secondary" onclick="downloadPDF()">📄 結果をPDFで保存</button>
+        <h3 id="ctaHeading">この結果を、「分かった」で終わらせないために</h3>
+        <p id="ctaBody"></p>
+        <a class="line-btn" href="https://lin.ee/VaRyFWg" target="_blank" rel="noopener">60分・¥3,300でセッションを受ける</a>
       </div>
 
       <!-- 追加分析（占術・姓名判断・入力済みの場合のみ自動表示） -->
@@ -374,6 +374,10 @@
       </div>
 
       <button class="btn btn-ghost" onclick="restartDiagnosis()" style="margin-top:24px;">もう一度診断する</button>
+
+      <div class="action-buttons" style="margin-top:12px;">
+        <button class="btn btn-secondary" onclick="downloadPDF()">📄 結果をPDFで保存</button>
+      </div>
     </div>
   </div>
 
@@ -781,12 +785,13 @@ function renderResult(result) {
   Object.keys(CATEGORY_LABEL).forEach(c => {
     const val = Math.max(0, Math.min(100, result.scores[c]));
     const band = getBand(val);
-    scoreHtml += `<div class="score-row"><span class="score-label">${CATEGORY_LABEL[c]}</span><div class="score-bar"><div class="score-fill" style="width:${val}%;background:${band.color};"></div></div><span class="score-val">${val}点・${band.label}<span class="score-meter">${meterString(val)}</span></span></div>`;
+    scoreHtml += `<div class="score-row"><span class="score-label">${CATEGORY_LABEL[c]}</span><div class="score-bar"><div class="score-fill" style="width:${val}%;background:${band.color};"></div></div><span class="score-val"><span class="score-text">${val}点・${band.label}</span><span class="score-meter">${meterString(val)}</span></span></div>`;
   });
   document.getElementById('scoreContent').innerHTML = scoreHtml;
 
   let title, conclusion, why, symptoms, risk, actions, avoid, goal30;
   const p = result.primaryBottleneck, s = result.secondaryBottleneck;
+  let displayedCategory = p;
 
   if (result.isStable) {
     title = "成長基盤安定型——次に伸ばす余地があるポイントがあります";
@@ -796,6 +801,7 @@ function renderResult(result) {
     const t = RESULT_TEMPLATES[next];
     why = t.why; symptoms = t.symptoms; risk = t.risk; actions = t.actions; avoid = t.avoid; goal30 = t.goal30;
     document.getElementById('secondaryBnCard').classList.add('hidden');
+    displayedCategory = next;
   } else if (result.isCompound) {
     const priorityFirst = getCompoundPriority(p, s, result.scores);
     title = `あなたの成長を止めている原因は「${CATEGORY_LABEL[p]}」です`;
@@ -804,6 +810,7 @@ function renderResult(result) {
     const t = RESULT_TEMPLATES[priorityFirst];
     why = t.why; symptoms = t.symptoms; risk = t.risk; actions = t.actions; avoid = t.avoid; goal30 = t.goal30;
     document.getElementById('secondaryBnCard').classList.remove('hidden');
+    displayedCategory = priorityFirst;
   } else {
     const t = RESULT_TEMPLATES[p];
     title = t.title; conclusion = t.conclusion;
@@ -826,6 +833,9 @@ function renderResult(result) {
   document.getElementById('resultActions').innerHTML = actions.map(x => `<li>${x}</li>`).join('');
   document.getElementById('resultAvoid').innerHTML = avoid.map(x => `<li>${x}</li>`).join('');
   document.getElementById('resultGoal').textContent = goal30;
+
+  document.getElementById('ctaBody').textContent =
+    `診断で分かったのは、多くの経営者に共通するパターンです。でも「${CATEGORY_LABEL[displayedCategory]}」が今のあなたの何を止めているのかは、あなたの商品やお客様の状況を聞かなければ分かりません。60分・¥3,300で、あなたの状況に合わせた次の一手を一緒に整理します。`;
 
   renderExtraAnalysis();
 }
