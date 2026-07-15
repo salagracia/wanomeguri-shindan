@@ -83,6 +83,7 @@
 
   .gender-section { margin: 20px 0 30px; text-align: center; }
   .gender-label { font-size: 14px; color: #7a5c3a; margin-bottom: 12px; letter-spacing: 0.1em; font-weight: 500; }
+  .name-label { font-size: 20px; color: #5a4628; margin-bottom: 14px; letter-spacing: 0.05em; font-weight: 700; }
   .gender-options { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
   .gender-btn {
     padding: 12px 20px;
@@ -343,14 +344,14 @@
     <p>より正確な診断結果をお届けします</p>
 
     <div class="gender-section">
-      <p class="gender-label">お名前</p>
+      <p class="name-label">お名前（ニックネームでOK）</p>
       <div class="birthday-inputs" style="margin-bottom:8px;">
         <input type="text" id="userSei" placeholder="姓" class="text-input" style="margin-top:0; flex:1;">
         <input type="text" id="userMei" placeholder="名" class="text-input" style="margin-top:0; flex:1;">
       </div>
-      <p class="optional-hint" style="margin-bottom:10px;">ニックネームでも大丈夫です（その場合は「名」だけでOK）</p>
+      <p class="optional-hint" style="margin-bottom:10px;">ニックネームは「名」だけでOK</p>
       <label class="gender-btn" style="font-size:13px;">
-        <input type="checkbox" id="isRealName"> 本名（漢字）で入力しました — 姓名判断を結果に追加
+        <input type="checkbox" id="isRealName"> 本名で入力しました。姓名判断も追加します。
       </label>
     </div>
 
