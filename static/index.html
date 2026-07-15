@@ -105,7 +105,7 @@
   .section-label { font-size: 14px; color: #7a5c3a; margin: 20px 0 10px; text-align: center; letter-spacing: 0.1em; font-weight: 500; }
 
   .optional-section {
-    margin: 30px 0;
+    margin: 12px 0 30px;
     padding: 20px;
     background: #f9f2df;
     border-radius: 12px;
@@ -113,6 +113,17 @@
   }
   .optional-title { font-size: 14px; color: #7a5c3a; margin-bottom: 6px; font-weight: 500; letter-spacing: 0.1em; }
   .optional-hint { font-size: 12px; color: #8a7a5c; margin-bottom: 16px; line-height: 1.5; }
+  .optional-toggle {
+    text-align: center; font-size: 13px; color: #8a7a5c;
+    margin: 24px 0 4px; cursor: pointer; letter-spacing: 0.05em; user-select: none;
+  }
+  .optional-toggle:hover { color: #7a5c3a; }
+  .detail-check {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 14px; color: #5a4a3a; margin-bottom: 10px; cursor: pointer;
+  }
+  .detail-check input[type="checkbox"] { accent-color: #7a5c3a; width: 16px; height: 16px; }
+  .detail-benefit { font-size: 12px; color: #b0895a; margin: -4px 0 16px 24px; }
   .text-input {
     width: 100%;
     padding: 14px 18px;
@@ -349,10 +360,7 @@
         <input type="text" id="userSei" placeholder="姓" class="text-input" style="margin-top:0; flex:1;">
         <input type="text" id="userMei" placeholder="名" class="text-input" style="margin-top:0; flex:1;">
       </div>
-      <p class="optional-hint" style="margin-bottom:10px;">ニックネームは「名」だけでOK</p>
-      <label class="gender-btn" style="font-size:13px;">
-        <input type="checkbox" id="isRealName"> 本名で入力しました。姓名判断も追加します。
-      </label>
+      <p class="optional-hint" style="margin-bottom:0;">ニックネームは「名」だけでOK</p>
     </div>
 
     <div class="gender-section">
@@ -371,14 +379,35 @@
       <select id="birthDay"><option value="">日</option></select>
     </div>
 
-    <div class="optional-section">
-      <p class="optional-title">より深い診断のため（任意）</p>
-      <p class="optional-hint">生まれた時間・場所がわかる方は、月星座や上昇星座の分析ができます</p>
-      <div class="birthday-inputs">
-        <select id="birthHour"><option value="">時（任意）</option></select>
-        <select id="birthMinute"><option value="">分（任意）</option></select>
+    <div class="optional-toggle" onclick="toggleOptionalSection()">
+      <span id="optionalToggleIcon">▸</span> より詳しく知りたい方（任意）
+    </div>
+
+    <div class="optional-section hidden" id="optionalSection">
+      <p class="optional-hint" style="margin-bottom:16px;">この診断は、マーケティング・経営分析・統計・東洋哲学など複数の視点を組み合わせて作成しています。そのため、任意項目をご入力いただくほど、より精度の高い診断結果をお届けできます。</p>
+
+      <label class="detail-check">
+        <input type="checkbox" id="wantTime" onchange="toggleField('birthTimeFields', this.checked)"> 生まれた時間
+      </label>
+      <div id="birthTimeFields" class="hidden" style="margin-bottom:6px;">
+        <div class="birthday-inputs">
+          <select id="birthHour"><option value="">時</option></select>
+          <select id="birthMinute"><option value="">分</option></select>
+        </div>
       </div>
-      <input type="text" id="birthPlace" placeholder="生まれた場所（任意・例：東京都）" class="text-input">
+
+      <label class="detail-check">
+        <input type="checkbox" id="wantPlace" onchange="toggleField('birthPlaceField', this.checked)"> 出生地
+      </label>
+      <div id="birthPlaceField" class="hidden" style="margin-bottom:6px;">
+        <input type="text" id="birthPlace" placeholder="生まれた場所（例：東京都）" class="text-input">
+      </div>
+      <p class="detail-benefit">→ より精度の高い分析ができます</p>
+
+      <label class="detail-check">
+        <input type="checkbox" id="isRealName"> 本名で診断する
+      </label>
+      <p class="detail-benefit">→ 強み・判断傾向まで詳しく分析できます</p>
     </div>
 
     <button class="btn" onclick="proceedToIntro()">次へ</button>
@@ -640,6 +669,17 @@ let userY = 0, userM = 0, userD = 0;
 let currentQuestion = 0;
 let scores = Array(13).fill(0);
 let winnerType = 1;
+
+function toggleOptionalSection() {
+  const el = document.getElementById('optionalSection');
+  const icon = document.getElementById('optionalToggleIcon');
+  el.classList.toggle('hidden');
+  icon.textContent = el.classList.contains('hidden') ? '▸' : '▾';
+}
+
+function toggleField(id, show) {
+  document.getElementById(id).classList.toggle('hidden', !show);
+}
 
 function proceedToIntro() {
   userSei = (document.getElementById('userSei').value || '').trim();
@@ -909,7 +949,7 @@ function buildChecklistHTML() {
 }
 
 function buildLineCTA(typeName) {
-  return `<p><strong>経営者の"巡り"は、一人では整いません。</strong></p><p>率直なフィードバックをくれる人が、経営者の周りには驚くほど少ないのが現実です。「${typeName}」のあなたの巡りを本当に整えるには、まず信頼できる場所で本音を言葉にすることから始まります。</p><p>LINEでは、あなたと同じように成長を止めない経営者・リーダーだけに向けて、</p><ul><li>信頼——今のあなたの状態を、正確に言語化できるようになる</li><li>尊敬——部下・取引先から「ぶれない人」として見られるようになる</li><li>事業の結果——意思決定が速くなり、交渉・採用・売上に跳ね返る</li></ul><p>という順番で、あなたの巡りを整える具体的な道筋をお届けしています。</p><a class="line-btn" href="https://lin.ee/VaRyFWg" target="_blank" rel="noopener">今日も、わの巡りでうまくいく——続きはLINEで</a>`;
+  return `<p><strong>経営者の"巡り"は、一人では整いません。</strong></p><p>率直なフィードバックをくれる人が、経営者の周りには驚くほど少ないのが現実です。「${typeName}」のあなたの巡りを本当に整えるには、まず信頼できる場所で本音を言葉にすることから始まります。</p><p>LINEでは、あなたと同じように成長を止めない経営者・リーダーだけに向けて、</p><ul><li>信頼——今のあなたの状態を、正確に言語化できるようになる</li><li>尊敬——部下・取引先から「ぶれない人」として見られるようになる</li><li>事業の結果——意思決定が速くなり、交渉・採用・売上に跳ね返る</li></ul><p>という順番で、あなたの巡りを整える具体的な道筋をお届けしています。</p><p>今回の診断は、あなたの経営傾向を分析したものです。実際に話してみると、さらに深い原因が見つかることもあります。</p><a class="line-btn" href="https://lin.ee/VaRyFWg" target="_blank" rel="noopener">個別相談はこちら</a>`;
 }
 
 function startQuiz() {
