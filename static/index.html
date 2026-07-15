@@ -130,7 +130,7 @@
   .score-row { display: flex; align-items: center; margin-bottom: 14px; }
   .score-row:last-child { margin-bottom: 0; }
   .score-label { width: 96px; flex-shrink: 0; font-size: 13px; color: #1f3d54; letter-spacing: 0.02em; }
-  .score-bar { flex: 1; height: 14px; background: #d7e7f0; border-radius: 7px; overflow: hidden; margin: 0 12px; }
+  .score-bar { flex: 1; height: 14px; background: #eef5f9; border: 1px solid #d7e7f0; border-radius: 7px; overflow: hidden; margin: 0 12px; }
   .score-fill { height: 100%; border-radius: 7px; }
   .score-val { width: 72px; flex-shrink: 0; font-size: 12px; color: #5b7c93; text-align: right; }
 
@@ -731,10 +731,10 @@ function computeResult() {
 }
 
 function getBand(score) {
-  if (score <= 29) return { label: '良好', color: '#d7e7f0' };
-  if (score <= 49) return { label: '注意', color: '#8fb8d1' };
-  if (score <= 69) return { label: '要改善', color: '#5b8fb0' };
-  return { label: '優先改善', color: '#2c5674' };
+  if (score <= 29) return { label: '良好', color: '#a8cfe0' };
+  if (score <= 49) return { label: '注意', color: '#6fa8c7' };
+  if (score <= 69) return { label: '要改善', color: '#3d7ca3' };
+  return { label: '優先改善', color: '#1f3d54' };
 }
 
 function getCompoundText(cat1, cat2) {
@@ -761,7 +761,7 @@ function renderResult(result) {
   Object.keys(CATEGORY_LABEL).forEach(c => {
     const val = Math.max(0, Math.min(100, result.scores[c]));
     const band = getBand(val);
-    scoreHtml += `<div class="score-row"><span class="score-label">${CATEGORY_LABEL[c]}</span><span class="score-bar"><span class="score-fill" style="width:${val}%;background:${band.color};"></span></span><span class="score-val">${val}点・${band.label}</span></div>`;
+    scoreHtml += `<div class="score-row"><span class="score-label">${CATEGORY_LABEL[c]}</span><div class="score-bar"><div class="score-fill" style="width:${val}%;background:${band.color};"></div></div><span class="score-val">${val}点・${band.label}</span></div>`;
   });
   document.getElementById('scoreContent').innerHTML = scoreHtml;
 
