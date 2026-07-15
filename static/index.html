@@ -9,8 +9,8 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
-    background: linear-gradient(135deg, #f5f0e8 0%, #e8dcc4 100%);
-    color: #3a3428;
+    background: linear-gradient(135deg, #eaf2f7 0%, #cfe3ee 100%);
+    color: #263544;
     min-height: 100vh;
     padding: 20px;
     line-height: 1.8;
@@ -18,51 +18,51 @@
   .container {
     max-width: 680px;
     margin: 0 auto;
-    background: #fdfaf3;
+    background: #f7fbfd;
     border-radius: 20px;
     padding: 40px 30px;
-    box-shadow: 0 10px 40px rgba(90, 70, 40, 0.15);
+    box-shadow: 0 10px 40px rgba(31, 61, 84, 0.15);
     position: relative;
   }
-  .header { text-align: center; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #ddd0b8; }
-  .header h1 { font-size: 26px; font-weight: 600; color: #5a4628; margin-bottom: 10px; letter-spacing: 0.05em; }
-  .header .subtitle { font-size: 14px; color: #8a7a5c; line-height: 1.7; }
-  .header .lead { font-size: 13px; color: #8a7a5c; margin-top: 12px; line-height: 1.8; }
+  .header { text-align: center; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #b8d4e3; }
+  .header h1 { font-size: 26px; font-weight: 600; color: #1f3d54; margin-bottom: 10px; letter-spacing: 0.05em; }
+  .header .subtitle { font-size: 14px; color: #5b7c93; line-height: 1.7; }
+  .header .lead { font-size: 13px; color: #5b7c93; margin-top: 12px; line-height: 1.8; }
   .header .methodology-note {
-    font-size: 12px; color: #7a5c3a; margin-top: 16px; line-height: 1.8;
-    padding: 12px 16px; background: #f9f2df; border-radius: 10px;
+    font-size: 12px; color: #2c5674; margin-top: 16px; line-height: 1.8;
+    padding: 12px 16px; background: #eef5f9; border-radius: 10px;
   }
   .disclaimer {
-    font-size: 11px; color: #a89b7d; text-align: center; margin-top: 14px;
-    padding: 10px; background: #f9f2df; border-radius: 8px; line-height: 1.6;
+    font-size: 11px; color: #7f9db2; text-align: center; margin-top: 14px;
+    padding: 10px; background: #eef5f9; border-radius: 8px; line-height: 1.6;
   }
 
-  h3 { font-size: 16px; color: #5a4628; margin-bottom: 10px; }
+  h3 { font-size: 16px; color: #1f3d54; margin-bottom: 10px; }
   p { margin-bottom: 10px; }
 
   /* フォーム共通 */
   .field-group { margin-bottom: 22px; }
-  .field-label { font-size: 14px; color: #7a5c3a; margin-bottom: 8px; font-weight: 600; letter-spacing: 0.05em; }
-  .field-label .required { color: #b0895a; font-size: 12px; margin-left: 6px; }
-  .field-label .optional { color: #a89b7d; font-size: 12px; margin-left: 6px; font-weight: 400; }
+  .field-label { font-size: 14px; color: #2c5674; margin-bottom: 8px; font-weight: 600; letter-spacing: 0.05em; }
+  .field-label .required { color: #5b8fb0; font-size: 12px; margin-left: 6px; }
+  .field-label .optional { color: #7f9db2; font-size: 12px; margin-left: 6px; font-weight: 400; }
   .text-input, .select-input, textarea.text-input {
-    width: 100%; padding: 14px 16px; border: 2px solid #ddd0b8; border-radius: 12px;
-    background: #fdfaf3; font-family: inherit; font-size: 15px; color: #3a3428;
+    width: 100%; padding: 14px 16px; border: 2px solid #b8d4e3; border-radius: 12px;
+    background: #f7fbfd; font-family: inherit; font-size: 15px; color: #263544;
   }
   textarea.text-input { resize: vertical; min-height: 80px; }
   .row-2 { display: flex; gap: 10px; }
   .row-2 > * { flex: 1; }
   .gender-options, .pill-options { display: flex; gap: 10px; flex-wrap: wrap; }
   .pill-btn {
-    padding: 12px 18px; border: 2px solid #ddd0b8; border-radius: 25px; background: #fdfaf3;
-    cursor: pointer; font-size: 14px; color: #5a4a3a; display: inline-flex; align-items: center; gap: 6px;
+    padding: 12px 18px; border: 2px solid #b8d4e3; border-radius: 25px; background: #f7fbfd;
+    cursor: pointer; font-size: 14px; color: #3a5266; display: inline-flex; align-items: center; gap: 6px;
   }
-  .pill-btn input { accent-color: #7a5c3a; }
-  .pill-btn:has(input:checked) { background: #7a5c3a; color: #fdfaf3; border-color: #7a5c3a; }
+  .pill-btn input { accent-color: #2c5674; }
+  .pill-btn:has(input:checked) { background: #2c5674; color: #f7fbfd; border-color: #2c5674; }
 
-  .optional-toggle { text-align: center; font-size: 13px; color: #8a7a5c; margin: 20px 0 4px; cursor: pointer; user-select: none; }
-  .optional-toggle:hover { color: #7a5c3a; }
-  .optional-block { margin: 12px 0; padding: 20px; background: #f9f2df; border-radius: 12px; border: 1px dashed #ddd0b8; }
+  .optional-toggle { text-align: center; font-size: 13px; color: #5b7c93; margin: 20px 0 4px; cursor: pointer; user-select: none; }
+  .optional-toggle:hover { color: #2c5674; }
+  .optional-block { margin: 12px 0; padding: 20px; background: #eef5f9; border-radius: 12px; border: 1px dashed #b8d4e3; }
 
   .precision-block {
     margin: 20px 0; padding: 18px 20px; background: #eaf3f8; border: 1px solid #cfe3ee;
@@ -71,99 +71,99 @@
   .precision-block p { font-size: 13px; color: #2c5674; line-height: 1.8; margin-bottom: 14px; }
   .precision-btn {
     display: inline-block; padding: 13px 30px; background: linear-gradient(135deg, #5b8fb0, #1f3d54);
-    color: #fdfaf3; border: none; border-radius: 25px; font-size: 14px; font-weight: 600;
+    color: #f7fbfd; border: none; border-radius: 25px; font-size: 14px; font-weight: 600;
     letter-spacing: 0.05em; cursor: pointer; font-family: inherit;
   }
   .precision-btn:hover { opacity: 0.92; }
-  .detail-check { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #5a4a3a; margin-bottom: 10px; cursor: pointer; }
-  .detail-check input[type="checkbox"] { accent-color: #7a5c3a; width: 16px; height: 16px; }
-  .detail-benefit { font-size: 12px; color: #b0895a; margin: -4px 0 16px 24px; }
+  .detail-check { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #3a5266; margin-bottom: 10px; cursor: pointer; }
+  .detail-check input[type="checkbox"] { accent-color: #2c5674; width: 16px; height: 16px; }
+  .detail-benefit { font-size: 12px; color: #5b8fb0; margin: -4px 0 16px 24px; }
 
   .resume-banner {
-    background: #f5eddb; border: 1px solid #ddd0b8; border-radius: 12px; padding: 16px;
-    margin-bottom: 20px; text-align: center; font-size: 13px; color: #5a4628;
+    background: #e3eef4; border: 1px solid #b8d4e3; border-radius: 12px; padding: 16px;
+    margin-bottom: 20px; text-align: center; font-size: 13px; color: #1f3d54;
   }
   .resume-banner .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
   .resume-banner button { padding: 8px 16px; font-size: 13px; }
 
   .btn {
     display: block; width: 100%; padding: 16px; margin-top: 20px;
-    background: linear-gradient(135deg, #5b8fb0, #1f3d54); color: #fdfaf3;
+    background: linear-gradient(135deg, #5b8fb0, #1f3d54); color: #f7fbfd;
     border: none; border-radius: 14px; font-size: 16px; font-weight: 600;
     letter-spacing: 0.05em; cursor: pointer; font-family: inherit;
   }
-  .btn-secondary { background: #fdfaf3; color: #2c5674; border: 2px solid #b8d4e3; }
-  .btn-ghost { background: transparent; color: #8a7a5c; border: 1px solid #ddd0b8; }
+  .btn-secondary { background: #f7fbfd; color: #2c5674; border: 2px solid #b8d4e3; }
+  .btn-ghost { background: transparent; color: #5b7c93; border: 1px solid #b8d4e3; }
   .btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .hidden { display: none !important; }
 
   /* 質問画面 */
-  .progress-text { text-align: center; font-size: 13px; color: #8a7a5c; margin-bottom: 8px; letter-spacing: 0.1em; }
-  .progress-bar { height: 6px; background: #e8ddc7; border-radius: 3px; overflow: hidden; margin-bottom: 30px; }
+  .progress-text { text-align: center; font-size: 13px; color: #5b7c93; margin-bottom: 8px; letter-spacing: 0.1em; }
+  .progress-bar { height: 6px; background: #d7e7f0; border-radius: 3px; overflow: hidden; margin-bottom: 30px; }
   .progress-fill { height: 100%; background: linear-gradient(90deg, #5b8fb0, #1f3d54); transition: width 0.3s ease; }
   .question { text-align: center; padding: 10px 0 20px; }
-  .question .q-cat { font-size: 12px; color: #b0895a; letter-spacing: 0.15em; margin-bottom: 14px; }
-  .question .q-text { font-size: 18px; color: #3a3428; line-height: 1.8; margin-bottom: 30px; min-height: 90px; }
+  .question .q-cat { font-size: 12px; color: #5b8fb0; letter-spacing: 0.15em; margin-bottom: 14px; }
+  .question .q-text { font-size: 18px; color: #263544; line-height: 1.8; margin-bottom: 30px; min-height: 90px; }
   .likert { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
   .likert-btn {
-    flex: 1; padding: 16px 4px; border: 2px solid #ddd0b8; border-radius: 12px;
-    background: #fdfaf3; font-family: inherit; font-size: 15px; color: #3a3428; cursor: pointer;
+    flex: 1; padding: 16px 4px; border: 2px solid #b8d4e3; border-radius: 12px;
+    background: #f7fbfd; font-family: inherit; font-size: 15px; color: #263544; cursor: pointer;
   }
   .likert-btn:hover { border-color: #5b8fb0; }
-  .likert-btn.selected { background: #1f3d54; color: #fdfaf3; border-color: #1f3d54; }
-  .likert-labels { display: flex; justify-content: space-between; font-size: 10px; color: #a89b7d; margin-bottom: 24px; padding: 0 2px; }
+  .likert-btn.selected { background: #1f3d54; color: #f7fbfd; border-color: #1f3d54; }
+  .likert-labels { display: flex; justify-content: space-between; font-size: 10px; color: #7f9db2; margin-bottom: 24px; padding: 0 2px; }
   .quiz-nav { display: flex; gap: 10px; margin-top: 10px; }
   .quiz-nav .btn { margin-top: 0; }
 
   /* 送信中 */
   .sending-screen { text-align: center; padding: 60px 0; }
-  .sending-text { font-size: 18px; color: #5a4628; margin-bottom: 12px; }
-  .sending-sub { font-size: 14px; color: #8a7a5c; }
+  .sending-text { font-size: 18px; color: #1f3d54; margin-bottom: 12px; }
+  .sending-sub { font-size: 14px; color: #5b7c93; }
 
   /* 結果画面 */
   .result { padding: 10px 0; }
-  .result-title { text-align: center; font-size: 22px; color: #5a4628; font-weight: 700; line-height: 1.6; margin-bottom: 14px; }
-  .result-conclusion { text-align: center; font-size: 15px; color: #7a5c3a; line-height: 1.8; margin-bottom: 30px; padding: 0 6px; }
-  .result-tag { text-align: center; font-size: 12px; color: #a89b7d; margin-bottom: 24px; }
+  .result-title { text-align: center; font-size: 22px; color: #1f3d54; font-weight: 700; line-height: 1.6; margin-bottom: 14px; }
+  .result-conclusion { text-align: center; font-size: 15px; color: #2c5674; line-height: 1.8; margin-bottom: 30px; padding: 0 6px; }
+  .result-tag { text-align: center; font-size: 12px; color: #7f9db2; margin-bottom: 24px; }
 
-  .score-section { margin-bottom: 26px; padding: 24px 22px; background: #f9f2df; border-radius: 14px; }
+  .score-section { margin-bottom: 26px; padding: 24px 22px; background: #eef5f9; border-radius: 14px; }
   .score-row { display: flex; align-items: center; margin-bottom: 14px; }
   .score-row:last-child { margin-bottom: 0; }
-  .score-label { width: 96px; flex-shrink: 0; font-size: 13px; color: #5a4628; letter-spacing: 0.02em; }
-  .score-bar { flex: 1; height: 14px; background: #e8ddc7; border-radius: 7px; overflow: hidden; margin: 0 12px; }
+  .score-label { width: 96px; flex-shrink: 0; font-size: 13px; color: #1f3d54; letter-spacing: 0.02em; }
+  .score-bar { flex: 1; height: 14px; background: #d7e7f0; border-radius: 7px; overflow: hidden; margin: 0 12px; }
   .score-fill { height: 100%; border-radius: 7px; }
-  .score-val { width: 72px; flex-shrink: 0; font-size: 12px; color: #8a7a5c; text-align: right; }
+  .score-val { width: 72px; flex-shrink: 0; font-size: 12px; color: #5b7c93; text-align: right; }
 
   .bottleneck-card {
     margin-bottom: 20px; padding: 26px 22px; border-radius: 14px;
-    background: linear-gradient(135deg, #7a5c3a, #5a4628); color: #fdfaf3;
+    background: linear-gradient(135deg, #2c5674, #1f3d54); color: #f7fbfd;
   }
   .bottleneck-card .bn-tag { font-size: 12px; letter-spacing: 0.15em; opacity: 0.85; margin-bottom: 8px; }
   .bottleneck-card .bn-cat { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
   .bottleneck-card .bn-score { font-size: 13px; opacity: 0.9; }
   .bottleneck-card.secondary {
-    background: #f5eddb; color: #5a4628; border: 1px solid #ddd0b8;
+    background: #e3eef4; color: #1f3d54; border: 1px solid #b8d4e3;
   }
-  .bottleneck-card.secondary .bn-tag { color: #b0895a; opacity: 1; }
+  .bottleneck-card.secondary .bn-tag { color: #5b8fb0; opacity: 1; }
 
-  .result-section { margin-bottom: 22px; padding: 24px 22px; background: #f9f2df; border-radius: 12px; border-left: 4px solid #b0895a; }
-  .result-section h3 { font-size: 16px; color: #7a5c3a; margin-bottom: 12px; letter-spacing: 0.05em; }
-  .result-section p, .result-section li { font-size: 14px; color: #3a3428; line-height: 1.85; }
+  .result-section { margin-bottom: 22px; padding: 24px 22px; background: #eef5f9; border-radius: 12px; border-left: 4px solid #5b8fb0; }
+  .result-section h3 { font-size: 16px; color: #2c5674; margin-bottom: 12px; letter-spacing: 0.05em; }
+  .result-section p, .result-section li { font-size: 14px; color: #263544; line-height: 1.85; }
   .result-section ul { margin-left: 20px; }
   .result-section li { margin-bottom: 6px; }
 
-  .action-section { background: #f5eddb; border-left-color: #7a5c3a; }
-  .avoid-section { background: #f4efe4; border-left-color: #c8b98e; }
-  .goal-section { background: #efe6d0; border-left-color: #7a5c3a; }
+  .action-section { background: #e3eef4; border-left-color: #2c5674; }
+  .avoid-section { background: #e8f0f5; border-left-color: #a8c8db; }
+  .goal-section { background: #dce8ef; border-left-color: #2c5674; }
 
   .cta-section {
-    margin-top: 30px; padding: 30px 22px; background: linear-gradient(135deg, #7a5c3a, #5a4628);
-    color: #fdfaf3; border-radius: 14px; text-align: center;
+    margin-top: 30px; padding: 30px 22px; background: linear-gradient(135deg, #2c5674, #1f3d54);
+    color: #f7fbfd; border-radius: 14px; text-align: center;
   }
   .cta-section h3 { font-size: 16px; margin-bottom: 14px; letter-spacing: 0.05em; }
   .cta-section p { font-size: 13px; line-height: 1.9; opacity: 0.95; margin-bottom: 16px; }
   .cta-section .line-btn {
-    display: inline-block; margin-top: 4px; padding: 14px 32px; background: #fdfaf3; color: #5a4628;
+    display: inline-block; margin-top: 4px; padding: 14px 32px; background: #f7fbfd; color: #1f3d54;
     border-radius: 30px; font-size: 15px; font-weight: 600; text-decoration: none;
   }
 
@@ -171,8 +171,8 @@
   .action-buttons .btn { width: auto; flex: 1; min-width: 140px; margin-top: 0; }
 
   /* 追加分析（占術・姓名判断） */
-  .extra-analysis { margin-top: 30px; padding-top: 24px; border-top: 1px dashed #ddd0b8; }
-  .extra-analysis .extra-lead { font-size: 13px; color: #8a7a5c; text-align: center; margin-bottom: 16px; }
+  .extra-analysis { margin-top: 30px; padding-top: 24px; border-top: 1px dashed #b8d4e3; }
+  .extra-analysis .extra-lead { font-size: 13px; color: #5b7c93; text-align: center; margin-bottom: 16px; }
   .extra-analysis .result-section { margin-top: 16px; }
 
   @media (max-width: 480px) {
@@ -754,10 +754,10 @@ function computeResult() {
 }
 
 function getBand(score) {
-  if (score <= 29) return { label: '良好', color: '#e8ddc7' };
-  if (score <= 49) return { label: '注意', color: '#d4b483' };
-  if (score <= 69) return { label: '要改善', color: '#b0895a' };
-  return { label: '優先改善', color: '#7a5c3a' };
+  if (score <= 29) return { label: '良好', color: '#d7e7f0' };
+  if (score <= 49) return { label: '注意', color: '#8fb8d1' };
+  if (score <= 69) return { label: '要改善', color: '#5b8fb0' };
+  return { label: '優先改善', color: '#2c5674' };
 }
 
 function getCompoundText(cat1, cat2) {
@@ -923,10 +923,10 @@ function showExtraAnalysis() {
       <p><strong>◆ 星座：${userZodiac}</strong><br>${zText}</p>
       <p><strong>◆ 数秘ライフパスナンバー：${lp}</strong><br>${lifePathData[lp]}</p>
       <p><strong>◆ 九星気学：${kd.name}</strong><br>${kd.nature}<br>気を付けたいこと——${kd.care}<br>${kd.flow}</p>
-      <p style="font-size:12px;color:#8a7a5c;">※ あくまで参考情報です。診断結果の判定には使用していません。</p>
+      <p style="font-size:12px;color:#5b7c93;">※ あくまで参考情報です。診断結果の判定には使用していません。</p>
     </div>`;
   } else {
-    html += `<p style="font-size:13px;color:#8a7a5c;">生年月日が入力されていないため、星座・数秘・九星気学は表示できません。基本診断画面で生年月日を入力してから、もう一度お試しください。</p>`;
+    html += `<p style="font-size:13px;color:#5b7c93;">生年月日が入力されていないため、星座・数秘・九星気学は表示できません。基本診断画面で生年月日を入力してから、もう一度お試しください。</p>`;
   }
 
   document.getElementById('extraResult').innerHTML = html;
@@ -943,8 +943,8 @@ function showExtraAnalysis() {
       sh += `<p><strong>◆ 人格：${s.gokaku.jinkaku}画「${s.jinkaku.name}」</strong><br>${s.jinkaku.description}</p>`;
       sh += `<p><strong>◆ 総格：${s.gokaku.soukaku}画「${s.soukaku.name}」</strong><br>${s.soukaku.description}</p>`;
       sh += `<p><strong>◆ 三才配置：${s.sansai.combo}</strong><br>${s.sansai.meaning}</p>`;
-      if (d.approx) sh += `<p style="font-size:12px;color:#8a7a5c;">※ お名前の一部の文字は概算の画数で計算しています。</p>`;
-      sh += `<p style="font-size:12px;color:#8a7a5c;">※ あくまで参考情報です。診断結果の判定には使用していません。</p></div>`;
+      if (d.approx) sh += `<p style="font-size:12px;color:#5b7c93;">※ お名前の一部の文字は概算の画数で計算しています。</p>`;
+      sh += `<p style="font-size:12px;color:#5b7c93;">※ あくまで参考情報です。診断結果の判定には使用していません。</p></div>`;
       document.getElementById('extraResult').innerHTML += sh;
     }).catch(() => {});
   }
@@ -960,7 +960,7 @@ function downloadPDF() {
     margin: 10,
     filename: `業績アップ診断_${new Date().toISOString().slice(0,10)}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, backgroundColor: '#fdfaf3' },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, backgroundColor: '#f7fbfd' },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     pagebreak: { mode: ['css', 'legacy'], avoid: ['.result-section', '.score-section', '.bottleneck-card', '.cta-section'] }
   };
@@ -974,32 +974,32 @@ function downloadShareImage() {
   const W = canvas.width, H = canvas.height;
 
   const grad = ctx.createLinearGradient(0, 0, W, H);
-  grad.addColorStop(0, '#f5f0e8'); grad.addColorStop(1, '#e8dcc4');
+  grad.addColorStop(0, '#eaf2f7'); grad.addColorStop(1, '#cfe3ee');
   ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
 
-  ctx.fillStyle = '#5a4628';
+  ctx.fillStyle = '#1f3d54';
   ctx.font = 'bold 52px "Hiragino Sans", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('業績アップ診断', W/2, 160);
 
   ctx.font = '28px "Hiragino Sans", sans-serif';
-  ctx.fillStyle = '#8a7a5c';
+  ctx.fillStyle = '#5b7c93';
   ctx.fillText('あなたの最大のボトルネックは', W/2, 420);
 
   ctx.font = 'bold 88px "Hiragino Sans", sans-serif';
-  ctx.fillStyle = '#7a5c3a';
+  ctx.fillStyle = '#2c5674';
   ctx.fillText(CATEGORY_LABEL[diagnosisResult.primaryBottleneck], W/2, 540);
 
   const score = diagnosisResult.scores[diagnosisResult.primaryBottleneck];
   ctx.font = '32px "Hiragino Sans", sans-serif';
-  ctx.fillStyle = '#5a4628';
+  ctx.fillStyle = '#1f3d54';
   ctx.fillText(`停滞度 ${score}点（${getBand(score).label}）`, W/2, 620);
 
-  ctx.strokeStyle = '#ddd0b8'; ctx.lineWidth = 3;
+  ctx.strokeStyle = '#b8d4e3'; ctx.lineWidth = 3;
   ctx.strokeRect(60, 60, W-120, H-120);
 
   ctx.font = '24px "Hiragino Sans", sans-serif';
-  ctx.fillStyle = '#a89b7d';
+  ctx.fillStyle = '#7f9db2';
   ctx.fillText('あなたの業績が伸びない原因が分かります', W/2, H-100);
 
   const link = document.createElement('a');
