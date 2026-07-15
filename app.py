@@ -124,63 +124,39 @@ def seimei():
 
 @app.route("/api/send-pdf", methods=["POST"])
 def send_pdf():
-    """結果表示後にブラウザから呼ばれる。診断結果PDFを添付してお客様へ送信。"""
+    """結果表示後にブラウザから自動で呼ばれる。診断結果PDFを管理者（サラさん）へ送信。
+    メールアドレスは収集していないため、お客様への送信は行わない。"""
     data = request.get_json(force=True, silent=True) or {}
     email = (data.get("email") or "").strip()
     name = (data.get("name") or "").strip()
     type_name = (data.get("type") or "").strip()
     pdf_b64 = (data.get("pdf_base64") or "").strip()
 
-    if not (_resend_ready() and email):
+    if not (_resend_ready() and pdf_b64):
         return jsonify({"ok": False})
 
     from_email = os.environ.get("FROM_EMAIL", "onboarding@resend.dev")
-    from_name = os.environ.get("FROM_NAME", "わの巡り診断")
+    from_name = os.environ.get("FROM_NAME", "業績アップ診断")
     today = datetime.now(JST).strftime("%Y-%m-%d")
-
-    line_url = "https://lin.ee/VaRyFWg"
-    greeting = f"{name}さん\n\n" if name else ""
-    if pdf_b64:
-        body = (
-            f"{greeting}"
-            "わの巡り診断をご利用いただき、ありがとうございます。\n\n"
-            f"あなたの診断タイプは——「{type_name}」でした。\n\n"
-            "詳しい診断結果を、このメールにPDFで添付しています。\n"
-            "いつでも、何度でも、読み返してください。\n\n"
-            "経営者・リーダーの巡りは、一人では整いません。\n"
-            "あなたの巡りを本当に整える具体的な道筋は、LINEでお届けしています。\n"
-            f"{line_url}\n\n"
-            "あなたの巡りが、今日から動き出しますように。\n\n"
-            "わの巡り診断\n"
-        )
-    else:
-        body = (
-            f"{greeting}"
-            "わの巡り診断をご利用いただき、ありがとうございます。\n\n"
-            f"あなたの診断タイプは——「{type_name}」でした。\n\n"
-            "詳しい結果は、診断画面にすべて表示されています。\n\n"
-            "経営者・リーダーの巡りは、一人では整いません。\n"
-            "あなたの巡りを本当に整える具体的な道筋は、LINEでお届けしています。\n"
-            f"{line_url}\n\n"
-            "あなたの巡りが、今日から動き出しますように。\n\n"
-            "わの巡り診断\n"
-        )
+    admin_email = os.environ.get("ADMIN_EMAIL", "monthly@salagracia.com")
 
     params = {
         "from": f"{from_name} <{from_email}>",
-        "to": [email],
-        "subject": f"【わの巡り診断】あなたの診断結果「{type_name}」をお届けします",
-        "text": body,
-    }
-    # 管理者（サラさん）にも同じメール＋PDF添付をBCCで届ける（結果の控え）
-    admin_email = os.environ.get("ADMIN_EMAIL", "monthly@salagracia.com")
-    if admin_email and admin_email != email:
-        params["bcc"] = [admin_email]
-    if pdf_b64:
-        params["attachments"] = [{
-            "filename": f"wa-meguri-shindan_{today}.pdf",
+        "to": [email] if email else [admin_email],
+        "subject": f"【業績アップ診断】新しい診断結果PDF: {name or '名前未入力'} / 第一ボトルネック:{type_name}",
+        "text": (
+            f"業績アップ診断が完了しました。\n\n"
+            f"お名前　　　　: {name or '未入力'}\n"
+            f"第一ボトルネック: {type_name}\n\n"
+            "詳しい結果はPDFを添付しています。\n"
+        ),
+        "attachments": [{
+            "filename": f"業績アップ診断_{today}.pdf",
             "content": pdf_b64,
-        }]
+        }],
+    }
+    if email and admin_email and admin_email != email:
+        params["bcc"] = [admin_email]
 
     try:
         resend.Emails.send(params)

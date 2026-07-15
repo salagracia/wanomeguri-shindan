@@ -373,9 +373,7 @@
         <div id="extraResult"></div>
       </div>
 
-      <button class="btn btn-ghost" onclick="restartDiagnosis()" style="margin-top:24px;">もう一度診断する</button>
-
-      <div class="action-buttons" style="margin-top:12px;">
+      <div class="action-buttons" style="margin-top:24px;">
         <button class="btn btn-secondary" onclick="downloadPDF()">📄 結果をPDFで保存</button>
       </div>
     </div>
@@ -710,7 +708,35 @@ function finishQuiz() {
     renderResult(diagnosisResult);
     clearSaved();
     window.scrollTo(0, 0);
+    setTimeout(sendPdfToAdmin, 800);
   }, 1800);
+}
+
+// 結果PDFを裏で生成し、管理者（サラさん）へ自動送信する（ユーザーの操作は不要）
+function sendPdfToAdmin() {
+  try {
+    const element = document.getElementById('resultContent');
+    const opt = {
+      margin: 10,
+      image: { type: 'jpeg', quality: 0.9 },
+      html2canvas: { scale: 1.5, useCORS: true, scrollY: 0, scrollX: 0, backgroundColor: '#f7fbfd' },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'], avoid: ['.result-section', '.score-section', '.bottleneck-card', '.cta-section'] }
+    };
+    html2pdf().set(opt).from(element).outputPdf('datauristring').then(function (dataUri) {
+      const base64 = (dataUri.split(',')[1]) || '';
+      if (!base64) return;
+      fetch('/api/send-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: '', name: userInfo.name,
+          type: CATEGORY_LABEL[diagnosisResult.primaryBottleneck],
+          pdf_base64: base64
+        })
+      }).catch(() => {});
+    }).catch(() => {});
+  } catch (e) {}
 }
 
 // ===================================================================
