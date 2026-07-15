@@ -383,14 +383,6 @@
     <button class="btn" onclick="proceedToIntro()">次へ</button>
   </div>
 
-  <!-- イントロ画面 -->
-  <div id="intro" class="intro hidden">
-    <p>事業は順調に来ているはずなのに、<br>なぜか業績が伸び悩む。</p>
-    <p>その原因を、24問の質問から<br>「心・判断・行動・信用・ご縁・売上・豊かさ」<br>7つのスコアとして可視化します。</p>
-    <p style="color:#8a7a5c;font-size:13px;margin-top:20px;">所要時間：約5分</p>
-    <button class="btn" onclick="startQuiz()">診断を始める</button>
-  </div>
-
   <!-- 質問画面 -->
   <div id="quiz" class="hidden">
     <div class="progress-text"><span id="progressText">Q1 / 24</span></div>
@@ -673,7 +665,7 @@ function proceedToIntro() {
   userPlace = document.getElementById('birthPlace').value || '';
 
   document.getElementById('birthdayScreen').classList.add('hidden');
-  document.getElementById('intro').classList.remove('hidden');
+  startQuiz();
 }
 
 // 24問
@@ -922,7 +914,6 @@ function buildLineCTA(typeName) {
 function startQuiz() {
   currentQuestion = 0;
   scores = Array(13).fill(0);
-  document.getElementById('intro').classList.add('hidden');
   document.getElementById('quiz').classList.remove('hidden');
   showQuestion();
 }
