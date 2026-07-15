@@ -137,6 +137,7 @@ def send_pdf():
     from_name = os.environ.get("FROM_NAME", "わの巡り診断")
     today = datetime.now(JST).strftime("%Y-%m-%d")
 
+    line_url = "https://lin.ee/VaRyFWg"
     greeting = f"{name}さん\n\n" if name else ""
     if pdf_b64:
         body = (
@@ -145,6 +146,9 @@ def send_pdf():
             f"あなたの診断タイプは——「{type_name}」でした。\n\n"
             "詳しい診断結果を、このメールにPDFで添付しています。\n"
             "いつでも、何度でも、読み返してください。\n\n"
+            "経営者・リーダーの巡りは、一人では整いません。\n"
+            "あなたの巡りを本当に整える具体的な道筋は、LINEでお届けしています。\n"
+            f"{line_url}\n\n"
             "あなたの巡りが、今日から動き出しますように。\n\n"
             "わの巡り診断\n"
         )
@@ -154,6 +158,9 @@ def send_pdf():
             "わの巡り診断をご利用いただき、ありがとうございます。\n\n"
             f"あなたの診断タイプは——「{type_name}」でした。\n\n"
             "詳しい結果は、診断画面にすべて表示されています。\n\n"
+            "経営者・リーダーの巡りは、一人では整いません。\n"
+            "あなたの巡りを本当に整える具体的な道筋は、LINEでお届けしています。\n"
+            f"{line_url}\n\n"
             "あなたの巡りが、今日から動き出しますように。\n\n"
             "わの巡り診断\n"
         )

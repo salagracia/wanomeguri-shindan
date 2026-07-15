@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>わの巡り診断 | あなたの巡りが止まる原因</title>
+<title>業績アップ診断 | あなたの業績が伸びない原因と、次に改善すべきポイントが分かります</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -254,6 +254,71 @@
   .action-buttons { display: flex; gap: 12px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
   .hidden { display: none; }
 
+  /* 巡りスコア可視化 */
+  .flow-score-section {
+    margin-bottom: 24px;
+    padding: 28px 25px;
+    background: #f9f2df;
+    border-radius: 12px;
+    border-left: 4px solid #b0895a;
+  }
+  .flow-score-section h3 { font-size: 17px; color: #7a5c3a; margin-bottom: 20px; letter-spacing: 0.1em; font-weight: 600; }
+  .flow-score-row { display: flex; align-items: center; margin-bottom: 12px; }
+  .flow-score-label { width: 92px; flex-shrink: 0; font-size: 14px; color: #5a4628; letter-spacing: 0.05em; }
+  .flow-score-bar { flex: 1; height: 10px; background: #e8ddc7; border-radius: 5px; overflow: hidden; margin: 0 12px; }
+  .flow-score-fill { height: 100%; background: linear-gradient(90deg, #b0895a, #7a5c3a); border-radius: 5px; }
+  .flow-score-stars { width: 84px; flex-shrink: 0; font-size: 14px; color: #b0895a; text-align: right; letter-spacing: 1px; }
+  .flow-score-summary { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e8ddc7; font-size: 14px; color: #7a5c3a; font-weight: 600; line-height: 1.8; }
+
+  /* 経営への影響 */
+  .impact-section {
+    margin-bottom: 24px;
+    padding: 28px 25px;
+    background: #fdf6ea;
+    border-radius: 12px;
+    border: 1px solid #e0c99a;
+  }
+  .impact-section h3 { font-size: 17px; color: #7a5c3a; margin-bottom: 12px; letter-spacing: 0.1em; font-weight: 600; }
+  .impact-section .impact-lead { font-size: 14px; color: #5a4628; margin-bottom: 16px; line-height: 1.8; }
+  .impact-section ul { margin: 0; padding: 0; list-style: none; }
+  .impact-section li {
+    font-size: 15px; color: #3a3428; line-height: 1.8; margin-bottom: 10px;
+    padding-left: 22px; position: relative;
+  }
+  .impact-section li::before { content: "▸"; position: absolute; left: 0; color: #b0895a; }
+
+  /* 今日のたった一つの行動 + チェックリスト */
+  .today-section {
+    margin-bottom: 24px;
+    padding: 28px 25px;
+    background: #f5eddb;
+    border-radius: 12px;
+    border-left: 4px solid #7a5c3a;
+  }
+  .today-section h3 { font-size: 17px; color: #5a4628; margin-bottom: 16px; letter-spacing: 0.1em; }
+  .today-section .today-bridge { font-size: 13px; color: #8a7a5c; margin-top: 14px; line-height: 1.8; }
+  .checklist-title { font-size: 14px; color: #7a5c3a; font-weight: 600; margin: 20px 0 10px; letter-spacing: 0.05em; }
+  .checklist-item { font-size: 14px; color: #3a3428; line-height: 2; padding-left: 4px; }
+
+  /* LINE誘導CTA */
+  .cta-section {
+    margin-top: 40px;
+    padding: 32px 25px;
+    background: linear-gradient(135deg, #7a5c3a, #5a4628);
+    color: #fdfaf3;
+    border-radius: 12px;
+    text-align: center;
+  }
+  .cta-section h3 { font-size: 17px; margin-bottom: 18px; letter-spacing: 0.1em; }
+  .cta-section p { font-size: 14px; line-height: 1.9; opacity: 0.95; margin-bottom: 12px; }
+  .cta-section ul { text-align: left; display: inline-block; margin: 8px auto 16px; padding: 0; list-style: none; }
+  .cta-section li { font-size: 14px; line-height: 2; opacity: 0.95; }
+  .cta-section .line-btn {
+    display: inline-block; margin-top: 12px; padding: 14px 36px;
+    background: #fdfaf3; color: #5a4628; border-radius: 30px;
+    font-size: 15px; font-weight: 600; text-decoration: none; letter-spacing: 0.05em;
+  }
+
   @media (max-width: 480px) {
     .container { padding: 30px 20px; }
     .header h1 { font-size: 24px; }
@@ -268,8 +333,8 @@
 <div class="container">
 
   <div class="header">
-    <h1>わの巡り診断</h1>
-    <div class="subtitle">あなたの巡りが止まっている原因</div>
+    <h1>業績アップ診断</h1>
+    <div class="subtitle">あなたの業績が伸びない原因と、次に改善すべきポイントが分かります。</div>
   </div>
 
   <!-- 生年月日入力画面 -->
@@ -320,8 +385,8 @@
 
   <!-- イントロ画面 -->
   <div id="intro" class="intro hidden">
-    <p>順調に来ているはずなのに、<br>なぜか満たされない。</p>
-    <p>その原因を、24問の質問から<br>明らかにします。</p>
+    <p>事業は順調に来ているはずなのに、<br>なぜか業績が伸び悩む。</p>
+    <p>その原因を、24問の質問から<br>「心・判断・行動・信用・ご縁・売上・豊かさ」<br>7つのスコアとして可視化します。</p>
     <p style="color:#8a7a5c;font-size:13px;margin-top:20px;">所要時間：約5分</p>
     <button class="btn" onclick="startQuiz()">診断を始める</button>
   </div>
@@ -373,6 +438,11 @@
       <div class="type-name" id="typeName"></div>
       <div class="zodiac" id="zodiacDisplay"></div>
 
+      <div class="flow-score-section">
+        <h3>《あなたの"7つの巡り"スコア》</h3>
+        <div id="flowScoreContent"></div>
+      </div>
+
       <div class="result-section">
         <h3>《あなたの本質》</h3>
         <div id="typeEssence"></div>
@@ -388,13 +458,19 @@
         <div id="typeReason"></div>
       </div>
 
+      <div class="impact-section">
+        <h3>《経営への影響》</h3>
+        <p class="impact-lead">これは性格の問題ではありません。この巡りの滞りは、具体的に経営にこう影響しています——</p>
+        <ul id="impactContent"></ul>
+      </div>
+
       <div class="result-section">
         <h3>《このままだと訪れる未来》</h3>
         <div id="typeFuture"></div>
       </div>
 
       <div class="result-section">
-        <h3>《本来のあなた》</h3>
+        <h3>《本来のあなた——1ヶ月後、巡りが動き出したあなた》</h3>
         <div id="typeReal"></div>
       </div>
 
@@ -408,13 +484,15 @@
         <div id="seimeiContent"></div>
       </div>
 
-      <div class="action-section">
-        <h3>《今日、あなたに必要な整え方》</h3>
+      <div class="today-section">
+        <h3>《今日、あなたにできる、たった一つのこと》</h3>
         <div id="typeAction"></div>
+        <div class="checklist-title">□ 今日の一歩（できるものだけでOK）</div>
+        <div id="checklistContent"></div>
       </div>
 
-      <div class="message-section">
-        <h3>あなたへのメッセージ</h3>
+      <div class="cta-section">
+        <h3>個別相談へ——あなたの巡りは、一人では整いません</h3>
         <div id="typeMessage"></div>
       </div>
     </div>
@@ -750,6 +828,97 @@ const typeResults = {
   }
 };
 
+// ===== 7つの巡りスコア（1〜5）＝心・判断・行動・信用・ご縁・売上・豊かさ =====
+const flowScores = {
+  1:  { 心:2, 判断:4, 行動:5, 信用:5, ご縁:4, 売上:2, 豊かさ:2 }, // 与え上手型
+  2:  { 心:2, 判断:3, 行動:4, 信用:5, ご縁:4, 売上:2, 豊かさ:2 }, // 献身型
+  3:  { 心:3, 判断:4, 行動:2, 信用:4, ご縁:3, 売上:2, 豊かさ:3 }, // 磨き上げ型
+  4:  { 心:3, 判断:2, 行動:3, 信用:3, ご縁:3, 売上:2, 豊かさ:2 }, // 観察型
+  5:  { 心:2, 判断:5, 行動:5, 信用:4, ご縁:2, 売上:4, 豊かさ:3 }, // 独立型
+  6:  { 心:5, 判断:2, 行動:3, 信用:5, ご縁:4, 売上:2, 豊かさ:3 }, // 謙虚型
+  7:  { 心:3, 判断:5, 行動:4, 信用:3, ご縁:2, 売上:4, 豊かさ:3 }, // 信念型
+  8:  { 心:3, 判断:3, 行動:3, 信用:4, ご縁:2, 売上:3, 豊かさ:2 }, // 深愛型
+  9:  { 心:2, 判断:4, 行動:5, 信用:4, ご縁:3, 売上:4, 豊かさ:2 }, // 集中型
+  10: { 心:2, 判断:5, 行動:5, 信用:4, ご縁:3, 売上:4, 豊かさ:2 }, // 先回り型
+  11: { 心:3, 判断:3, 行動:2, 信用:5, ご縁:3, 売上:2, 豊かさ:3 }, // 地に足型
+  12: { 心:3, 判断:3, 行動:3, 信用:2, ご縁:4, 売上:2, 豊かさ:3 }  // 柔軟型
+};
+
+// ===== 経営への影響（タイプ別） =====
+const businessImpact = {
+  1: ["自分の仕事に正当な価格を請求できない","頼まれると断れず、優先順位が崩れる","「自分がいないと回らない」と抱え込み、権限移譲やAI活用が進まない","スタッフに仕事を任せても、不安で口を出してしまう","発信しても「与える情報」ばかりで、自分の商品価値を語れない"],
+  2: ["自分の商品・サービスに正当な値段をつけられない","「私さえ我慢すれば」でスタッフの待遇改善が後回しになる","休みが取れず、経営判断が疲労の中で行われる","本音の交渉ができず、条件面で損をする","発信で自分の実績を語れず、認知が広がらない"],
+  3: ["商品・サービスのリリースが遅れ、機会損失が続く","完璧を求めるあまり、値上げのタイミングを逃す","部下の仕事に細かく口を出し、任せられない","SNS投稿や動画が「完璧じゃないから」出せない","新しい挑戦に踏み出すまでに時間がかかりすぎる"],
+  4: ["競合の価格を見て、自分の値段に自信が持てない","他社の成功を見て焦り、戦略がぶれる","自分の判断より他人の評価を優先し、意思決定が遅れる","SNSで他人と比較し、発信のトーンが定まらない","自分の強みを言語化できず、差別化が弱い"],
+  5: ["相談できる相手がおらず、経営判断が独りよがりになるリスクがある","弱みを見せられず、AIや専門家など外部の力を借りられない","後継者・右腕を育てられない","顧客・スタッフとの距離が縮まらない","孤独な意思決定が続き、判断の精度が徐々に落ちる"],
+  6: ["適正な価格を提示できず、値上げができない","実績を語れず、発信・PRで存在感を出せない","部下を信じきれず、権限移譲やAI活用が進まない","顔出し・実名での発信に踏み切れない","交渉の最終局面で一歩引いてしまう"],
+  7: ["部下の意見を聞かず、離職や不満につながる","自分の判断に固執し、専門家やAIなど外部のアドバイスを取り入れない","顧客の本音のフィードバックを受け取れない","後継者が育たず、事業が自分一人に依存する","市場の変化への対応が遅れる"],
+  8: ["大切な事業・顧客を手放せず、新しい挑戦ができない","権限移譲ができず、スタッフが育たない","成功や機会を独占し、パートナーシップが築けない","執着から交渉で強く出過ぎて、関係が壊れることがある","新しい市場・顧客層への展開に踏み切れない"],
+  9: ["家庭の巡りが崩れ、経営判断の土台が不安定になる","仕事に逃げ込み、本当に大事な人間関係の課題を先送りする","感情を扱えず、スタッフとの対話が事務的になる","燃え尽きのリスクが高く、長期的な経営体力が落ちる","プライベートの充実がないまま、成功しても満たされない"],
+  10: ["今の成果を味わえず、達成しても次の不安に駆られる","焦りから拙速な意思決定をしてしまう","「今」に集中できず、目の前の顧客・スタッフへの対応が雑になる","燃え尽きのリスクが高い","プロセスを楽しめず、成長を実感できない"],
+  11: ["新しい挑戦・値上げに踏み切れず、機会損失が続く","変化への抵抗が強く、時代の変化に対応が遅れる","AIなど新しいツールの導入に及び腰になる","新規顧客層・新しい発信方法に踏み出せない","「このままでいい」が口癖になり、成長が止まる"],
+  12: ["手を広げすぎて、どの事業も専門性が深まらない","一貫性がなく、ブランドの信用構築が弱い","価格を安売りしがちで、単価が上がらない","発信のテーマが定まらず、フォロワー・顧客が育ちにくい","始めたことを完成させられず、成果につながらない"]
+};
+
+// ===== 今日、あなたにできる、たった一つのこと（寸止め・タイプ別） =====
+const dangledAction = {
+  1: "今日、誰かに小さな手伝いを1つだけ頼んでみてください。",
+  2: "今日10分だけ、誰にも与えず、自分のためだけに使ってください。",
+  3: "今日、何か一つを「70点」のまま世に出してみてください。",
+  4: "今日1時間だけ、SNSを見ない時間を作ってください。",
+  5: "今日、信頼できる一人に、小さな弱さを見せてみてください。",
+  6: "今日、鏡の前で「私はこの立場にふさわしい」と1回だけ言ってみてください。",
+  7: "今日、身近な人の意見を一つ、最後まで否定せず聞いてみてください。",
+  8: "今日、握りしめている何か一つを、誰かに譲ってみてください。",
+  9: "今日、パートナーか家族に「最近どう？」と3分だけ聞いてみてください。",
+  10: "今日5分だけ、スマホを置いて「今」を味わってみてください。",
+  11: "今日、いつもと違う小さな行動を一つしてみてください。",
+  12: "今日、進めている中の一つだけを選び、「今週はこれに集中する」と決めてください。"
+};
+
+// ===== 今日の一歩チェックリスト（共通・経営リズムの基本動作） =====
+const todayChecklist = [
+  "価格を1つだけ、今日中に見直す",
+  "SNSやメルマガで、今日一つだけ発信する",
+  "スタッフや家族に、感謝を一言伝える",
+  "30分だけ、AIか誰かに仕事を任せてみる",
+  "会いたいと思っていた一人に、今日連絡してみる"
+];
+
+function starString(score) {
+  return "★".repeat(score) + "☆".repeat(5 - score);
+}
+
+function buildFlowScoreHTML(type) {
+  const s = flowScores[type];
+  const order = ["心", "判断", "行動", "信用", "ご縁", "売上", "豊かさ"];
+  let html = "";
+  order.forEach((key) => {
+    const score = s[key];
+    html += `<div class="flow-score-row"><span class="flow-score-label">${key}の巡り</span><span class="flow-score-bar"><span class="flow-score-fill" style="width:${score * 20}%"></span></span><span class="flow-score-stars">${starString(score)}</span></div>`;
+  });
+  const min = Math.min(...order.map((k) => s[k]));
+  const lowest = order.filter((k) => s[k] === min);
+  html += `<div class="flow-score-summary">特に「${lowest.join("の巡り」「")}の巡り」が止まっています。</div>`;
+  return html;
+}
+
+function buildImpactHTML(type) {
+  return businessImpact[type].map((item) => `<li>${item}</li>`).join("");
+}
+
+function buildTodayActionHTML(type) {
+  return `<p>${dangledAction[type]}</p><p class="today-bridge">ただし、これは対症療法にすぎません。あなたの巡りが止まっている根本の構造は、今日だけの一つの行動では変わりません。</p>`;
+}
+
+function buildChecklistHTML() {
+  return todayChecklist.map((item) => `<div class="checklist-item">□ ${item}</div>`).join("");
+}
+
+function buildLineCTA(typeName) {
+  return `<p><strong>経営者の"巡り"は、一人では整いません。</strong></p><p>率直なフィードバックをくれる人が、経営者の周りには驚くほど少ないのが現実です。「${typeName}」のあなたの巡りを本当に整えるには、まず信頼できる場所で本音を言葉にすることから始まります。</p><p>LINEでは、あなたと同じように成長を止めない経営者・リーダーだけに向けて、</p><ul><li>信頼——今のあなたの状態を、正確に言語化できるようになる</li><li>尊敬——部下・取引先から「ぶれない人」として見られるようになる</li><li>事業の結果——意思決定が速くなり、交渉・採用・売上に跳ね返る</li></ul><p>という順番で、あなたの巡りを整える具体的な道筋をお届けしています。</p><a class="line-btn" href="https://lin.ee/VaRyFWg" target="_blank" rel="noopener">今日も、わの巡りでうまくいく——続きはLINEで</a>`;
+}
+
 function startQuiz() {
   currentQuestion = 0;
   scores = Array(13).fill(0);
@@ -863,7 +1032,7 @@ function sendPdfByEmail() {
       image: { type: 'jpeg', quality: 0.9 },
       html2canvas: { scale: 1.5, useCORS: true, scrollY: 0, scrollX: 0, backgroundColor: '#fdfaf3' },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['css', 'legacy'], avoid: ['.result-section', '.action-section', '.message-section'] }
+      pagebreak: { mode: ['css', 'legacy'], avoid: ['.result-section', '.flow-score-section', '.impact-section', '.today-section', '.cta-section'] }
     };
     html2pdf().set(opt).from(element).outputPdf('datauristring').then(function (dataUri) {
       const base64 = (dataUri.split(',')[1]) || '';
@@ -891,13 +1060,16 @@ function showResult() {
   if (userTime) zodiacText += `　／　生まれた時刻：${userTime}`;
   if (userPlace) zodiacText += `　／　生まれた場所：${userPlace}`;
   document.getElementById('zodiacDisplay').textContent = zodiacText;
+  document.getElementById('flowScoreContent').innerHTML = buildFlowScoreHTML(winnerType);
   document.getElementById('typeEssence').innerHTML = result.essence;
   document.getElementById('typeStrength').innerHTML = result.strength;
   document.getElementById('typeReason').innerHTML = result.reason;
+  document.getElementById('impactContent').innerHTML = buildImpactHTML(winnerType);
   document.getElementById('typeFuture').innerHTML = result.future;
   document.getElementById('typeReal').innerHTML = result.real;
-  document.getElementById('typeAction').innerHTML = result.action;
-  document.getElementById('typeMessage').innerHTML = result.message;
+  document.getElementById('typeAction').innerHTML = buildTodayActionHTML(winnerType);
+  document.getElementById('checklistContent').innerHTML = buildChecklistHTML();
+  document.getElementById('typeMessage').innerHTML = buildLineCTA(result.name);
   document.getElementById('typeFortune').innerHTML = buildFortuneHTML();
   window.scrollTo(0, 0);
 }
@@ -907,11 +1079,11 @@ function downloadPDF() {
   window.scrollTo(0, 0);
   const opt = {
     margin: 10,
-    filename: `わの巡り診断_${new Date().toISOString().slice(0,10)}.pdf`,
+    filename: `業績アップ診断_${new Date().toISOString().slice(0,10)}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, backgroundColor: '#fdfaf3' },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['css', 'legacy'], avoid: ['.result-section', '.action-section', '.message-section'] }
+    pagebreak: { mode: ['css', 'legacy'], avoid: ['.result-section', '.flow-score-section', '.impact-section', '.today-section', '.cta-section'] }
   };
   setTimeout(() => { html2pdf().set(opt).from(element).save(); }, 200);
 }
