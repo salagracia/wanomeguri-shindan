@@ -63,6 +63,18 @@
   .optional-toggle { text-align: center; font-size: 13px; color: #8a7a5c; margin: 20px 0 4px; cursor: pointer; user-select: none; }
   .optional-toggle:hover { color: #7a5c3a; }
   .optional-block { margin: 12px 0; padding: 20px; background: #f9f2df; border-radius: 12px; border: 1px dashed #ddd0b8; }
+
+  .precision-block {
+    margin: 20px 0; padding: 18px 20px; background: #eaf3f8; border: 1px solid #cfe3ee;
+    border-radius: 14px; text-align: center;
+  }
+  .precision-block p { font-size: 13px; color: #2c5674; line-height: 1.8; margin-bottom: 14px; }
+  .precision-btn {
+    display: inline-block; padding: 13px 30px; background: linear-gradient(135deg, #5b8fb0, #1f3d54);
+    color: #fdfaf3; border: none; border-radius: 25px; font-size: 14px; font-weight: 600;
+    letter-spacing: 0.05em; cursor: pointer; font-family: inherit;
+  }
+  .precision-btn:hover { opacity: 0.92; }
   .detail-check { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #5a4a3a; margin-bottom: 10px; cursor: pointer; }
   .detail-check input[type="checkbox"] { accent-color: #7a5c3a; width: 16px; height: 16px; }
   .detail-benefit { font-size: 12px; color: #b0895a; margin: -4px 0 16px 24px; }
@@ -76,11 +88,11 @@
 
   .btn {
     display: block; width: 100%; padding: 16px; margin-top: 20px;
-    background: linear-gradient(135deg, #b0895a, #7a5c3a); color: #fdfaf3;
+    background: linear-gradient(135deg, #5b8fb0, #1f3d54); color: #fdfaf3;
     border: none; border-radius: 14px; font-size: 16px; font-weight: 600;
     letter-spacing: 0.05em; cursor: pointer; font-family: inherit;
   }
-  .btn-secondary { background: #fdfaf3; color: #7a5c3a; border: 2px solid #ddd0b8; }
+  .btn-secondary { background: #fdfaf3; color: #2c5674; border: 2px solid #b8d4e3; }
   .btn-ghost { background: transparent; color: #8a7a5c; border: 1px solid #ddd0b8; }
   .btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .hidden { display: none !important; }
@@ -88,7 +100,7 @@
   /* 質問画面 */
   .progress-text { text-align: center; font-size: 13px; color: #8a7a5c; margin-bottom: 8px; letter-spacing: 0.1em; }
   .progress-bar { height: 6px; background: #e8ddc7; border-radius: 3px; overflow: hidden; margin-bottom: 30px; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, #b0895a, #7a5c3a); transition: width 0.3s ease; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #5b8fb0, #1f3d54); transition: width 0.3s ease; }
   .question { text-align: center; padding: 10px 0 20px; }
   .question .q-cat { font-size: 12px; color: #b0895a; letter-spacing: 0.15em; margin-bottom: 14px; }
   .question .q-text { font-size: 18px; color: #3a3428; line-height: 1.8; margin-bottom: 30px; min-height: 90px; }
@@ -97,8 +109,8 @@
     flex: 1; padding: 16px 4px; border: 2px solid #ddd0b8; border-radius: 12px;
     background: #fdfaf3; font-family: inherit; font-size: 15px; color: #3a3428; cursor: pointer;
   }
-  .likert-btn:hover { border-color: #7a5c3a; }
-  .likert-btn.selected { background: #7a5c3a; color: #fdfaf3; border-color: #7a5c3a; }
+  .likert-btn:hover { border-color: #5b8fb0; }
+  .likert-btn.selected { background: #1f3d54; color: #fdfaf3; border-color: #1f3d54; }
   .likert-labels { display: flex; justify-content: space-between; font-size: 10px; color: #a89b7d; margin-bottom: 24px; padding: 0 2px; }
   .quiz-nav { display: flex; gap: 10px; margin-top: 10px; }
   .quiz-nav .btn { margin-top: 0; }
@@ -181,7 +193,6 @@
     <h1>業績アップ診断</h1>
     <div class="subtitle">あなたの業績が伸びない原因と、次に改善すべきポイントが分かります。</div>
     <div class="lead">売上、商品、発信、顧客、人材、時間の使い方。<br>今の経営で、どこが成長を止めているのかを整理し、<br>業績アップにつながる次の一手を明確にします。</div>
-    <div class="methodology-note">この診断は、マーケティング・経営分析・統計・東洋哲学など複数の視点を組み合わせて作成しています。そのため、任意項目をご入力いただくほど、より精度の高い診断結果をお届けできます。</div>
     <div class="disclaimer">本診断は経営状況を整理するための簡易診断です。医学的・心理学的な検査ではありません。</div>
   </div>
 
@@ -209,8 +220,9 @@
       </div>
     </div>
 
-    <div class="optional-toggle" onclick="toggleBlock('moreInfoBlock','moreInfoIcon')">
-      <span id="moreInfoIcon">▸</span> さらに詳しく（任意・より精度の高い分析ができます）
+    <div class="precision-block">
+      <p>この診断は、マーケティング・経営分析・統計・東洋哲学など複数の視点を組み合わせて作成しています。そのため、任意項目をご入力いただくほど、より精度の高い診断結果をお届けできます。</p>
+      <button type="button" class="precision-btn" id="moreInfoToggleBtn" onclick="togglePrecision()">より精度を上げる</button>
     </div>
     <div id="moreInfoBlock" class="optional-block hidden">
       <div class="field-group">
@@ -524,6 +536,13 @@ function toggleBlock(blockId, iconId) {
   const icon = document.getElementById(iconId);
   el.classList.toggle('hidden');
   icon.textContent = el.classList.contains('hidden') ? '▸' : '▾';
+}
+
+function togglePrecision() {
+  const el = document.getElementById('moreInfoBlock');
+  const btn = document.getElementById('moreInfoToggleBtn');
+  el.classList.toggle('hidden');
+  btn.textContent = el.classList.contains('hidden') ? 'より精度を上げる' : '閉じる';
 }
 
 function populateSelect(id, from, to) {
