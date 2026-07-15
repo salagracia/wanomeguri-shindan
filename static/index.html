@@ -216,6 +216,25 @@
     letter-spacing: 0.1em;
     line-height: 1.6;
   }
+  .bottleneck-hero {
+    text-align: center;
+    padding: 34px 20px;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #7a5c3a, #5a4628);
+    border-radius: 14px;
+    color: #fdfaf3;
+  }
+  .bottleneck-label { font-size: 14px; letter-spacing: 0.2em; opacity: 0.85; margin-bottom: 10px; }
+  .bottleneck-name { font-size: 34px; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 12px; }
+  .bottleneck-stars { font-size: 24px; letter-spacing: 3px; color: #ffe6b0; }
+  .type-tag {
+    text-align: center;
+    color: #8a7a5c;
+    font-size: 13px;
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+  .type-tag strong { color: #7a5c3a; }
   .result-section {
     margin-bottom: 24px;
     padding: 28px 25px;
@@ -456,14 +475,19 @@
   <!-- 結果画面 -->
   <div id="result" class="result hidden">
     <div id="resultContent">
-      <div class="type-label">あなたのタイプは</div>
-      <div class="type-name" id="typeName"></div>
-      <div class="zodiac" id="zodiacDisplay"></div>
+      <div class="bottleneck-hero">
+        <div class="bottleneck-label" id="bottleneckLabel">あなたの最大のボトルネックは</div>
+        <div class="bottleneck-name" id="bottleneckName"></div>
+        <div class="bottleneck-stars" id="bottleneckStars"></div>
+      </div>
 
       <div class="flow-score-section">
-        <h3>《あなたの"7つの巡り"スコア》</h3>
+        <h3>《経営5カテゴリ・スコア》</h3>
         <div id="flowScoreContent"></div>
       </div>
+
+      <div class="type-tag">内面の傾向：<strong id="typeName"></strong></div>
+      <div class="zodiac" id="zodiacDisplay"></div>
 
       <div class="result-section">
         <h3>《あなたの本質》</h3>
@@ -861,20 +885,20 @@ const typeResults = {
   }
 };
 
-// ===== 7つの巡りスコア（1〜5）＝心・判断・行動・信用・ご縁・売上・豊かさ =====
-const flowScores = {
-  1:  { 心:2, 判断:4, 行動:5, 信用:5, ご縁:4, 売上:2, 豊かさ:2 }, // 与え上手型
-  2:  { 心:2, 判断:3, 行動:4, 信用:5, ご縁:4, 売上:2, 豊かさ:2 }, // 献身型
-  3:  { 心:3, 判断:4, 行動:2, 信用:4, ご縁:3, 売上:2, 豊かさ:3 }, // 磨き上げ型
-  4:  { 心:3, 判断:2, 行動:3, 信用:3, ご縁:3, 売上:2, 豊かさ:2 }, // 観察型
-  5:  { 心:2, 判断:5, 行動:5, 信用:4, ご縁:2, 売上:4, 豊かさ:3 }, // 独立型
-  6:  { 心:5, 判断:2, 行動:3, 信用:5, ご縁:4, 売上:2, 豊かさ:3 }, // 謙虚型
-  7:  { 心:3, 判断:5, 行動:4, 信用:3, ご縁:2, 売上:4, 豊かさ:3 }, // 信念型
-  8:  { 心:3, 判断:3, 行動:3, 信用:4, ご縁:2, 売上:3, 豊かさ:2 }, // 深愛型
-  9:  { 心:2, 判断:4, 行動:5, 信用:4, ご縁:3, 売上:4, 豊かさ:2 }, // 集中型
-  10: { 心:2, 判断:5, 行動:5, 信用:4, ご縁:3, 売上:4, 豊かさ:2 }, // 先回り型
-  11: { 心:3, 判断:3, 行動:2, 信用:5, ご縁:3, 売上:2, 豊かさ:3 }, // 地に足型
-  12: { 心:3, 判断:3, 行動:3, 信用:2, ご縁:4, 売上:2, 豊かさ:3 }  // 柔軟型
+// ===== 経営5カテゴリ・ボトルネックスコア（1〜5）＝商品・発信・価格・時間・人間関係 =====
+const bottleneckScores = {
+  1:  { 商品:3, 発信:3, 価格:1, 時間:2, 人間関係:4 }, // 貢献型
+  2:  { 商品:3, 発信:3, 価格:2, 時間:1, 人間関係:4 }, // 献身型
+  3:  { 商品:1, 発信:2, 価格:3, 時間:3, 人間関係:3 }, // 完璧主義型
+  4:  { 商品:3, 発信:1, 価格:3, 時間:3, 人間関係:3 }, // 比較型
+  5:  { 商品:4, 発信:3, 価格:3, 時間:3, 人間関係:1 }, // 孤軍奮闘型
+  6:  { 商品:4, 発信:2, 価格:1, 時間:3, 人間関係:3 }, // 謙虚型
+  7:  { 商品:1, 発信:3, 価格:3, 時間:3, 人間関係:2 }, // 信念型
+  8:  { 商品:3, 発信:3, 価格:3, 時間:1, 人間関係:2 }, // 深愛型
+  9:  { 商品:4, 発信:3, 価格:3, 時間:2, 人間関係:1 }, // 集中型
+  10: { 商品:3, 発信:3, 価格:3, 時間:1, 人間関係:3 }, // 先回り型
+  11: { 商品:3, 発信:1, 価格:3, 時間:3, 人間関係:3 }, // 地に足型
+  12: { 商品:1, 発信:3, 価格:3, 時間:3, 人間関係:3 }  // 柔軟型
 };
 
 // ===== 経営への影響（タイプ別） =====
@@ -922,17 +946,22 @@ function starString(score) {
   return "★".repeat(score) + "☆".repeat(5 - score);
 }
 
+function getPrimaryBottleneck(type) {
+  const s = bottleneckScores[type];
+  const order = ["商品", "発信", "価格", "時間", "人間関係"];
+  const min = Math.min(...order.map((k) => s[k]));
+  const lowest = order.filter((k) => s[k] === min);
+  return { category: lowest[0], score: min };
+}
+
 function buildFlowScoreHTML(type) {
-  const s = flowScores[type];
-  const order = ["心", "判断", "行動", "信用", "ご縁", "売上", "豊かさ"];
+  const s = bottleneckScores[type];
+  const order = ["商品", "発信", "価格", "時間", "人間関係"];
   let html = "";
   order.forEach((key) => {
     const score = s[key];
-    html += `<div class="flow-score-row"><span class="flow-score-label">${key}の巡り</span><span class="flow-score-bar"><span class="flow-score-fill" style="width:${score * 20}%"></span></span><span class="flow-score-stars">${starString(score)}</span></div>`;
+    html += `<div class="flow-score-row"><span class="flow-score-label">${key}</span><span class="flow-score-bar"><span class="flow-score-fill" style="width:${score * 20}%"></span></span><span class="flow-score-stars">${starString(score)}</span></div>`;
   });
-  const min = Math.min(...order.map((k) => s[k]));
-  const lowest = order.filter((k) => s[k] === min);
-  html += `<div class="flow-score-summary">特に「${lowest.join("の巡り」「")}の巡り」が止まっています。</div>`;
   return html;
 }
 
@@ -1086,7 +1115,10 @@ function sendPdfByEmail() {
 function showResult() {
   const result = typeResults[winnerType];
   document.getElementById('result').classList.remove('hidden');
-  document.querySelector('#result .type-label').textContent = userName ? `${userName}さんのタイプは` : 'あなたのタイプは';
+  const bottleneck = getPrimaryBottleneck(winnerType);
+  document.getElementById('bottleneckLabel').textContent = userName ? `${userName}さんの最大のボトルネックは` : 'あなたの最大のボトルネックは';
+  document.getElementById('bottleneckName').textContent = bottleneck.category;
+  document.getElementById('bottleneckStars').textContent = starString(bottleneck.score);
   document.getElementById('typeName').textContent = result.name;
   let zodiacText = userZodiac ? `星座：${userZodiac}` : '';
   if (userTime) zodiacText += `　／　生まれた時刻：${userTime}`;
