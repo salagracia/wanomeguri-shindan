@@ -160,7 +160,7 @@
     margin-top: 30px; padding: 30px 22px; background: linear-gradient(135deg, #2c5674, #1f3d54);
     color: #f7fbfd; border-radius: 14px; text-align: center;
   }
-  .cta-section h3 { font-size: 16px; margin-bottom: 14px; letter-spacing: 0.05em; }
+  .cta-section h3 { font-size: 16px; margin-bottom: 14px; letter-spacing: 0.05em; color: #f7fbfd; }
   .cta-section p { font-size: 13px; line-height: 1.9; opacity: 0.95; margin-bottom: 16px; }
   .cta-section .line-btn {
     display: inline-block; margin-top: 4px; padding: 14px 32px; background: #f7fbfd; color: #1f3d54;
@@ -357,7 +357,6 @@
 
       <div class="action-buttons">
         <button class="btn btn-secondary" onclick="downloadPDF()">📄 結果をPDFで保存</button>
-        <button class="btn btn-secondary" onclick="downloadShareImage()">🖼 シェア画像を保存</button>
       </div>
 
       <!-- 追加分析（占術・姓名判断・入力済みの場合のみ自動表示） -->
@@ -372,7 +371,6 @@
 
 </div>
 
-<canvas id="shareCanvas" width="1080" height="1080" class="hidden"></canvas>
 
 <script>
 // ===================================================================
@@ -944,47 +942,6 @@ function downloadPDF() {
     pagebreak: { mode: ['css', 'legacy'], avoid: ['.result-section', '.score-section', '.bottleneck-card', '.cta-section'] }
   };
   setTimeout(() => { html2pdf().set(opt).from(element).save(); }, 200);
-}
-
-function downloadShareImage() {
-  if (!diagnosisResult) return;
-  const canvas = document.getElementById('shareCanvas');
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-
-  const grad = ctx.createLinearGradient(0, 0, W, H);
-  grad.addColorStop(0, '#eaf2f7'); grad.addColorStop(1, '#cfe3ee');
-  ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
-
-  ctx.fillStyle = '#1f3d54';
-  ctx.font = 'bold 52px "Hiragino Sans", sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('業績アップ診断', W/2, 160);
-
-  ctx.font = '28px "Hiragino Sans", sans-serif';
-  ctx.fillStyle = '#5b7c93';
-  ctx.fillText('あなたの最大のボトルネックは', W/2, 420);
-
-  ctx.font = 'bold 88px "Hiragino Sans", sans-serif';
-  ctx.fillStyle = '#2c5674';
-  ctx.fillText(CATEGORY_LABEL[diagnosisResult.primaryBottleneck], W/2, 540);
-
-  const score = diagnosisResult.scores[diagnosisResult.primaryBottleneck];
-  ctx.font = '32px "Hiragino Sans", sans-serif';
-  ctx.fillStyle = '#1f3d54';
-  ctx.fillText(`停滞度 ${score}点（${getBand(score).label}）`, W/2, 620);
-
-  ctx.strokeStyle = '#b8d4e3'; ctx.lineWidth = 3;
-  ctx.strokeRect(60, 60, W-120, H-120);
-
-  ctx.font = '24px "Hiragino Sans", sans-serif';
-  ctx.fillStyle = '#7f9db2';
-  ctx.fillText('あなたの業績が伸びない原因が分かります', W/2, H-100);
-
-  const link = document.createElement('a');
-  link.download = `業績アップ診断_${new Date().toISOString().slice(0,10)}.png`;
-  link.href = canvas.toDataURL('image/png');
-  link.click();
 }
 
 function restartDiagnosis() {
