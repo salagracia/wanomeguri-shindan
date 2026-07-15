@@ -362,9 +362,13 @@
       </div>
 
       <div class="cta-section">
-        <h3 id="ctaHeading">この結果を、「分かった」で終わらせないために</h3>
-        <p id="ctaBody"></p>
-        <a class="line-btn" href="https://lin.ee/VaRyFWg" target="_blank" rel="noopener">60分・¥3,300でセッションを受ける</a>
+        <h3>診断結果を、あなたの経営に落とし込みませんか？</h3>
+        <p>この診断は、30問の回答から現在の傾向を分析しています。</p>
+        <p>個別セッションでは、<br>あなたの商品や発信、現在の経営状況を伺いながら、</p>
+        <p><strong>「何から改善すれば一番成果につながるのか」</strong></p>
+        <p>を一緒に整理します。</p>
+        <p>必要であれば、その先の改善方法についてもご提案します。</p>
+        <a class="line-btn" href="https://lin.ee/VaRyFWg" target="_blank" rel="noopener">60分・3,300円の個別セッションを見る</a>
       </div>
 
       <!-- 追加分析（占術・姓名判断・入力済みの場合のみ自動表示） -->
@@ -817,7 +821,6 @@ function renderResult(result) {
 
   let title, conclusion, why, symptoms, risk, actions, avoid, goal30;
   const p = result.primaryBottleneck, s = result.secondaryBottleneck;
-  let displayedCategory = p;
 
   if (result.isStable) {
     title = "成長基盤安定型——次に伸ばす余地があるポイントがあります";
@@ -827,7 +830,6 @@ function renderResult(result) {
     const t = RESULT_TEMPLATES[next];
     why = t.why; symptoms = t.symptoms; risk = t.risk; actions = t.actions; avoid = t.avoid; goal30 = t.goal30;
     document.getElementById('secondaryBnCard').classList.add('hidden');
-    displayedCategory = next;
   } else if (result.isCompound) {
     const priorityFirst = getCompoundPriority(p, s, result.scores);
     title = `あなたの成長を止めている原因は「${CATEGORY_LABEL[p]}」です`;
@@ -836,7 +838,6 @@ function renderResult(result) {
     const t = RESULT_TEMPLATES[priorityFirst];
     why = t.why; symptoms = t.symptoms; risk = t.risk; actions = t.actions; avoid = t.avoid; goal30 = t.goal30;
     document.getElementById('secondaryBnCard').classList.remove('hidden');
-    displayedCategory = priorityFirst;
   } else {
     const t = RESULT_TEMPLATES[p];
     title = t.title; conclusion = t.conclusion;
@@ -859,9 +860,6 @@ function renderResult(result) {
   document.getElementById('resultActions').innerHTML = actions.map(x => `<li>${x}</li>`).join('');
   document.getElementById('resultAvoid').innerHTML = avoid.map(x => `<li>${x}</li>`).join('');
   document.getElementById('resultGoal').textContent = goal30;
-
-  document.getElementById('ctaBody').textContent =
-    `診断で分かったのは、多くの経営者に共通するパターンです。でも「${CATEGORY_LABEL[displayedCategory]}」が今のあなたの何を止めているのかは、あなたの商品やお客様の状況を聞かなければ分かりません。60分・¥3,300で、あなたの状況に合わせた次の一手を一緒に整理します。`;
 
   renderExtraAnalysis();
 }
