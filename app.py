@@ -71,10 +71,6 @@ def submit():
     name = (data.get("name") or "").strip()
     gender = GENDER_LABELS.get(data.get("gender"), "回答なし")
     birthday = (data.get("birthday") or "").strip()
-    industry = (data.get("industry") or "").strip()
-    revenue = (data.get("revenue") or "").strip()
-    employees = (data.get("employees") or "").strip()
-    worry = (data.get("worry") or "").strip()
     primary = (data.get("primary") or "").strip()
     secondary = (data.get("secondary") or "").strip()
     scores = data.get("scores") or {}
@@ -97,10 +93,6 @@ def submit():
                     f"メール　　　: {email or '未収集'}\n"
                     f"性別　　　　: {gender}\n"
                     f"生年月日　　: {birthday or '未入力'}\n"
-                    f"業種　　　　: {industry or '未入力'}\n"
-                    f"年商帯　　　: {revenue or '未入力'}\n"
-                    f"従業員数　　: {employees or '未入力'}\n"
-                    f"困っていること: {worry or '未入力'}\n"
                     f"第一ボトルネック: {primary}\n"
                     f"第二ボトルネック: {secondary}\n"
                     f"6領域スコア:\n{scores_text}\n"

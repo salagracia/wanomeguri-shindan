@@ -220,50 +220,43 @@
       </div>
     </div>
 
+    <div class="field-group">
+      <div class="field-label">生年月日<span class="optional">任意</span></div>
+      <div class="row-2">
+        <select id="birthYear" class="select-input"><option value="">年</option></select>
+        <select id="birthMonth" class="select-input"><option value="">月</option></select>
+        <select id="birthDay" class="select-input"><option value="">日</option></select>
+      </div>
+    </div>
+
     <div class="precision-block">
-      <p>この診断は、マーケティング・経営分析・統計・東洋哲学など複数の視点を組み合わせて作成しています。そのため、任意項目をご入力いただくほど、より精度の高い診断結果をお届けできます。</p>
+      <p>こうした情報を入力いただくことで、姓名判断や占星術などマーケティング以外の多角的な分析も加わり、診断の精度が上がります。</p>
       <button type="button" class="precision-btn" id="moreInfoToggleBtn" onclick="togglePrecision()">より精度を上げる</button>
     </div>
     <div id="moreInfoBlock" class="optional-block hidden">
-      <div class="field-group">
-        <div class="field-label">生年月日<span class="optional">任意</span></div>
+      <div class="field-group" style="margin-bottom:14px;">
+        <div class="field-label">本名（漢字）<span class="optional">任意・姓名判断も追加</span></div>
         <div class="row-2">
-          <select id="birthYear" class="select-input"><option value="">年</option></select>
-          <select id="birthMonth" class="select-input"><option value="">月</option></select>
-          <select id="birthDay" class="select-input"><option value="">日</option></select>
+          <input type="text" id="userSei" class="text-input" placeholder="姓">
+          <input type="text" id="userMei" class="text-input" placeholder="名">
         </div>
       </div>
-      <div class="field-group">
-        <div class="field-label">業種<span class="optional">任意</span></div>
-        <input type="text" id="userIndustry" class="text-input" placeholder="例：コンサルティング業">
+
+      <div class="optional-toggle" onclick="toggleBlock('astroBlock','astroIcon')">
+        <span id="astroIcon">▸</span> 生まれた時間・場所（任意・西洋占星術のより高度な診断に使用）
       </div>
-      <div class="field-group">
-        <div class="field-label">現在の年商帯<span class="optional">任意</span></div>
-        <select id="userRevenue" class="select-input">
-          <option value="">選択してください</option>
-          <option value="500万未満">500万未満</option>
-          <option value="500万〜1000万">500万〜1000万</option>
-          <option value="1000万〜3000万">1000万〜3000万</option>
-          <option value="3000万〜5000万">3000万〜5000万</option>
-          <option value="5000万〜1億">5000万〜1億</option>
-          <option value="1億以上">1億以上</option>
-          <option value="答えたくない">答えたくない</option>
-        </select>
-      </div>
-      <div class="field-group">
-        <div class="field-label">従業員数<span class="optional">任意</span></div>
-        <select id="userEmployees" class="select-input">
-          <option value="">選択してください</option>
-          <option value="1人（自分のみ）">1人（自分のみ）</option>
-          <option value="2〜5人">2〜5人</option>
-          <option value="6〜10人">6〜10人</option>
-          <option value="11〜30人">11〜30人</option>
-          <option value="31人以上">31人以上</option>
-        </select>
-      </div>
-      <div class="field-group" style="margin-bottom:0;">
-        <div class="field-label">現在、最も困っていること<span class="optional">任意</span></div>
-        <textarea id="userWorry" class="text-input" placeholder="自由にご記入ください"></textarea>
+      <div id="astroBlock" class="optional-block hidden" style="margin-bottom:0;">
+        <div class="field-group">
+          <div class="field-label">生まれた時間<span class="optional">任意</span></div>
+          <div class="row-2">
+            <select id="birthHour" class="select-input"><option value="">時</option></select>
+            <select id="birthMinute" class="select-input"><option value="">分</option></select>
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:0;">
+          <div class="field-label">生まれた場所<span class="optional">任意</span></div>
+          <input type="text" id="birthPlace" class="text-input" placeholder="例：東京都">
+        </div>
       </div>
     </div>
 
@@ -367,34 +360,10 @@
         <button class="btn btn-secondary" onclick="downloadShareImage()">🖼 シェア画像を保存</button>
       </div>
 
-      <!-- 追加分析（占術・姓名判断・任意） -->
-      <div class="extra-analysis">
-        <div class="optional-toggle" onclick="toggleBlock('extraBlock','extraIcon')">
-          <span id="extraIcon">▸</span> さらに、自分の生まれ持った傾向も参考情報として知りたい方へ（任意）
-        </div>
-        <div id="extraBlock" class="optional-block hidden">
-          <p class="extra-lead">※ 業績の診断結果は、30問の回答のみで判定しています。ここから先は参考情報です。</p>
-          <div class="field-group">
-            <div class="field-label">生まれた時間<span class="optional">任意</span></div>
-            <div class="row-2">
-              <select id="birthHour" class="select-input"><option value="">時</option></select>
-              <select id="birthMinute" class="select-input"><option value="">分</option></select>
-            </div>
-          </div>
-          <div class="field-group">
-            <div class="field-label">出生地<span class="optional">任意</span></div>
-            <input type="text" id="birthPlace" class="text-input" placeholder="例：東京都">
-          </div>
-          <div class="field-group">
-            <div class="field-label">本名（漢字）で姓名判断も見る<span class="optional">任意</span></div>
-            <div class="row-2">
-              <input type="text" id="userSei" class="text-input" placeholder="姓">
-              <input type="text" id="userMei" class="text-input" placeholder="名">
-            </div>
-          </div>
-          <button class="btn btn-secondary" onclick="showExtraAnalysis()">参考情報を見る</button>
-          <div id="extraResult" style="margin-top:16px;"></div>
-        </div>
+      <!-- 追加分析（占術・姓名判断・入力済みの場合のみ自動表示） -->
+      <div id="extraAnalysisWrap" class="extra-analysis hidden">
+        <p class="extra-lead">※ 業績の診断結果は、30問の回答のみで判定しています。ここから先は参考情報です。</p>
+        <div id="extraResult"></div>
       </div>
 
       <button class="btn btn-ghost" onclick="restartDiagnosis()" style="margin-top:24px;">もう一度診断する</button>
@@ -574,7 +543,9 @@ function populateSelect(id, from, to) {
 function saveState() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      shuffledQuestions, answers, currentIndex, userInfo, savedAt: Date.now()
+      shuffledQuestions, answers, currentIndex, userInfo,
+      userY, userM, userD, userZodiac, userSei, userMei, userTime, userPlace,
+      savedAt: Date.now()
     }));
   } catch (e) {}
 }
@@ -596,6 +567,9 @@ function resumeSaved() {
   answers = s.answers;
   currentIndex = s.currentIndex;
   userInfo = s.userInfo || {};
+  userY = s.userY || 0; userM = s.userM || 0; userD = s.userD || 0;
+  userZodiac = s.userZodiac || ''; userSei = s.userSei || ''; userMei = s.userMei || '';
+  userTime = s.userTime || ''; userPlace = s.userPlace || '';
   if (userInfo.name) document.getElementById('userName').value = userInfo.name;
   document.getElementById('infoScreen').classList.add('hidden');
   document.getElementById('quizScreen').classList.remove('hidden');
@@ -627,11 +601,7 @@ function startDiagnosis() {
   const genderInput = document.querySelector('input[name="gender"]:checked');
   userInfo = {
     name,
-    gender: genderInput ? genderInput.value : '',
-    industry: (document.getElementById('userIndustry').value || '').trim(),
-    revenue: document.getElementById('userRevenue').value || '',
-    employees: document.getElementById('userEmployees').value || '',
-    worry: (document.getElementById('userWorry').value || '').trim()
+    gender: genderInput ? genderInput.value : ''
   };
 
   const y = document.getElementById('birthYear').value;
@@ -640,7 +610,16 @@ function startDiagnosis() {
   if (y && m && d) {
     userY = parseInt(y); userM = parseInt(m); userD = parseInt(d);
     userZodiac = getZodiac(userM, userD);
+  } else {
+    userY = 0; userM = 0; userD = 0; userZodiac = '';
   }
+
+  userSei = (document.getElementById('userSei').value || '').trim();
+  userMei = (document.getElementById('userMei').value || '').trim();
+  const h = document.getElementById('birthHour').value;
+  const min = document.getElementById('birthMinute').value;
+  userTime = (h !== '' && min !== '') ? `${h}時${String(min).padStart(2,'0')}分` : '';
+  userPlace = (document.getElementById('birthPlace').value || '').trim();
 
   shuffledQuestions = shuffle(questions);
   answers = {};
@@ -701,8 +680,6 @@ function finishQuiz() {
         body: JSON.stringify({
           email: '', name: userInfo.name, gender: userInfo.gender,
           birthday: (userY && userM && userD) ? `${userY}年${userM}月${userD}日` : '',
-          industry: userInfo.industry, revenue: userInfo.revenue,
-          employees: userInfo.employees, worry: userInfo.worry,
           primary: CATEGORY_LABEL[diagnosisResult.primaryBottleneck],
           secondary: CATEGORY_LABEL[diagnosisResult.secondaryBottleneck],
           scores: Object.fromEntries(Object.entries(diagnosisResult.scores).map(([k, v]) => [CATEGORY_LABEL[k], v]))
@@ -827,6 +804,8 @@ function renderResult(result) {
   document.getElementById('resultActions').innerHTML = actions.map(x => `<li>${x}</li>`).join('');
   document.getElementById('resultAvoid').innerHTML = avoid.map(x => `<li>${x}</li>`).join('');
   document.getElementById('resultGoal').textContent = goal30;
+
+  renderExtraAnalysis();
 }
 
 // ===================================================================
@@ -904,16 +883,18 @@ const zodiacData = {
   '魚座': '水の星座。想像力と優しさがあなたの武器。境界線を引くことを覚えると、優しさが枯れません。'
 };
 
-function showExtraAnalysis() {
-  const h = document.getElementById('birthHour').value;
-  const min = document.getElementById('birthMinute').value;
-  userTime = (h !== '' && min !== '') ? `${h}時${String(min).padStart(2,'0')}分` : '';
-  userPlace = document.getElementById('birthPlace').value || '';
-  userSei = (document.getElementById('userSei').value || '').trim();
-  userMei = (document.getElementById('userMei').value || '').trim();
+// 診断前に本名・生まれた時間/場所の入力があれば、結果画面に自動で参考情報として表示する
+function renderExtraAnalysis() {
+  const hasBirthday = !!(userY && userM && userD);
+  const hasName = !!(userSei && userMei);
+  if (!hasBirthday && !hasName) {
+    document.getElementById('extraAnalysisWrap').classList.add('hidden');
+    return;
+  }
+  document.getElementById('extraAnalysisWrap').classList.remove('hidden');
 
   let html = '';
-  if (userY && userM && userD) {
+  if (hasBirthday) {
     const lp = getLifePath(userY, userM, userD);
     const ks = getKyusei(userY, userM, userD);
     const kd = kyuseiData[ks];
@@ -923,15 +904,13 @@ function showExtraAnalysis() {
       <p><strong>◆ 星座：${userZodiac}</strong><br>${zText}</p>
       <p><strong>◆ 数秘ライフパスナンバー：${lp}</strong><br>${lifePathData[lp]}</p>
       <p><strong>◆ 九星気学：${kd.name}</strong><br>${kd.nature}<br>気を付けたいこと——${kd.care}<br>${kd.flow}</p>
+      ${userTime || userPlace ? `<p style="font-size:12px;color:#5b7c93;">生まれた時刻・場所を活かした、さらに詳しい鑑定は講座の中でお届けしています。</p>` : ''}
       <p style="font-size:12px;color:#5b7c93;">※ あくまで参考情報です。診断結果の判定には使用していません。</p>
     </div>`;
-  } else {
-    html += `<p style="font-size:13px;color:#5b7c93;">生年月日が入力されていないため、星座・数秘・九星気学は表示できません。基本診断画面で生年月日を入力してから、もう一度お試しください。</p>`;
   }
-
   document.getElementById('extraResult').innerHTML = html;
 
-  if (userSei && userMei) {
+  if (hasName) {
     fetch('/api/seimei', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1017,10 +996,11 @@ function restartDiagnosis() {
   document.getElementById('birthYear').value = '';
   document.getElementById('birthMonth').value = '';
   document.getElementById('birthDay').value = '';
-  document.getElementById('userIndustry').value = '';
-  document.getElementById('userRevenue').value = '';
-  document.getElementById('userEmployees').value = '';
-  document.getElementById('userWorry').value = '';
+  document.getElementById('userSei').value = '';
+  document.getElementById('userMei').value = '';
+  document.getElementById('birthHour').value = '';
+  document.getElementById('birthMinute').value = '';
+  document.getElementById('birthPlace').value = '';
   window.scrollTo(0, 0);
 }
 </script>
