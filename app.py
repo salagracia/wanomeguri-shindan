@@ -65,36 +65,45 @@ def health():
 
 @app.route("/api/submit", methods=["POST"])
 def submit():
-    """メール入力直後に呼ばれる。管理者通知（リード記録）のみ。"""
+    """30問回答完了時に呼ばれる。管理者通知（リード記録）のみ。メール未収集でも通知する。"""
     data = request.get_json(force=True, silent=True) or {}
     email = (data.get("email") or "").strip()
     name = (data.get("name") or "").strip()
     gender = GENDER_LABELS.get(data.get("gender"), "回答なし")
     birthday = (data.get("birthday") or "").strip()
-    birthtime = (data.get("birthtime") or "").strip()
-    birthplace = (data.get("birthplace") or "").strip()
-    type_name = (data.get("type") or "").strip()
+    industry = (data.get("industry") or "").strip()
+    revenue = (data.get("revenue") or "").strip()
+    employees = (data.get("employees") or "").strip()
+    worry = (data.get("worry") or "").strip()
+    primary = (data.get("primary") or "").strip()
+    secondary = (data.get("secondary") or "").strip()
+    scores = data.get("scores") or {}
 
-    if _resend_ready() and email:
+    if _resend_ready():
         from_email = os.environ.get("FROM_EMAIL", "onboarding@resend.dev")
         admin_from = os.environ.get("ADMIN_FROM_EMAIL", from_email)
         admin_email = os.environ.get("ADMIN_EMAIL", "monthly@salagracia.com")
         now = datetime.now(JST).strftime("%Y-%m-%d %H:%M")
+        scores_text = "\n".join(f"  {k}: {v}点" for k, v in scores.items()) if scores else "  （未取得）"
         try:
             resend.Emails.send({
-                "from": f"わの巡り診断 <{admin_from}>",
+                "from": f"業績アップ診断 <{admin_from}>",
                 "to": [admin_email],
-                "subject": f"【わの巡り診断】新しい診断: {name or '名前未入力'} / {type_name} ({email})",
+                "subject": f"【業績アップ診断】新しい診断完了: {name or '名前未入力'} / 第一ボトルネック:{primary}",
                 "text": (
-                    "わの巡り診断で新しい診断が完了しました。\n\n"
-                    f"日時　　　: {now}\n"
-                    f"お名前　　: {name or '未入力'}\n"
-                    f"メール　　: {email}\n"
-                    f"性別　　　: {gender}\n"
-                    f"生年月日　: {birthday}\n"
-                    f"出生時刻　: {birthtime or '未入力'}\n"
-                    f"出生地　　: {birthplace or '未入力'}\n"
-                    f"診断タイプ: {type_name}\n"
+                    "業績アップ診断で新しい診断が完了しました。\n\n"
+                    f"日時　　　　: {now}\n"
+                    f"お名前　　　: {name or '未入力'}\n"
+                    f"メール　　　: {email or '未収集'}\n"
+                    f"性別　　　　: {gender}\n"
+                    f"生年月日　　: {birthday or '未入力'}\n"
+                    f"業種　　　　: {industry or '未入力'}\n"
+                    f"年商帯　　　: {revenue or '未入力'}\n"
+                    f"従業員数　　: {employees or '未入力'}\n"
+                    f"困っていること: {worry or '未入力'}\n"
+                    f"第一ボトルネック: {primary}\n"
+                    f"第二ボトルネック: {secondary}\n"
+                    f"6領域スコア:\n{scores_text}\n"
                 ),
             })
         except Exception:
