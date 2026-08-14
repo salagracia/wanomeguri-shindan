@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>業績アップ診断 | あなたの業績が伸びない原因と、次に改善すべきポイントが分かります</title>
+<title>REBOOT診断 | あなたを止めているのは何か、が分かります</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
-    background: linear-gradient(135deg, #eaf2f7 0%, #cfe3ee 100%);
-    color: #263544;
+    background: linear-gradient(135deg, #0d1b2a 0%, #1b3352 100%);
+    color: #1c2733;
     min-height: 100vh;
     padding: 20px;
     line-height: 1.8;
@@ -18,180 +18,131 @@
   .container {
     max-width: 680px;
     margin: 0 auto;
-    background: #f7fbfd;
+    background: #f5f8fb;
     border-radius: 20px;
     padding: 40px 30px;
-    box-shadow: 0 10px 40px rgba(31, 61, 84, 0.15);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
     position: relative;
   }
-  .header { text-align: center; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #b8d4e3; }
-  .header h1 { font-size: 26px; font-weight: 600; color: #1f3d54; margin-bottom: 10px; letter-spacing: 0.05em; }
-  .header .subtitle { font-size: 14px; color: #5b7c93; line-height: 1.7; }
-  .header .lead { font-size: 13px; color: #5b7c93; margin-top: 12px; line-height: 1.8; }
-  .header .methodology-note {
-    font-size: 12px; color: #2c5674; margin-top: 16px; line-height: 1.8;
-    padding: 12px 16px; background: #eef5f9; border-radius: 10px;
-  }
+  .header { text-align: center; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #c3d2e0; }
+  .header .brand { font-size: 13px; letter-spacing: 0.3em; color: #3d6fa8; font-weight: 700; margin-bottom: 6px; }
+  .header h1 { font-size: 24px; font-weight: 700; color: #10233b; margin-bottom: 10px; letter-spacing: 0.03em; }
+  .header .subtitle { font-size: 14px; color: #4c657f; line-height: 1.7; }
+  .header .lead { font-size: 13px; color: #4c657f; margin-top: 12px; line-height: 1.8; }
   .disclaimer {
-    font-size: 11px; color: #7f9db2; text-align: center; margin-top: 14px;
-    padding: 10px; background: #eef5f9; border-radius: 8px; line-height: 1.6;
+    font-size: 11px; color: #7f93a6; text-align: center; margin-top: 14px;
+    padding: 10px; background: #e9eff5; border-radius: 8px; line-height: 1.6;
   }
 
-  h3 { font-size: 16px; color: #1f3d54; margin-bottom: 10px; }
+  h3 { font-size: 16px; color: #10233b; margin-bottom: 10px; }
   p { margin-bottom: 10px; }
 
-  /* フォーム共通 */
   .field-group { margin-bottom: 22px; }
-  .field-label { font-size: 14px; color: #2c5674; margin-bottom: 8px; font-weight: 600; letter-spacing: 0.05em; }
-  .field-label .required { color: #5b8fb0; font-size: 12px; margin-left: 6px; }
-  .field-label .optional { color: #7f9db2; font-size: 12px; margin-left: 6px; font-weight: 400; }
-  .text-input, .select-input, textarea.text-input {
-    width: 100%; padding: 14px 16px; border: 2px solid #b8d4e3; border-radius: 12px;
-    background: #f7fbfd; font-family: inherit; font-size: 15px; color: #263544;
+  .field-label { font-size: 14px; color: #1b3352; margin-bottom: 8px; font-weight: 600; letter-spacing: 0.05em; }
+  .field-label .required { color: #3d6fa8; font-size: 12px; margin-left: 6px; }
+  .text-input {
+    width: 100%; padding: 14px 16px; border: 2px solid #c3d2e0; border-radius: 12px;
+    background: #f5f8fb; font-family: inherit; font-size: 15px; color: #1c2733;
   }
-  textarea.text-input { resize: vertical; min-height: 80px; }
-  .row-2 { display: flex; gap: 10px; }
-  .row-2 > * { flex: 1; }
-  .gender-options, .pill-options { display: flex; gap: 10px; flex-wrap: wrap; }
-  .pill-btn {
-    padding: 12px 18px; border: 2px solid #b8d4e3; border-radius: 25px; background: #f7fbfd;
-    cursor: pointer; font-size: 14px; color: #3a5266; display: inline-flex; align-items: center; gap: 6px;
-  }
-  .pill-btn input { accent-color: #2c5674; }
-  .pill-btn:has(input:checked) { background: #2c5674; color: #f7fbfd; border-color: #2c5674; }
-
-  .optional-toggle { text-align: center; font-size: 13px; color: #5b7c93; margin: 20px 0 4px; cursor: pointer; user-select: none; }
-  .optional-toggle:hover { color: #2c5674; }
-  .optional-block { margin: 12px 0; padding: 20px; background: #eef5f9; border-radius: 12px; border: 1px dashed #b8d4e3; }
-
-  .precision-block {
-    margin: 20px 0; padding: 18px 20px; background: #eaf3f8; border: 1px solid #cfe3ee;
-    border-radius: 14px; text-align: center;
-  }
-  .precision-block p { font-size: 13px; color: #2c5674; line-height: 1.8; margin-bottom: 14px; }
-  .precision-btn {
-    display: inline-block; padding: 13px 30px; background: linear-gradient(135deg, #5b8fb0, #1f3d54);
-    color: #f7fbfd; border: none; border-radius: 25px; font-size: 14px; font-weight: 600;
-    letter-spacing: 0.05em; cursor: pointer; font-family: inherit;
-  }
-  .precision-btn:hover { opacity: 0.92; }
-  .detail-check { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #3a5266; margin-bottom: 10px; cursor: pointer; }
-  .detail-check input[type="checkbox"] { accent-color: #2c5674; width: 16px; height: 16px; }
-  .detail-benefit { font-size: 12px; color: #5b8fb0; margin: -4px 0 16px 24px; }
 
   .resume-banner {
-    background: #e3eef4; border: 1px solid #b8d4e3; border-radius: 12px; padding: 16px;
-    margin-bottom: 20px; text-align: center; font-size: 13px; color: #1f3d54;
+    background: #e3ebf3; border: 1px solid #c3d2e0; border-radius: 12px; padding: 16px;
+    margin-bottom: 20px; text-align: center; font-size: 13px; color: #10233b;
   }
   .resume-banner .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
   .resume-banner button { padding: 8px 16px; font-size: 13px; }
 
   .btn {
     display: block; width: 100%; padding: 16px; margin-top: 20px;
-    background: linear-gradient(135deg, #5b8fb0, #1f3d54); color: #f7fbfd;
+    background: linear-gradient(135deg, #3d6fa8, #10233b); color: #f5f8fb;
     border: none; border-radius: 14px; font-size: 16px; font-weight: 600;
     letter-spacing: 0.05em; cursor: pointer; font-family: inherit;
   }
-  .btn-secondary { background: #f7fbfd; color: #2c5674; border: 2px solid #b8d4e3; }
-  .btn-ghost { background: transparent; color: #5b7c93; border: 1px solid #b8d4e3; }
-  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-secondary { background: #f5f8fb; color: #1b3352; border: 2px solid #c3d2e0; }
+  .btn-ghost { background: transparent; color: #4c657f; border: 1px solid #c3d2e0; }
   .hidden { display: none !important; }
 
-  /* 質問画面 */
-  .progress-text { text-align: center; font-size: 13px; color: #5b7c93; margin-bottom: 8px; letter-spacing: 0.1em; }
-  .progress-bar { height: 6px; background: #d7e7f0; border-radius: 3px; overflow: hidden; margin-bottom: 30px; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, #5b8fb0, #1f3d54); transition: width 0.3s ease; }
+  .progress-text { text-align: center; font-size: 13px; color: #4c657f; margin-bottom: 8px; letter-spacing: 0.1em; }
+  .progress-bar { height: 6px; background: #dbe5ee; border-radius: 3px; overflow: hidden; margin-bottom: 30px; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #3d6fa8, #10233b); transition: width 0.3s ease; }
   .question { text-align: center; padding: 10px 0 20px; }
-  .question .q-cat { font-size: 12px; color: #5b8fb0; letter-spacing: 0.15em; margin-bottom: 14px; }
-  .question .q-text { font-size: 18px; color: #263544; line-height: 1.8; margin-bottom: 30px; min-height: 90px; }
+  .question .q-text { font-size: 18px; color: #1c2733; line-height: 1.8; margin-bottom: 30px; min-height: 90px; }
   .likert { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
   .likert-btn {
-    flex: 1; padding: 16px 4px; border: 2px solid #b8d4e3; border-radius: 12px;
-    background: #f7fbfd; font-family: inherit; font-size: 15px; color: #263544; cursor: pointer;
+    flex: 1; padding: 16px 4px; border: 2px solid #c3d2e0; border-radius: 12px;
+    background: #f5f8fb; font-family: inherit; font-size: 15px; color: #1c2733; cursor: pointer;
   }
-  .likert-btn:hover { border-color: #5b8fb0; }
-  .likert-btn.selected { background: #1f3d54; color: #f7fbfd; border-color: #1f3d54; }
-  .likert-labels { display: flex; justify-content: space-between; font-size: 10px; color: #7f9db2; margin-bottom: 24px; padding: 0 2px; }
+  .likert-btn:hover { border-color: #3d6fa8; }
+  .likert-btn.selected { background: #10233b; color: #f5f8fb; border-color: #10233b; }
+  .likert-labels { display: flex; justify-content: space-between; font-size: 10px; color: #7f93a6; margin-bottom: 24px; padding: 0 2px; }
   .quiz-nav { display: flex; gap: 10px; margin-top: 10px; }
   .quiz-nav .btn { margin-top: 0; }
 
-  /* 送信中 */
   .sending-screen { text-align: center; padding: 60px 0; }
-  .sending-text { font-size: 18px; color: #1f3d54; margin-bottom: 12px; }
-  .sending-sub { font-size: 14px; color: #5b7c93; }
+  .sending-text { font-size: 18px; color: #10233b; margin-bottom: 12px; }
+  .sending-sub { font-size: 14px; color: #4c657f; }
 
-  /* 結果画面 */
   .result { padding: 10px 0; }
-  .result-title { text-align: center; font-size: 22px; color: #1f3d54; font-weight: 700; line-height: 1.6; margin-bottom: 14px; }
-  .result-conclusion { text-align: center; font-size: 15px; color: #2c5674; line-height: 1.8; padding: 0 6px; }
+  .result-title { text-align: center; font-size: 22px; color: #10233b; font-weight: 700; line-height: 1.6; margin-bottom: 14px; }
+  .result-conclusion { text-align: center; font-size: 15px; color: #1b3352; line-height: 1.8; padding: 0 6px; }
   .one-liner {
-    margin: 20px 0 26px; padding: 20px 22px; background: #e3eef4; border-radius: 14px;
-    text-align: center; font-size: 15px; color: #1f3d54; line-height: 1.9; font-weight: 600;
+    margin: 20px 0 26px; padding: 20px 22px; background: #e3ebf3; border-radius: 14px;
+    text-align: center; font-size: 15px; color: #10233b; line-height: 1.9; font-weight: 600;
   }
-  .score-meter { display: block; font-size: 13px; color: #3d7ca3; letter-spacing: 1px; margin-top: 2px; }
-  .result-tag { text-align: center; font-size: 12px; color: #7f9db2; margin-bottom: 24px; }
+  .result-tag { text-align: center; font-size: 12px; color: #7f93a6; margin-bottom: 24px; }
 
-  .score-section { margin-bottom: 26px; padding: 24px 22px; background: #eef5f9; border-radius: 14px; }
+  .score-section { margin-bottom: 26px; padding: 24px 22px; background: #eef2f7; border-radius: 14px; }
   .score-row { display: flex; align-items: center; margin-bottom: 14px; }
   .score-row:last-child { margin-bottom: 0; }
-  .score-label { width: 96px; flex-shrink: 0; font-size: 13px; color: #1f3d54; letter-spacing: 0.02em; }
-  .score-bar { flex: 1; height: 14px; background: #eef5f9; border: 1px solid #d7e7f0; border-radius: 7px; overflow: hidden; margin: 0 12px; }
+  .score-label { width: 110px; flex-shrink: 0; font-size: 13px; color: #10233b; letter-spacing: 0.02em; }
+  .score-bar { flex: 1; height: 14px; background: #eef2f7; border: 1px solid #dbe5ee; border-radius: 7px; overflow: hidden; margin: 0 12px; }
   .score-fill { height: 100%; border-radius: 7px; }
-  .score-val {
-    width: 96px; flex-shrink: 0; font-size: 12px; color: #5b7c93; text-align: right;
-    word-break: keep-all; overflow-wrap: normal;
-  }
-  .score-val .score-text { white-space: nowrap; }
+  .score-val { width: 80px; flex-shrink: 0; font-size: 12px; color: #4c657f; text-align: right; white-space: nowrap; }
 
   .bottleneck-card {
     margin-bottom: 20px; padding: 26px 22px; border-radius: 14px;
-    background: linear-gradient(135deg, #2c5674, #1f3d54); color: #f7fbfd;
+    background: linear-gradient(135deg, #1b3352, #10233b); color: #f5f8fb;
   }
   .bottleneck-card .bn-tag { font-size: 12px; letter-spacing: 0.15em; opacity: 0.85; margin-bottom: 8px; }
   .bottleneck-card .bn-cat { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
   .bottleneck-card .bn-score { font-size: 13px; opacity: 0.9; }
-  .bottleneck-card.secondary {
-    background: #e3eef4; color: #1f3d54; border: 1px solid #b8d4e3;
-  }
-  .bottleneck-card.secondary .bn-tag { color: #5b8fb0; opacity: 1; }
+  .bottleneck-card.secondary { background: #e3ebf3; color: #10233b; border: 1px solid #c3d2e0; }
+  .bottleneck-card.secondary .bn-tag { color: #3d6fa8; opacity: 1; }
 
-  .result-section { margin-bottom: 22px; padding: 24px 22px; background: #eef5f9; border-radius: 12px; border-left: 4px solid #5b8fb0; }
-  .result-section h3 { font-size: 16px; color: #2c5674; margin-bottom: 12px; letter-spacing: 0.05em; }
-  .result-section p, .result-section li { font-size: 14px; color: #263544; line-height: 1.85; }
+  .result-section { margin-bottom: 22px; padding: 24px 22px; background: #eef2f7; border-radius: 12px; border-left: 4px solid #3d6fa8; }
+  .result-section h3 { font-size: 16px; color: #1b3352; margin-bottom: 12px; letter-spacing: 0.05em; }
+  .result-section p, .result-section li { font-size: 14px; color: #1c2733; line-height: 1.85; }
   .result-section ul { margin-left: 20px; }
   .result-section li { margin-bottom: 6px; }
-  .symptom-item { font-size: 14px; color: #263544; line-height: 2; }
+  .symptom-item { font-size: 14px; color: #1c2733; line-height: 2; }
 
-  .action-section { background: #e3eef4; border-left-color: #2c5674; }
-  .avoid-section { background: #e8f0f5; border-left-color: #a8c8db; }
-  .goal-section { background: #dce8ef; border-left-color: #2c5674; }
+  .action-section { background: #e3ebf3; border-left-color: #10233b; }
+  .avoid-section { background: #e7edf3; border-left-color: #9fb6cc; }
+  .goal-section { background: #dfe8f0; border-left-color: #10233b; }
+  .related-section { background: #10233b; border-left-color: #3d6fa8; }
+  .related-section h3, .related-section p { color: #f5f8fb; }
 
   .cta-section {
-    margin-top: 30px; padding: 30px 22px; background: linear-gradient(135deg, #2c5674, #1f3d54);
-    color: #f7fbfd; border-radius: 14px; text-align: center;
+    margin-top: 30px; padding: 30px 22px; background: linear-gradient(135deg, #1b3352, #10233b);
+    color: #f5f8fb; border-radius: 14px; text-align: center;
   }
-  .cta-section h3 { font-size: 16px; margin-bottom: 14px; letter-spacing: 0.05em; color: #f7fbfd; }
-  .cta-section p { font-size: 13px; line-height: 1.9; opacity: 0.95; margin-bottom: 16px; }
+  .cta-section h3 { font-size: 16px; margin-bottom: 14px; letter-spacing: 0.05em; color: #f5f8fb; }
+  .cta-section p { font-size: 13px; line-height: 1.9; opacity: 0.95; margin-bottom: 16px; color: #f5f8fb; }
   .cta-section .line-btn {
-    display: inline-block; margin-top: 4px; padding: 14px 32px; background: #f7fbfd; color: #1f3d54;
-    border-radius: 30px; font-size: 15px; font-weight: 600; text-decoration: none;
+    display: inline-block; margin-top: 4px; padding: 14px 32px; background: #06c755; color: #ffffff;
+    border-radius: 30px; font-size: 15px; font-weight: 700; text-decoration: none;
   }
 
   .action-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
   .action-buttons .btn { width: auto; flex: 1; min-width: 140px; margin-top: 0; }
 
-  /* 追加分析（占術・姓名判断） */
-  .extra-analysis { margin-top: 30px; padding-top: 24px; border-top: 1px dashed #b8d4e3; }
-  .extra-analysis .extra-lead { font-size: 13px; color: #5b7c93; text-align: center; margin-bottom: 16px; }
-  .extra-analysis .result-section { margin-top: 16px; }
-
   @media (max-width: 480px) {
     .container { padding: 28px 18px; }
-    .header h1 { font-size: 22px; }
+    .header h1 { font-size: 20px; }
     .question .q-text { font-size: 16px; }
     .likert-btn { padding: 14px 3px; font-size: 13px; }
     .result-title { font-size: 19px; }
-    .score-label { width: 76px; font-size: 12px; }
+    .score-label { width: 88px; font-size: 12px; }
     .bottleneck-card .bn-cat { font-size: 19px; }
   }
 </style>
@@ -200,13 +151,14 @@
 <div class="container">
 
   <div class="header">
-    <h1>業績アップ診断</h1>
-    <div class="subtitle">あなたの業績が伸びない原因と、次に改善すべきポイントが分かります。</div>
-    <div class="lead">売上、商品、発信、顧客、人材、時間の使い方。<br>今の経営で、どこが成長を止めているのかを整理し、<br>業績アップにつながる次の一手を明確にします。</div>
-    <div class="disclaimer">本診断は経営状況を整理するための簡易診断です。医学的・心理学的な検査ではありません。</div>
+    <div class="brand">REBOOT</div>
+    <h1>あなたを止めているのは、何か</h1>
+    <div class="subtitle">がんばっているのに、なぜか満たされない。その理由、実はちゃんとあります。</div>
+    <div class="lead">18個の質問に答えるだけで、<br>あなたが今、一番向き合うべきものが分かります。<br>厳しいことも言います。でも、そこに宝の地図があります。</div>
+    <div class="disclaimer">本診断は簡易的な自己理解のための診断です。医学的・心理学的な検査ではありません。</div>
   </div>
 
-  <!-- 個人情報入力画面 -->
+  <!-- 入力画面 -->
   <div id="infoScreen">
     <div id="resumeBanner" class="resume-banner hidden">
       前回の回答が途中まで保存されています。
@@ -221,64 +173,14 @@
       <input type="text" id="userName" class="text-input" placeholder="例：たろう">
     </div>
 
-    <div class="field-group">
-      <div class="field-label">性別<span class="optional">任意</span></div>
-      <div class="gender-options">
-        <label class="pill-btn"><input type="radio" name="gender" value="male"> 男性</label>
-        <label class="pill-btn"><input type="radio" name="gender" value="female"> 女性</label>
-        <label class="pill-btn"><input type="radio" name="gender" value="unspecified"> 答えたくない</label>
-      </div>
-    </div>
-
-    <div class="field-group">
-      <div class="field-label">生年月日<span class="optional">任意</span></div>
-      <div class="row-2">
-        <select id="birthYear" class="select-input"><option value="">年</option></select>
-        <select id="birthMonth" class="select-input"><option value="">月</option></select>
-        <select id="birthDay" class="select-input"><option value="">日</option></select>
-      </div>
-    </div>
-
-    <div class="precision-block">
-      <p>こうした情報を入力いただくことで、姓名判断や占星術などマーケティング以外の多角的な分析も加わり、診断の精度が上がります。</p>
-      <button type="button" class="precision-btn" id="moreInfoToggleBtn" onclick="togglePrecision()">より精度を上げる</button>
-    </div>
-    <div id="moreInfoBlock" class="optional-block hidden">
-      <div class="field-group" style="margin-bottom:14px;">
-        <div class="field-label">本名（漢字）<span class="optional">任意・姓名判断も追加</span></div>
-        <div class="row-2">
-          <input type="text" id="userSei" class="text-input" placeholder="姓">
-          <input type="text" id="userMei" class="text-input" placeholder="名">
-        </div>
-      </div>
-
-      <div class="optional-toggle" onclick="toggleBlock('astroBlock','astroIcon')">
-        <span id="astroIcon">▸</span> 生まれた時間・場所（任意・西洋占星術のより高度な診断に使用）
-      </div>
-      <div id="astroBlock" class="optional-block hidden" style="margin-bottom:0;">
-        <div class="field-group">
-          <div class="field-label">生まれた時間<span class="optional">任意</span></div>
-          <div class="row-2">
-            <select id="birthHour" class="select-input"><option value="">時</option></select>
-            <select id="birthMinute" class="select-input"><option value="">分</option></select>
-          </div>
-        </div>
-        <div class="field-group" style="margin-bottom:0;">
-          <div class="field-label">生まれた場所<span class="optional">任意</span></div>
-          <input type="text" id="birthPlace" class="text-input" placeholder="例：東京都">
-        </div>
-      </div>
-    </div>
-
-    <button class="btn" onclick="startDiagnosis()">30問の診断を始める（約5分）</button>
+    <button class="btn" onclick="startDiagnosis()">18問の診断を始める（約3分）</button>
   </div>
 
   <!-- 質問画面 -->
   <div id="quizScreen" class="hidden">
-    <div class="progress-text"><span id="progressText">Q1 / 30</span></div>
+    <div class="progress-text"><span id="progressText">Q1 / 18</span></div>
     <div class="progress-bar"><div id="progressFill" class="progress-fill" style="width:0%"></div></div>
     <div class="question">
-      <div class="q-cat" id="questionCat"></div>
       <div class="q-text" id="questionText"></div>
     </div>
     <div class="likert" id="likertButtons">
@@ -316,38 +218,38 @@
       <div class="one-liner" id="oneLiner"></div>
 
       <div class="score-section">
-        <h3 style="margin-bottom:16px;">《経営6領域スコア》</h3>
+        <h3 style="margin-bottom:16px;">《4つのタイプ・スコア》</h3>
         <div id="scoreContent"></div>
       </div>
 
       <div class="bottleneck-card">
-        <div class="bn-tag">第一ボトルネック</div>
+        <div class="bn-tag">あなたを一番止めているもの</div>
         <div class="bn-cat" id="primaryBnCat"></div>
         <div class="bn-score" id="primaryBnScore"></div>
       </div>
       <div class="bottleneck-card secondary" id="secondaryBnCard">
-        <div class="bn-tag">第二ボトルネック</div>
+        <div class="bn-tag">次に向き合うもの</div>
         <div class="bn-cat" id="secondaryBnCat"></div>
         <div class="bn-score" id="secondaryBnScore"></div>
       </div>
 
       <div class="result-section">
-        <h3>《なぜ業績が止まるのか》</h3>
+        <h3>《なぜ、あなたは止まっているのか》</h3>
         <p id="resultWhy"></p>
       </div>
 
       <div class="result-section">
-        <h3>《よく起きる症状》</h3>
+        <h3>《よくある場面》</h3>
         <div id="resultSymptoms"></div>
       </div>
 
       <div class="result-section">
-        <h3>《放置した場合のリスク》</h3>
+        <h3>《このまま放置した場合》</h3>
         <p id="resultRisk"></p>
       </div>
 
       <div class="result-section action-section">
-        <h3>《今週取り組むべき3つの行動》</h3>
+        <h3>《今日からやること》</h3>
         <ul id="resultActions"></ul>
       </div>
 
@@ -361,213 +263,135 @@
         <p id="resultGoal"></p>
       </div>
 
-      <div class="cta-section">
-        <h3>診断結果を、あなたの経営に落とし込みませんか？</h3>
-        <p>この診断は、30問の回答から現在の傾向を分析しています。</p>
-        <p>個別セッションでは、<br>あなたの商品や発信、現在の経営状況を伺いながら、</p>
-        <p><strong>「何から改善すれば一番成果につながるのか」</strong></p>
-        <p>を一緒に整理します。</p>
-        <p>必要であれば、その先の改善方法についてもご提案します。</p>
-        <a class="line-btn" href="https://salagracia.com/wanomeguri_lp/" target="_blank" rel="noopener">60分・3,300円の個別セッションを見る</a>
+      <div class="result-section related-section">
+        <h3>《この痛みを扱った動画》</h3>
+        <p id="resultRelated"></p>
       </div>
 
-      <!-- 追加分析（占術・姓名判断・入力済みの場合のみ自動表示） -->
-      <div id="extraAnalysisWrap" class="extra-analysis hidden">
-        <p class="extra-lead">※ 業績の診断結果は、30問の回答のみで判定しています。ここから先は参考情報です。</p>
-        <div id="extraResult"></div>
+      <div class="cta-section">
+        <h3>REBOOT。何度でも挑戦する。</h3>
+        <p>この診断は、あなたを癒すためのものではありません。<br>あなたが目を逸らしてきたものを、もう一度、正面から見るためのものです。</p>
       </div>
 
       <div class="action-buttons" style="margin-top:24px;">
         <button class="btn btn-secondary" onclick="downloadPDF()">📄 結果をPDFで保存</button>
+        <button class="btn btn-secondary" onclick="restartDiagnosis()">もう一度診断する</button>
       </div>
     </div>
   </div>
 
 </div>
 
-
 <script>
 // ===================================================================
-// データ：30問（category = product / marketing / sales / people / systems / focus）
+// データ：18問（category = comparison / swallow / control / unaware）
 // ===================================================================
 const questions = [
-  { id: 1, category: "product", text: "自分の商品が「誰の、どんな悩みを解決するものか」を一言で説明できない。" },
-  { id: 2, category: "marketing", text: "SNSやYouTubeで発信しているが、問い合わせや申込みにつながる流れができていない。" },
-  { id: 3, category: "sales", text: "お客様が実際に使う言葉より、自分が伝えたい内容を優先してしまう。" },
-  { id: 4, category: "people", text: "自分でやった方が早いと思い、仕事を人に任せられない。" },
-  { id: 5, category: "systems", text: "毎日忙しいのに、売上や将来につながる仕事へ十分な時間を使えていない。" },
-  { id: 6, category: "focus", text: "やりたいことが多く、今最も優先すべきことを一つに決められない。" },
-  { id: 7, category: "product", text: "商品の内容やサービス範囲が増え続け、何を売っているのか分かりにくくなっている。" },
-  { id: 8, category: "marketing", text: "発信テーマに一貫性がなく、投稿するたびに内容が変わってしまう。" },
-  { id: 9, category: "sales", text: "商品を案内することに抵抗があり、販売の提案を曖昧にしてしまう。" },
-  { id: 10, category: "people", text: "社員、外注先、パートナーに期待する役割や成果を明確に伝えられていない。" },
-  { id: 11, category: "systems", text: "繰り返し行っている業務を、仕組み化・自動化・AI活用できていない。" },
-  { id: 12, category: "focus", text: "新しい情報やノウハウを知ると、今の方針をすぐ変えたくなる。" },
-  { id: 13, category: "product", text: "競合との違いを聞かれても、顧客にとっての具体的な価値として説明できない。" },
-  { id: 14, category: "marketing", text: "発信を見た人に、次に何をしてほしいのかが明確になっていない。" },
-  { id: 15, category: "sales", text: "商品が売れなかった時、お客様へ理由を聞かずに、価格や内容を変えてしまう。" },
-  { id: 16, category: "people", text: "経営上の悩みや弱音を相談できる相手が少なく、一人で抱え込んでいる。" },
-  { id: 17, category: "systems", text: "売上や利益に直結しない仕事でも、頼まれると断れず引き受けてしまう。" },
-  { id: 18, category: "focus", text: "数字や事実より、その時の気分や直感で経営判断を変えることがある。" },
-  { id: 19, category: "product", text: "商品価格に自信がなく、本来の価値より安く設定していると感じる。" },
-  { id: 20, category: "marketing", text: "発信の反応を検証せず、投稿数を増やすことだけが目的になっている。" },
-  { id: 21, category: "sales", text: "見込み客が購入を迷う理由や不安を、具体的に把握できていない。" },
-  { id: 22, category: "people", text: "人に任せた仕事の仕上がりが気になり、結局自分でやり直してしまう。" },
-  { id: 23, category: "systems", text: "今日やるべき仕事と、やらなくてよい仕事の区別が曖昧である。" },
-  { id: 24, category: "focus", text: "一度決めたことでも、結果が出る前に別の方法へ切り替えてしまう。" },
-  { id: 25, category: "product", text: "商品購入後に、お客様がどんな状態になれるのかを具体的に示せていない。" },
-  { id: 26, category: "marketing", text: "LINE、メール、個別相談など、発信後の見込み客を育てる仕組みがない。" },
-  { id: 27, category: "sales", text: "成約率、リピート率、紹介率など、顧客に関する数字を把握していない。" },
-  { id: 28, category: "people", text: "社員や協力者との小さなすれ違いを放置し、後から大きな問題になることがある。" },
-  { id: 29, category: "systems", text: "自分にしかできない仕事と、他人やAIに任せられる仕事を整理できていない。" },
-  { id: 30, category: "focus", text: "今後3か月で達成する具体的な目標と、そのための行動が明確になっていない。" }
+  { id: 1, category: "comparison", text: "深夜、SNSで同世代の誰かの活躍を見て、焦って眠れなくなることがある。" },
+  { id: 2, category: "comparison", text: "「お金さえあれば、この焦りは消える」と思っているのに、達成しても数日でまた同じ焦りが戻ってくる。" },
+  { id: 3, category: "comparison", text: "値上げや値付けの場面で、なぜか怖くなって言葉を飲み込んでしまう。" },
+  { id: 4, category: "comparison", text: "頑張っているはずなのに、数字だけが去年と同じところで止まっている。" },
+  { id: 5, category: "comparison", text: "周りと比べて、自分だけが取り残されているように感じることがある。" },
+  { id: 6, category: "swallow", text: "大切にしてきた人間関係が、気づけば静かに離れていっている。" },
+  { id: 7, category: "swallow", text: "近い人（家族・パートナー）に意見を言われると、感情的にならず伝えるべきことが伝えられない。" },
+  { id: 8, category: "swallow", text: "職場では強く出られても、家族の前では昔の力関係に戻ってしまい、何も言えなくなる。" },
+  { id: 9, category: "swallow", text: "言いたいことを飲み込んで、当たり障りのない一日を今日も終えた。" },
+  { id: 10, category: "swallow", text: "批判されるのが怖くて、意見を言わない・挑戦しないことを選んでいる。" },
+  { id: 11, category: "control", text: "「あれだけ言ったのに」と、電話や会話の後にため息をつく瞬間がある。" },
+  { id: 12, category: "control", text: "たった一人の悪い影響でチーム・家庭の空気が悪くなっているのに、強く言えず様子を見てしまっている。" },
+  { id: 13, category: "control", text: "相手が変わってくれることを期待して、同じ話を何度も繰り返してしまう。" },
+  { id: 14, category: "control", text: "指示した通りに動いてもらえず、「なんで分かってくれないんだろう」と感じることが多い。" },
+  { id: 15, category: "unaware", text: "「今日はいいか」と自分に甘くすることに、罪悪感をほとんど感じない。" },
+  { id: 16, category: "unaware", text: "誰から見ても順調なのに、ふと「これで本当によかったんだっけ」と、理由もなく虚しくなる瞬間がある。" },
+  { id: 17, category: "unaware", text: "慰めの言葉をかけられるとほっとするが、同時に何かが鈍っていく感覚もある。" },
+  { id: 18, category: "unaware", text: "「まだ大丈夫」「もう少し様子を見よう」と、同じことを先延ばしにし続けている。" }
 ];
 
-const CATEGORY_LABEL = { product: "商品・価値設計", marketing: "発信・集客導線", sales: "顧客理解・販売", people: "人材・関係性", systems: "時間・仕組み", focus: "判断・集中" };
-const TIEBREAK_ORDER = ["focus", "product", "sales", "marketing", "systems", "people"];
-const COMPOUND_PRIORITY_ORDER = ["focus", "product", "sales", "marketing", "people", "systems"];
+const CATEGORY_LABEL = {
+  comparison: "比較タイプ",
+  swallow: "飲み込みタイプ",
+  control: "コントロールタイプ",
+  unaware: "無自覚タイプ"
+};
+const TIEBREAK_ORDER = ["comparison", "swallow", "control", "unaware"];
 
 const RESULT_TEMPLATES = {
-  product: {
-    title: "売れない原因は、努力不足ではなく「商品設計」です",
-    conclusion: "提供できる価値はあるのに、誰に何を約束する商品なのかが曖昧になっています。",
-    why: "ターゲット、解決する悩み、得られる変化、選ばれる理由が整理されていないため、発信や営業を増やしても顧客が自分向けの商品だと判断できません。",
-    symptoms: ["商品説明が気づけば長くなっている", "新しいサービスをつい増やしてしまう", "値段を聞かれるとドキッとする", "「結局何屋さんですか」と聞かれる", "個別対応が増えて、利益が薄くなっている"],
-    risk: "発信や営業の量を増やしても成約につながらず、値下げや新商品づくりを繰り返しやすくなります。",
-    actions: ["最も成果を出した顧客を一人選ぶ", "その顧客の「購入前の悩み」と「購入後の変化」を書く", "「誰が、何によって、どうなれる商品か」を一文にする"],
-    avoid: ["新しいSNSを始める", "特典を増やす", "安易に値下げする"],
-    goal30: "主力商品を一つに絞り、対象者・成果・期間・価格を一文で説明できる状態。"
+  comparison: {
+    title: "あなたを止めているのは「比較」です",
+    conclusion: "手に入れたいのはお金や成果そのものではなく、比べる焦りから解放されることかもしれません。",
+    why: "SNSで他人の活躍が見えるようになったことで、比較そのものが日常になっています。その焦りを埋めるために「お金があれば」「成果が出れば」と外側を追いかけるほど、比較は終わらず、満たされない感覚だけが残ります。",
+    symptoms: ["深夜、SNSで人の投稿を見て焦る", "目標を達成しても、数日で同じ焦りが戻ってくる", "値上げや値付けの場面で言葉を飲み込む", "頑張っているのに数字が去年と変わらない", "周りと比べて取り残されている感覚がある"],
+    risk: "外側を追いかけ続ける限り、比較は終わりません。「楽して儲かる」情報に惹かれ続け、実践から遠ざかっていきます。",
+    actions: ["今日、SNSを見る時間を意識的に減らす", "「比べている自分」に気づいたら、その場で立ち止まる", "地味な実践を一つだけ選んで、今日やる"],
+    avoid: ["ビジョンボードにゴールの写真だけ貼る", "「もっと情報を集めれば大丈夫」と先延ばしにする", "楽して結果が出る方法を探し続ける"],
+    goal30: "比べる時間より、自分の一歩を積む時間の方が長くなっている状態。",
+    related: "8A「そのビジョンボード、逆効果かもしれません｜引き寄せるのは、結果じゃなくて過程」"
   },
-  marketing: {
-    title: "価値はあるのに、必要な人へ届く仕組みが止まっています",
-    conclusion: "発信はしていても、見込み客が相談や申込みへ進む導線が不足しています。",
-    why: "投稿や動画が単発で終わり、誰に向けた発信か、次に何をしてほしいかが明確でないためです。",
-    symptoms: ["いいねは増えるのに問い合わせが来ない", "投稿するたびにテーマが変わる", "「で、結局何をすればいいの？」と言われる", "LINE登録してもらった後の案内ができていない", "発信すること自体が負担になっている"],
-    risk: "発信量を増やしても見込み客が蓄積されず、集客が常にゼロからのスタートになります。",
-    actions: ["理想顧客を一人に絞る", "発信テーマを3本柱に整理する", "すべての発信に一つのCTAを設置する"],
-    avoid: ["複数のSNSを同時に始める", "再生回数だけを追う", "毎回違う商品を案内する"],
-    goal30: "発信からLINE、相談、申込みまでの一本の導線が完成している状態。"
+  swallow: {
+    title: "あなたを止めているのは「言えないこと」です",
+    conclusion: "一番近い人にこそ、本音を飲み込み続けている状態です。",
+    why: "批判されること、関係が壊れることを恐れて、言うべきことを飲み込む習慣が続いています。無関心な人はわざわざ本音をぶつけてきません。あなたが黙っているのは優しさではなく、関係を守るための我慢です。",
+    symptoms: ["大切な人間関係が、気づけば静かに離れていく", "近い人に意見を言われると、感情的にならず伝えられない", "職場では強く出られても、家族には昔の力関係に戻る", "言いたいことを飲み込んで、当たり障りのない一日を終える", "批判が怖くて、意見を言わない・挑戦しないことを選ぶ"],
+    risk: "言わないまま関係を続けると、誰にも批判されない代わりに、誰の記憶にも残らないものになります。",
+    actions: ["今日、飲み込んでいる一言を一つだけ紙に書き出す", "事実の部分だけを拾って、感情を切り離して伝える練習をする", "「批判は関心の証」だと思い出す"],
+    avoid: ["関係が壊れることを恐れて、ずっと黙り続ける", "一度にすべてを伝えようとする"],
+    goal30: "言うべきことを、感情的にならずに伝えられている状態。",
+    related: "4A「批判が怖くて動けないあなたへ｜敵の言葉に、宝が眠っている」"
   },
-  sales: {
-    title: "商品ではなく、「顧客とのズレ」が成約を止めています",
-    conclusion: "顧客の悩みや購入を迷う理由を十分に把握できていません。",
-    why: "自分が伝えたい価値と、顧客が今すぐ解決したい問題が一致していないためです。",
-    symptoms: ["一生懸命説明しても、反応が薄い", "「検討します」でそのまま終わる", "価格の話になると急に空気が変わる", "売れないと、すぐ商品を変えたくなる", "リピートや紹介がなかなか増えない"],
-    risk: "商品改善を繰り返しても顧客とのズレが残り、営業が苦しくなります。",
-    actions: ["最近断られた3人の理由を整理する", "既存顧客へ購入理由を聞く", "顧客の言葉を使って商品説明を書き直す"],
-    avoid: ["割引を始める", "営業トークを増やす", "根拠なく商品内容を変える"],
-    goal30: "顧客の悩み、購入理由、迷う理由を具体的な言葉で説明できる状態。"
+  control: {
+    title: "あなたを止めているのは「変えられないものを変えようとする力」です",
+    conclusion: "人を思い通りに動かそうとして、消耗しています。",
+    why: "権限や実績があっても、人は思い通りには動きません。それを受け入れられないまま、指示・説得・叱咤を繰り返すほど、疲弊感だけが増えていきます。",
+    symptoms: ["「あれだけ言ったのに」とため息をつく瞬間がある", "一人の悪影響に気づきながら、様子を見てしまう", "相手が変わることを期待して同じ話を繰り返す", "指示通りに動いてもらえず、無力感を感じる"],
+    risk: "相手を変えようとする努力を続けるほど、あなたのエネルギーだけがすり減っていきます。",
+    actions: ["今日、一つだけ「相手を変えようとするのをやめる」場面を選ぶ", "自分がコントロールできる範囲だけに力を使う", "本気で活を入れてくれる人が周りにいるか、確認する"],
+    avoid: ["同じ説得や指摘を繰り返す", "慰めだけで済ませる・済まされる"],
+    goal30: "相手を変えようとする力を手放し、物事がスムーズに進み始めている状態。",
+    related: "5A「『よく頑張ってるね』しか言われないあなたへ｜時には、活を入れる人が要る」"
   },
-  people: {
-    title: "経営者一人の頑張りが、成長の限界になっています",
-    conclusion: "役割、期待、コミュニケーションが曖昧で、仕事が経営者へ集中しています。",
-    why: "人を信用していないからとは限りません。任せる基準と、成果の定義が作られていないことが原因です。",
-    symptoms: ["つい「自分でやった方が早い」と思う", "頼んだ仕事を結局やり直している", "社員がいつも指示を待っている", "経営の悩みを話せる相手がいない", "休みの日も仕事のことを考えている"],
-    risk: "売上が伸びるほど経営者が忙しくなり、人材の定着や顧客対応にも悪影響が出ます。",
-    actions: ["自分しかできない仕事を3つに絞る", "一つの仕事について完成条件を文章化する", "一人の社員・協力者と期待役割を確認する"],
-    avoid: ["いきなり人を増やす", "感覚だけで仕事を任せる", "全部を完璧に引き継ぐ"],
-    goal30: "自分が抱えていた仕事を一つ手放し、成果基準を共有できている状態。"
-  },
-  systems: {
-    title: "忙しさが、次の売上をつくる時間を奪っています",
-    conclusion: "業務量ではなく、仕事の選別と仕組み化が問題になっています。",
-    why: "緊急な仕事や繰り返し業務に追われ、商品改善、顧客理解、発信などの成長業務へ時間を使えていません。",
-    symptoms: ["気づけば一日が作業だけで終わっている", "同じ説明を何度も繰り返している", "AIや自動化を学んでも、結局使えていない", "急な依頼に予定を崩される", "休んでいても仕事が頭から離れない"],
-    risk: "売上が増えても労働時間が増え、利益と余裕が残らない経営になります。",
-    actions: ["1週間の業務を記録する", "やめる・任せる・自動化する・自分で行うの4つに分類する", "繰り返し業務を一つテンプレート化する"],
-    avoid: ["新しいツールを大量に導入する", "すべてを自動化する", "空いた時間へ新しい予定を入れる"],
-    goal30: "週3時間以上の成長業務時間を確保し、繰り返し業務を一つ削減できている状態。"
-  },
-  focus: {
-    title: "能力ではなく、経営判断の分散が成長を止めています",
-    conclusion: "選択肢が多く、最も重要な一つへ力を集中できていません。",
-    why: "新しい情報やアイデアへ反応する一方で、検証前に方針を変えるため、成果が積み上がらないからです。",
-    symptoms: ["新しい講座やサービスを思いつく", "発信テーマがどんどん増える", "学べば学ぶほど、逆に迷う", "始めたことを途中で方向転換する", "「結局どれを優先すべきか」が分からなくなる"],
-    risk: "行動量は多いのに、どの施策も成果が出る前に止まり、「何をしても伸びない」という感覚が強くなります。",
-    actions: ["90日後の目標を一つ決める", "その目標に関係しない施策を3つ止める", "毎週確認する指標を一つ決める"],
-    avoid: ["新商品を増やす", "新しい集客媒体を始める", "他人の成功法をすぐ取り入れる"],
-    goal30: "一つの目標、一つの主力商品、一つの主要施策に集中できている状態。"
+  unaware: {
+    title: "あなたを止めているのは「気づいていないこと」そのものです",
+    conclusion: "自分に甘くしていることと、結果が出ていないことが、まだ繋がっていません。",
+    why: "「今日はいいか」を積み重ねることに、罪悪感がありません。だからこそ、結果が出ない理由を自分の外側（運・環境・他人）に求めてしまいます。",
+    symptoms: ["「今日はいいか」に罪悪感をほとんど感じない", "誰から見ても順調なのに、ふと虚しくなる瞬間がある", "慰めの言葉にほっとするが、同時に何かが鈍っていく感覚がある", "「まだ大丈夫」と先延ばしを繰り返している"],
+    risk: "苦労せずに手に入るものは、長い目で見るとやる気そのものを静かに削っていきます。",
+    actions: ["今日、「すぐに」手に入れようとしているものを一つ見つける", "それを、少し手間をかけるものに変えてみる", "『まだ大丈夫』と言い聞かせていることを、一つだけ紙に書き出す"],
+    avoid: ["苦労せず手に入る快楽に逃げる", "「まだ大丈夫」で先延ばしを続ける"],
+    goal30: "待つこと・地味な実践が、喜びに変わり始めている状態。",
+    related: "6A「頑張らずに手に入るものが、あなたを弱くしている｜豆を挽く、その1分の意味」／7A「その『まだ大丈夫』が、一番危ない｜逃げるほど、恐怖は太る」"
   }
 };
 
 const ONE_LINER = {
-  product: "あなたは能力が足りないのではありません。何を誰に届けるかが、まだ一文になっていないだけです。",
-  marketing: "あなたは能力が足りないのではありません。発信の量ではなく、届いた後の導線が整っていないだけです。",
-  sales: "あなたは能力が足りないのではありません。伝えたいことと、顧客が知りたいことが、まだすれ違っているだけです。",
-  people: "あなたは能力が足りないのではありません。任せる基準が、まだ言葉になっていないだけです。",
-  systems: "あなたは能力が足りないのではありません。仕事の選別と仕組み化が、まだ追いついていないだけです。",
-  focus: "あなたは能力が足りないのではありません。やることが増えすぎて、一つに集中できていないだけです。"
+  comparison: "あなたは劣っているわけではありません。比べる基準が、外側にあるだけです。",
+  swallow: "あなたは弱いわけではありません。大切にしたい関係があるから、飲み込んでいるだけです。",
+  control: "あなたは無力なわけではありません。変えられないものに、力を使っているだけです。",
+  unaware: "あなたはダメなわけではありません。まだ、気づいていないだけです。"
 };
 
 const COMPOUND_PAIRS = {
-  "marketing|product": "商品が曖昧なため、発信テーマとCTAも定まっていない。",
-  "product|sales": "顧客理解が浅いため、売れる商品設計になっていない。",
-  "marketing|sales": "発信量ではなく、顧客の悩みとメッセージのズレがある。",
-  "people|systems": "任せる仕組みがないため、経営者の時間が奪われている。",
-  "focus|systems": "優先順位が決まらないため、重要でない作業へ時間を使っている。",
-  "focus|product": "やりたいことが多く、主力商品を一つに決められていない。"
+  "comparison|swallow": "比較から生まれた焦りを埋められないまま、近い人にも本音を言えずにいます。",
+  "comparison|unaware": "比較の焦りを埋めようとする一方で、自分に甘くしていることには気づいていません。",
+  "comparison|control": "外側との比較で焦りながら、同時に人を思い通りに動かそうとしています。",
+  "swallow|control": "本音を飲み込みながら、同時に相手を変えようとして消耗しています。",
+  "swallow|unaware": "本音を飲み込む一方で、自分の甘さには気づかず、結果が出ない理由を外に求めています。",
+  "control|unaware": "人を変えようとする一方で、自分自身の甘さには目が向いていません。"
 };
 
 // ===================================================================
 // 状態
 // ===================================================================
 let shuffledQuestions = [];
-let answers = {}; // { questionId: score }
+let answers = {};
 let currentIndex = 0;
 let userInfo = {};
-let userY = 0, userM = 0, userD = 0, userZodiac = '';
-let userTime = '', userPlace = '', userSei = '', userMei = '';
 let diagnosisResult = null;
 
-const STORAGE_KEY = 'gyoseki_diagnosis_state_v1';
+const STORAGE_KEY = 'reboot_shindan_state_v1';
 
-function toggleBlock(blockId, iconId) {
-  const el = document.getElementById(blockId);
-  const icon = document.getElementById(iconId);
-  el.classList.toggle('hidden');
-  icon.textContent = el.classList.contains('hidden') ? '▸' : '▾';
-}
-
-function togglePrecision() {
-  const el = document.getElementById('moreInfoBlock');
-  const btn = document.getElementById('moreInfoToggleBtn');
-  el.classList.toggle('hidden');
-  btn.textContent = el.classList.contains('hidden') ? 'より精度を上げる' : '閉じる';
-}
-
-function populateSelect(id, from, to) {
-  const sel = document.getElementById(id);
-  for (let i = from; i <= to; i++) {
-    const opt = document.createElement('option');
-    opt.value = i; opt.textContent = i;
-    sel.appendChild(opt);
-  }
-}
-(function initSelects() {
-  populateSelect('birthYear', 1940, 2026);
-  document.getElementById('birthYear').innerHTML = '<option value="">年</option>' +
-    Array.from({length: 2026-1940+1}, (_, i) => 2026 - i).map(y => `<option value="${y}">${y}年</option>`).join('');
-  populateSelect('birthMonth', 1, 12);
-  document.getElementById('birthMonth').innerHTML = '<option value="">月</option>' +
-    Array.from({length: 12}, (_, i) => i + 1).map(m => `<option value="${m}">${m}月</option>`).join('');
-  document.getElementById('birthDay').innerHTML = '<option value="">日</option>' +
-    Array.from({length: 31}, (_, i) => i + 1).map(d => `<option value="${d}">${d}日</option>`).join('');
-  document.getElementById('birthHour').innerHTML = '<option value="">時</option>' +
-    Array.from({length: 24}, (_, i) => i).map(h => `<option value="${h}">${h}時</option>`).join('');
-  document.getElementById('birthMinute').innerHTML = '<option value="">分</option>' +
-    [0,15,30,45].map(m => `<option value="${m}">${String(m).padStart(2,'0')}分</option>`).join('');
-})();
-
-// ===================================================================
-// localStorage 自動保存・再開
-// ===================================================================
 function saveState() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      shuffledQuestions, answers, currentIndex, userInfo,
-      userY, userM, userD, userZodiac, userSei, userMei, userTime, userPlace,
-      savedAt: Date.now()
-    }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ shuffledQuestions, answers, currentIndex, userInfo, savedAt: Date.now() }));
   } catch (e) {}
 }
 function loadState() {
@@ -588,9 +412,6 @@ function resumeSaved() {
   answers = s.answers;
   currentIndex = s.currentIndex;
   userInfo = s.userInfo || {};
-  userY = s.userY || 0; userM = s.userM || 0; userD = s.userD || 0;
-  userZodiac = s.userZodiac || ''; userSei = s.userSei || ''; userMei = s.userMei || '';
-  userTime = s.userTime || ''; userPlace = s.userPlace || '';
   if (userInfo.name) document.getElementById('userName').value = userInfo.name;
   document.getElementById('infoScreen').classList.add('hidden');
   document.getElementById('quizScreen').classList.remove('hidden');
@@ -618,29 +439,7 @@ function shuffle(arr) {
 function startDiagnosis() {
   const name = (document.getElementById('userName').value || '').trim();
   if (!name) { alert('ニックネームまたはお名前を入力してください'); return; }
-
-  const genderInput = document.querySelector('input[name="gender"]:checked');
-  userInfo = {
-    name,
-    gender: genderInput ? genderInput.value : ''
-  };
-
-  const y = document.getElementById('birthYear').value;
-  const m = document.getElementById('birthMonth').value;
-  const d = document.getElementById('birthDay').value;
-  if (y && m && d) {
-    userY = parseInt(y); userM = parseInt(m); userD = parseInt(d);
-    userZodiac = getZodiac(userM, userD);
-  } else {
-    userY = 0; userM = 0; userD = 0; userZodiac = '';
-  }
-
-  userSei = (document.getElementById('userSei').value || '').trim();
-  userMei = (document.getElementById('userMei').value || '').trim();
-  const h = document.getElementById('birthHour').value;
-  const min = document.getElementById('birthMinute').value;
-  userTime = (h !== '' && min !== '') ? `${h}時${String(min).padStart(2,'0')}分` : '';
-  userPlace = (document.getElementById('birthPlace').value || '').trim();
+  userInfo = { name };
 
   shuffledQuestions = shuffle(questions);
   answers = {};
@@ -654,7 +453,6 @@ function startDiagnosis() {
 
 function showQuestion() {
   const q = shuffledQuestions[currentIndex];
-  document.getElementById('questionCat').textContent = CATEGORY_LABEL[q.category];
   document.getElementById('questionText').textContent = q.text;
   document.getElementById('progressText').textContent = `Q${currentIndex + 1} / ${shuffledQuestions.length}`;
   document.getElementById('progressFill').style.width = (currentIndex / shuffledQuestions.length) * 100 + '%';
@@ -694,308 +492,113 @@ function finishQuiz() {
 
   setTimeout(() => {
     diagnosisResult = computeResult();
-    try {
-      fetch('/api/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: '', name: userInfo.name, gender: userInfo.gender,
-          birthday: (userY && userM && userD) ? `${userY}年${userM}月${userD}日` : '',
-          primary: CATEGORY_LABEL[diagnosisResult.primaryBottleneck],
-          secondary: CATEGORY_LABEL[diagnosisResult.secondaryBottleneck],
-          scores: Object.fromEntries(Object.entries(diagnosisResult.scores).map(([k, v]) => [CATEGORY_LABEL[k], v]))
-        })
-      }).catch(() => {});
-    } catch (e) {}
     document.getElementById('sendingScreen').classList.add('hidden');
     document.getElementById('resultScreenWrap').classList.remove('hidden');
     renderResult(diagnosisResult);
     clearSaved();
     window.scrollTo(0, 0);
-    setTimeout(sendPdfToAdmin, 800);
-  }, 1800);
-}
-
-// 結果PDFを裏で生成し、管理者（サラさん）へ自動送信する（ユーザーの操作は不要）
-function sendPdfToAdmin() {
-  try {
-    const element = document.getElementById('resultContent');
-    const opt = {
-      margin: 10,
-      image: { type: 'jpeg', quality: 0.9 },
-      html2canvas: { scale: 1.5, useCORS: true, scrollY: 0, scrollX: 0, backgroundColor: '#f7fbfd' },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['css', 'legacy'], avoid: ['.result-section', '.score-section', '.bottleneck-card', '.cta-section'] }
-    };
-    html2pdf().set(opt).from(element).outputPdf('datauristring').then(function (dataUri) {
-      const base64 = (dataUri.split(',')[1]) || '';
-      if (!base64) return;
-      fetch('/api/send-pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: '', name: userInfo.name,
-          type: CATEGORY_LABEL[diagnosisResult.primaryBottleneck],
-          pdf_base64: base64
-        })
-      }).catch(() => {});
-    }).catch(() => {});
-  } catch (e) {}
+  }, 1400);
 }
 
 // ===================================================================
-// スコアリングロジック
+// スコアリングロジック（カテゴリごとの設問数が異なるため、設問数に応じて正規化）
 // ===================================================================
 function computeResult() {
+  const countByCategory = {};
+  Object.keys(CATEGORY_LABEL).forEach(c => countByCategory[c] = 0);
+  questions.forEach(q => countByCategory[q.category]++);
+
   const rawByCategory = {};
   Object.keys(CATEGORY_LABEL).forEach(c => rawByCategory[c] = 0);
   shuffledQuestions.forEach(q => { rawByCategory[q.category] += (answers[q.id] || 0); });
 
   const scores = {};
   Object.keys(rawByCategory).forEach(c => {
-    scores[c] = Math.round(((rawByCategory[c] - 5) / 20) * 100);
+    const n = countByCategory[c];
+    scores[c] = Math.round(((rawByCategory[c] - n) / (4 * n)) * 100);
   });
 
   const entries = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-  // 同点タイブレーク
   const maxScore = entries[0][1];
   const topTied = entries.filter(([, v]) => v === maxScore).map(([k]) => k);
-  let primary = topTied.length > 1
-    ? TIEBREAK_ORDER.find(c => topTied.includes(c))
-    : entries[0][0];
+  let primary = topTied.length > 1 ? TIEBREAK_ORDER.find(c => topTied.includes(c)) : entries[0][0];
 
   const rest = entries.filter(([k]) => k !== primary);
   const secondMax = rest[0][1];
   const secondTied = rest.filter(([, v]) => v === secondMax).map(([k]) => k);
-  let secondary = secondTied.length > 1
-    ? TIEBREAK_ORDER.find(c => secondTied.includes(c))
-    : rest[0][0];
+  let secondary = secondTied.length > 1 ? TIEBREAK_ORDER.find(c => secondTied.includes(c)) : rest[0][0];
 
-  const allLow = Object.values(scores).every(v => v <= 29);
-  const isCompound = !allLow && (scores[primary] - scores[secondary] <= 5) && scores[primary] >= 50 && scores[secondary] >= 50;
-
-  const overall = Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / 6);
-
-  return { scores, primaryBottleneck: primary, secondaryBottleneck: secondary, isCompound, isStable: allLow, overallScore: overall };
+  return { scores, primaryBottleneck: primary, secondaryBottleneck: secondary };
 }
 
 function getBand(score) {
-  if (score <= 29) return { label: '良好', color: '#a8cfe0' };
-  if (score <= 49) return { label: '注意', color: '#6fa8c7' };
-  if (score <= 69) return { label: '要改善', color: '#3d7ca3' };
-  return { label: '優先改善', color: '#1f3d54' };
+  if (score <= 29) return { label: '良好', color: '#a9c4dc' };
+  if (score <= 49) return { label: '注意', color: '#6f97bf' };
+  if (score <= 69) return { label: '要注目', color: '#3d6fa8' };
+  return { label: '最優先', color: '#10233b' };
 }
 
 function getCompoundText(cat1, cat2) {
   const key1 = [cat1, cat2].sort().join('|');
   if (COMPOUND_PAIRS[key1]) return COMPOUND_PAIRS[key1];
-  return `「${CATEGORY_LABEL[cat1]}」と「${CATEGORY_LABEL[cat2]}」、2つの課題が連鎖しています。${RESULT_TEMPLATES[cat1].conclusion} また、${RESULT_TEMPLATES[cat2].conclusion}`;
-}
-
-function getCompoundPriority(cat1, cat2, scores) {
-  // 人材・時間が80点以上なら先に負荷軽減
-  const highLoad = [cat1, cat2].filter(c => (c === 'people' || c === 'systems') && scores[c] >= 80);
-  if (highLoad.length) return highLoad[0];
-  return COMPOUND_PRIORITY_ORDER.find(c => c === cat1 || c === cat2);
-}
-
-// ===================================================================
-// 結果描画
-// ===================================================================
-function meterString(score) {
-  const n = Math.max(1, Math.min(5, Math.round(score / 20)));
-  return "■".repeat(n) + "□".repeat(5 - n);
+  return `「${CATEGORY_LABEL[cat1]}」と「${CATEGORY_LABEL[cat2]}」、2つが絡み合っています。`;
 }
 
 function renderResult(result) {
   document.getElementById('resultUserTag').textContent = userInfo.name ? `${userInfo.name}さんの診断結果` : '診断結果';
 
-  // スコアバー
   let scoreHtml = '';
   Object.keys(CATEGORY_LABEL).forEach(c => {
     const val = Math.max(0, Math.min(100, result.scores[c]));
     const band = getBand(val);
-    scoreHtml += `<div class="score-row"><span class="score-label">${CATEGORY_LABEL[c]}</span><div class="score-bar"><div class="score-fill" style="width:${val}%;background:${band.color};"></div></div><span class="score-val"><span class="score-text">${val}点・${band.label}</span><span class="score-meter">${meterString(val)}</span></span></div>`;
+    scoreHtml += `<div class="score-row"><span class="score-label">${CATEGORY_LABEL[c]}</span><div class="score-bar"><div class="score-fill" style="width:${val}%;background:${band.color};"></div></div><span class="score-val">${val}点・${band.label}</span></div>`;
   });
   document.getElementById('scoreContent').innerHTML = scoreHtml;
 
-  let title, conclusion, why, symptoms, risk, actions, avoid, goal30;
   const p = result.primaryBottleneck, s = result.secondaryBottleneck;
+  const isCompound = (result.scores[p] - result.scores[s] <= 5) && result.scores[p] >= 50 && result.scores[s] >= 50;
 
-  if (result.isStable) {
-    title = "成長基盤安定型——次に伸ばす余地があるポイントがあります";
-    const next = Object.entries(result.scores).sort((a, b) => b[1] - a[1])[0][0];
-    conclusion = `6つの領域はいずれも大きな停滞は見られません。中でも「${CATEGORY_LABEL[next]}」に、次に伸ばす余地があります。`;
-    document.getElementById('oneLiner').textContent = ONE_LINER[next];
-    const t = RESULT_TEMPLATES[next];
-    why = t.why; symptoms = t.symptoms; risk = t.risk; actions = t.actions; avoid = t.avoid; goal30 = t.goal30;
-    document.getElementById('secondaryBnCard').classList.add('hidden');
-  } else if (result.isCompound) {
-    const priorityFirst = getCompoundPriority(p, s, result.scores);
-    title = `あなたの成長を止めている原因は「${CATEGORY_LABEL[p]}」です`;
-    conclusion = `そして、その影響で「${CATEGORY_LABEL[s]}」にも課題が生まれています。${getCompoundText(p, s)}`;
-    document.getElementById('oneLiner').textContent = ONE_LINER[priorityFirst];
-    const t = RESULT_TEMPLATES[priorityFirst];
-    why = t.why; symptoms = t.symptoms; risk = t.risk; actions = t.actions; avoid = t.avoid; goal30 = t.goal30;
-    document.getElementById('secondaryBnCard').classList.remove('hidden');
+  let title, conclusion;
+  const t = RESULT_TEMPLATES[p];
+
+  if (isCompound) {
+    title = `あなたを一番止めているのは「${CATEGORY_LABEL[p]}」です`;
+    conclusion = `そして「${CATEGORY_LABEL[s]}」も同時に絡んでいます。${getCompoundText(p, s)}`;
   } else {
-    const t = RESULT_TEMPLATES[p];
-    title = t.title; conclusion = t.conclusion;
-    document.getElementById('oneLiner').textContent = ONE_LINER[p];
-    why = t.why; symptoms = t.symptoms; risk = t.risk; actions = t.actions; avoid = t.avoid; goal30 = t.goal30;
-    document.getElementById('secondaryBnCard').classList.remove('hidden');
+    title = t.title;
+    conclusion = t.conclusion;
   }
 
   document.getElementById('resultTitle').textContent = title;
   document.getElementById('resultConclusion').textContent = conclusion;
+  document.getElementById('oneLiner').textContent = ONE_LINER[p];
 
   document.getElementById('primaryBnCat').textContent = CATEGORY_LABEL[p];
-  document.getElementById('primaryBnScore').textContent = `停滞度 ${result.scores[p]}点（${getBand(result.scores[p]).label}）`;
+  document.getElementById('primaryBnScore').textContent = `度合い ${result.scores[p]}点（${getBand(result.scores[p]).label}）`;
   document.getElementById('secondaryBnCat').textContent = CATEGORY_LABEL[s];
-  document.getElementById('secondaryBnScore').textContent = `停滞度 ${result.scores[s]}点（${getBand(result.scores[s]).label}）`;
+  document.getElementById('secondaryBnScore').textContent = `度合い ${result.scores[s]}点（${getBand(result.scores[s]).label}）`;
 
-  document.getElementById('resultWhy').textContent = why;
-  document.getElementById('resultSymptoms').innerHTML = symptoms.map(x => `<div class="symptom-item">□ ${x}</div>`).join('');
-  document.getElementById('resultRisk').textContent = risk;
-  document.getElementById('resultActions').innerHTML = actions.map(x => `<li>${x}</li>`).join('');
-  document.getElementById('resultAvoid').innerHTML = avoid.map(x => `<li>${x}</li>`).join('');
-  document.getElementById('resultGoal').textContent = goal30;
+  document.getElementById('resultWhy').textContent = t.why;
+  document.getElementById('resultSymptoms').innerHTML = t.symptoms.map(x => `<div class="symptom-item">□ ${x}</div>`).join('');
+  document.getElementById('resultRisk').textContent = t.risk;
+  document.getElementById('resultActions').innerHTML = t.actions.map(x => `<li>${x}</li>`).join('');
+  document.getElementById('resultAvoid').innerHTML = t.avoid.map(x => `<li>${x}</li>`).join('');
+  document.getElementById('resultGoal').textContent = t.goal30;
+  document.getElementById('resultRelated').textContent = t.related;
 
-  renderExtraAnalysis();
 }
 
 // ===================================================================
-// 占術（参考情報・任意・結果判定には使用しない）
-// ===================================================================
-function getZodiac(month, day) {
-  if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return '牡羊座 ♈';
-  if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return '牡牛座 ♉';
-  if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return '双子座 ♊';
-  if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return '蟹座 ♋';
-  if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return '獅子座 ♌';
-  if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return '乙女座 ♍';
-  if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return '天秤座 ♎';
-  if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return 'さそり座 ♏';
-  if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) return '射手座 ♐';
-  if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) return '山羊座 ♑';
-  if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return '水瓶座 ♒';
-  if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return '魚座 ♓';
-  return '';
-}
-function getLifePath(y, m, d) {
-  const digits = (String(y) + String(m).padStart(2,'0') + String(d).padStart(2,'0')).split('').map(Number);
-  let sum = digits.reduce((a,b)=>a+b,0);
-  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
-    sum = String(sum).split('').map(Number).reduce((a,b)=>a+b,0);
-  }
-  return sum;
-}
-function getKyusei(y, m, d) {
-  let year = y;
-  if (m < 2 || (m === 2 && d < 4)) year -= 1;
-  let s = String(year).split('').map(Number).reduce((a,b)=>a+b,0);
-  while (s > 9) s = String(s).split('').map(Number).reduce((a,b)=>a+b,0);
-  let num = 11 - s;
-  if (num > 9) num -= 9;
-  return num;
-}
-const kyuseiData = {
-  1: { name:'一白水星', nature:'水のように柔らかく、どんな環境にも馴染む適応力の人。人の心の機微を感じ取る力に優れています。', care:'流されすぎて、自分を見失わないこと。', flow:'2026年は「転換と充実」の年。これまでの生き方を見直し、内側を整えるほど、次の大きな流れに乗れます。' },
-  2: { name:'二黒土星', nature:'大地のように人を支え、育てる力の人。コツコツ積み重ねる誠実さが信頼を生みます。', care:'尽くしすぎて、自分が空にならないこと。', flow:'2026年は「実りと多忙」の年。これまでの努力が形になる時。忙しさの中でも、自分の巡りを整える時間を。' },
-  3: { name:'三碧木星', nature:'春の雷のような行動力と発信力の人。新しいことを始めるエネルギーに溢れています。', care:'勢い任せで、足元の確認を忘れないこと。', flow:'2026年は「収穫と喜び」の年。楽しみながら人と関わるほど、お金とご縁の巡りが良くなります。' },
-  4: { name:'四緑木星', nature:'風のように人と人を繋ぐ調整力の人。信用とご縁を育てる天才です。', care:'周りに合わせすぎて、軸を失わないこと。', flow:'2026年は「変化・転換」の年。環境や役割が変わりやすい時。変化を恐れず、巡りに乗ってください。' },
-  5: { name:'五黄土星', nature:'中心に立つ帝王の星。逆境から立ち上がる底力と、周りを巻き込む器の大きさを持ちます。', care:'我の強さが、独善にならないこと。', flow:'2026年は「注目」の年。良くも悪くも表に出ます。誠実さを貫くほど、光があなたの味方になります。' },
-  6: { name:'六白金星', nature:'天のように高い理想と責任感の人。リーダーとして人を導く力があります。', care:'完璧を求めすぎて、心が固くならないこと。', flow:'2026年は「充電と基礎固め」の年。焦らず内側を整え、学びを深めるほど、翌年以降の飛躍に繋がります。' },
-  7: { name:'七赤金星', nature:'実りの秋のような愛嬌と社交性の人。人を楽しませる天性の魅力があります。', care:'楽しさに流れて、大切なものを後回しにしないこと。', flow:'2026年は「土台作り」の年。コツコツ積み重ねる地味な時間が、数年後の大輪の花になります。' },
-  8: { name:'八白土星', nature:'山のようにどっしり構え、変化を成し遂げる人。継続と再生の力を持ちます。', care:'頑固さで、チャンスを逃さないこと。', flow:'2026年は「発展・スタート」の年。新しいことを始める絶好の追い風。動き出すなら、今年です。' },
-  9: { name:'九紫火星', nature:'太陽のような華やかさと直感力の人。美意識と先見性に優れています。', care:'感情の火が、燃え上がりすぎないこと。', flow:'2026年は「ご縁が整う」年。信用が育ち、縁が広がる時。人との繋がりを丁寧に扱うほど、巡りが加速します。' }
-};
-const lifePathData = {
-  1: '「切り拓く人」。先頭に立ち、ゼロから道を作る時に最も輝きます。誰かの後ろではなく、自分の旗を立ててください。',
-  2: '「繋ぐ人」。人と人の間に立ち、調和を生む時に最も輝きます。その繊細さは弱さではなく、才能です。',
-  3: '「表現する人」。楽しさ・言葉・創造で人を明るくする時に最も輝きます。遊び心を封印しないでください。',
-  4: '「築く人」。コツコツと確かなものを積み上げる時に最も輝きます。あなたの誠実さは、何よりの信用です。',
-  5: '「自由に動く人」。変化と冒険の中で最も輝きます。安定の檻に入りすぎると、巡りが止まります。',
-  6: '「愛で支える人」。人を守り、育てる時に最も輝きます。ただし、自分を後回しにしすぎないこと。',
-  7: '「探求する人」。物事の本質を深く掘り下げる時に最も輝きます。一人の時間は、あなたの充電器です。',
-  8: '「実現する人」。目標を形にし、豊かさを生む時に最も輝きます。力を独り占めせず、循環させてください。',
-  9: '「与える人」。誰かのため、世界のために動く時に最も輝きます。理想を語ることを、恐れないでください。',
-  11: '「感じ取る人」（マスターナンバー）。直感とインスピレーションで人を導く時に最も輝きます。感受性の強さは、選ばれた才能です。',
-  22: '「大きく築く人」（マスターナンバー）。理想を現実の形にする大器です。スケールの大きな夢を、恐れずに。',
-  33: '「無条件に愛する人」（マスターナンバー）。存在そのものが人を癒します。まず、自分を満たすことから。'
-};
-const zodiacData = {
-  '牡羊座': '火の星座。始める勇気があなたの武器。直感で動き出した時、巡りが加速します。',
-  '牡牛座': '地の星座。五感と継続力があなたの武器。心地よさを大切にするほど、巡りが安定します。',
-  '双子座': '風の星座。好奇心と言葉があなたの武器。軽やかに動きながら、一つの軸を持つと最強です。',
-  '蟹座': '水の星座。共感と守る力があなたの武器。心を許せる居場所が、あなたの巡りの源です。',
-  '獅子座': '火の星座。存在感と創造力があなたの武器。堂々と輝くことを自分に許した時、巡りが動きます。',
-  '乙女座': '地の星座。分析力と丁寧さがあなたの武器。完璧より「調える」を意識すると、巡りが軽くなります。',
-  '天秤座': '風の星座。バランス感覚と美意識があなたの武器。他人軸ではなく、自分の美学で選ぶこと。',
-  'さそり座': '水の星座。深い集中と絆の力があなたの武器。握りしめず、信じて手放した時に巡りが起きます。',
-  '射手座': '火の星座。冒険心と楽観性があなたの武器。遠くを目指しながら、足元のご縁も大切に。',
-  '山羊座': '地の星座。責任感と達成力があなたの武器。頑張りすぎず、受け取ることも仕事のうちです。',
-  '水瓶座': '風の星座。独創性と俯瞰力があなたの武器。孤高になりすぎず、仲間と繋がると巡りが広がります。',
-  '魚座': '水の星座。想像力と優しさがあなたの武器。境界線を引くことを覚えると、優しさが枯れません。'
-};
-
-// 診断前に本名・生まれた時間/場所の入力があれば、結果画面に自動で参考情報として表示する
-function renderExtraAnalysis() {
-  const hasBirthday = !!(userY && userM && userD);
-  const hasName = !!(userSei && userMei);
-  if (!hasBirthday && !hasName) {
-    document.getElementById('extraAnalysisWrap').classList.add('hidden');
-    return;
-  }
-  document.getElementById('extraAnalysisWrap').classList.remove('hidden');
-
-  let html = '';
-  if (hasBirthday) {
-    const lp = getLifePath(userY, userM, userD);
-    const ks = getKyusei(userY, userM, userD);
-    const kd = kyuseiData[ks];
-    const zName = userZodiac.split(' ')[0];
-    const zText = zodiacData[zName] || '';
-    html += `<div class="result-section"><h3>《あなたの経営判断に影響しやすい傾向（参考）》</h3>
-      <p><strong>◆ 星座：${userZodiac}</strong><br>${zText}</p>
-      <p><strong>◆ 数秘ライフパスナンバー：${lp}</strong><br>${lifePathData[lp]}</p>
-      <p><strong>◆ 九星気学：${kd.name}</strong><br>${kd.nature}<br>気を付けたいこと——${kd.care}<br>${kd.flow}</p>
-      ${userTime || userPlace ? `<p style="font-size:12px;color:#5b7c93;">生まれた時刻・場所を活かした、さらに詳しい鑑定は講座の中でお届けしています。</p>` : ''}
-      <p style="font-size:12px;color:#5b7c93;">※ あくまで参考情報です。診断結果の判定には使用していません。</p>
-    </div>`;
-  }
-  document.getElementById('extraResult').innerHTML = html;
-
-  if (hasName) {
-    fetch('/api/seimei', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sei: userSei, mei: userMei })
-    }).then(r => r.json()).then(d => {
-      if (!d.ok) return;
-      const s = d.result;
-      let sh = `<div class="result-section"><h3>《お名前が示す傾向》</h3><p>${(s.intro || '').replace(/\n/g, '<br>')}</p>`;
-      sh += `<p><strong>◆ 人格：${s.gokaku.jinkaku}画「${s.jinkaku.name}」</strong><br>${s.jinkaku.description}</p>`;
-      sh += `<p><strong>◆ 総格：${s.gokaku.soukaku}画「${s.soukaku.name}」</strong><br>${s.soukaku.description}</p>`;
-      sh += `<p><strong>◆ 三才配置：${s.sansai.combo}</strong><br>${s.sansai.meaning}</p>`;
-      if (d.approx) sh += `<p style="font-size:12px;color:#5b7c93;">※ お名前の一部の文字は概算の画数で計算しています。</p>`;
-      sh += `<p style="font-size:12px;color:#5b7c93;">※ あくまで参考情報です。診断結果の判定には使用していません。</p></div>`;
-      document.getElementById('extraResult').innerHTML += sh;
-    }).catch(() => {});
-  }
-}
-
-// ===================================================================
-// PDF・シェア画像
+// PDF
 // ===================================================================
 function downloadPDF() {
   const element = document.getElementById('resultContent');
   window.scrollTo(0, 0);
   const opt = {
     margin: 10,
-    filename: `業績アップ診断_${new Date().toISOString().slice(0,10)}.pdf`,
+    filename: `REBOOT診断_${new Date().toISOString().slice(0,10)}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, backgroundColor: '#f7fbfd' },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, backgroundColor: '#f5f8fb' },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     pagebreak: { mode: ['css', 'legacy'], avoid: ['.result-section', '.score-section', '.bottleneck-card', '.cta-section'] }
   };
@@ -1007,15 +610,6 @@ function restartDiagnosis() {
   document.getElementById('resultScreenWrap').classList.add('hidden');
   document.getElementById('infoScreen').classList.remove('hidden');
   document.getElementById('userName').value = '';
-  document.querySelectorAll('input[name="gender"]').forEach(r => r.checked = false);
-  document.getElementById('birthYear').value = '';
-  document.getElementById('birthMonth').value = '';
-  document.getElementById('birthDay').value = '';
-  document.getElementById('userSei').value = '';
-  document.getElementById('userMei').value = '';
-  document.getElementById('birthHour').value = '';
-  document.getElementById('birthMinute').value = '';
-  document.getElementById('birthPlace').value = '';
   window.scrollTo(0, 0);
 }
 </script>
