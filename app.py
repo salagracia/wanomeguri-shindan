@@ -64,6 +64,7 @@ def health():
 
 
 APP_NAME = "REBOOT現在地診断"
+PAYMENT_URL = os.environ.get("CONSULT_PAYMENT_URL", "https://square.link/u/B7I7bZ8r")  # 個別相談3,300円（Square）
 
 
 def _scores_text(scores):
@@ -138,7 +139,7 @@ def consult():
             "subject": f"【個別相談 申込】{name or '名前未入力'}さん / {primary}",
             "text": (
                 "REBOOT現在地診断から、個別相談（3,300円）の申込がありました。\n"
-                "24時間以内に、日程とお支払い方法をご案内してください。\n\n"
+                "本人にはSquareのお支払いリンクを案内済みです。入金を確認したら、24時間以内に日程をご連絡ください。\n\n"
                 f"日時　　　　: {now}\n"
                 f"お名前　　　: {name or '未入力'}\n"
                 f"メール　　　: {email}\n"
@@ -161,8 +162,10 @@ def consult():
             "subject": "【REBOOT】個別相談のお申込を受け付けました",
             "text": (
                 f"{name or 'あなた'}さん\n\n"
-                "REBOOT現在地診断から、個別相談のお申込をいただきありがとうございます。\n"
-                "24時間以内に、このメールアドレスまたはLINEへ、日程と3,300円のお支払い方法をご案内します。\n\n"
+                "REBOOT現在地診断から、個別相談のお申込をいただきありがとうございます。\n\n"
+                "まだお支払いがお済みでない場合は、下のリンクからお願いします（3,300円）。\n"
+                f"{PAYMENT_URL}\n\n"
+                "お支払いの確認後、24時間以内に、このメールアドレスまたはLINEへ日程をご連絡します。\n\n"
                 "【お申込内容】\n"
                 f"一番のブレーキ: {primary}\n"
                 f"ご希望の日時　: {preferred or '未入力'}\n"

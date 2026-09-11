@@ -152,6 +152,8 @@
   .consult-done { margin: 20px auto 0; max-width: 420px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 12px; padding: 18px; }
   .consult-done-title { font-size: 16px; font-weight: 700; color: #f5f8fb; margin-bottom: 10px; }
   .consult-done p { font-size: 13px; color: #f5f8fb; }
+  .consult-done .pay-btn { display: block; margin: 14px auto; max-width: 320px; background: #e0553a; }
+  .consult-done .consult-small { font-size: 11px; opacity: 0.8; }
   .cta-section .cta-tagline { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; opacity: 0.9; margin-top: 6px; color: #f5f8fb; }
 
   .action-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
@@ -325,14 +327,16 @@
             <label for="consultNote">いま一番困っていること<span class="opt">任意</span></label>
             <textarea id="consultNote" class="consult-input" rows="3" placeholder="一言で大丈夫です"></textarea>
           </div>
-          <p class="consult-note">送信後、24時間以内にメールまたはLINEで、日程と3,300円のお支払い方法をご案内します。</p>
+          <p class="consult-note">送信後、お支払いページ（3,300円）へご案内します。お支払い確認後、24時間以内に日程をご連絡します。</p>
           <button type="button" class="line-btn" id="consultSubmitBtn" onclick="submitConsult()">この内容で申し込む</button>
           <div id="consultError" class="consult-error hidden"></div>
         </div>
 
         <div id="consultDone" class="consult-done hidden">
           <div class="consult-done-title">申込を受け付けました</div>
-          <p>24時間以内に、ご入力のメールアドレスまたはLINEへ、日程と3,300円のお支払い方法をご案内します。<br>届かない場合は迷惑メールフォルダをご確認ください。</p>
+          <p>続けて、下のボタンからお支払いをお願いします（3,300円）。<br>お支払いの確認後、24時間以内にメールまたはLINEで日程をご連絡します。</p>
+          <a class="line-btn pay-btn" href="https://square.link/u/B7I7bZ8r" target="_blank" rel="noopener">お支払いに進む（3,300円）</a>
+          <p class="consult-small">受付メールにも同じお支払いリンクを入れています。届かない場合は迷惑メールフォルダをご確認ください。</p>
           <p>ここまで来たあなたは、もう「いつか」の人ではありません。</p>
         </div>
 
