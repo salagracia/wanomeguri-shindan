@@ -137,6 +137,21 @@
   .cta-section .cta-list li { font-size: 13px; line-height: 1.8; color: #f5f8fb; padding-left: 1.2em; position: relative; margin-bottom: 4px; }
   .cta-section .cta-list li::before { content: "✓"; position: absolute; left: 0; color: #9fd6ff; font-weight: 700; }
   .cta-section .cta-proof { margin-top: 20px; font-size: 12px; opacity: 0.85; margin-bottom: 14px; }
+  .cta-section .line-btn { border: none; cursor: pointer; font-family: inherit; }
+  .cta-section .line-btn:disabled { opacity: 0.6; cursor: default; }
+  .consult-form { margin: 20px auto 0; max-width: 420px; text-align: left; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18); border-radius: 12px; padding: 18px; }
+  .consult-form-title { font-size: 14px; font-weight: 700; color: #f5f8fb; text-align: center; margin-bottom: 14px; letter-spacing: 0.05em; }
+  .consult-field { margin-bottom: 12px; }
+  .consult-field label { display: block; font-size: 12px; color: #f5f8fb; margin-bottom: 5px; font-weight: 600; }
+  .consult-field .req { font-size: 10px; margin-left: 6px; padding: 1px 6px; border-radius: 6px; background: #e0553a; color: #fff; font-weight: 700; }
+  .consult-field .opt { font-size: 10px; margin-left: 6px; padding: 1px 6px; border-radius: 6px; background: rgba(255,255,255,0.2); color: #f5f8fb; }
+  .consult-input { width: 100%; padding: 12px 14px; border: 1px solid rgba(255,255,255,0.3); border-radius: 10px; background: #f5f8fb; color: #1c2733; font-family: inherit; font-size: 15px; }
+  .consult-note { font-size: 12px; opacity: 0.85; text-align: center; margin: 8px 0 12px; }
+  .consult-form .line-btn { display: block; width: 100%; text-align: center; }
+  .consult-error { margin-top: 10px; font-size: 12px; color: #ffd2c8; text-align: center; line-height: 1.7; }
+  .consult-done { margin: 20px auto 0; max-width: 420px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 12px; padding: 18px; }
+  .consult-done-title { font-size: 16px; font-weight: 700; color: #f5f8fb; margin-bottom: 10px; }
+  .consult-done p { font-size: 13px; color: #f5f8fb; }
   .cta-section .cta-tagline { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; opacity: 0.9; margin-top: 6px; color: #f5f8fb; }
 
   .action-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
@@ -290,7 +305,37 @@
           </ul>
         </div>
         <p>無料相談にしていないのは、「いつか」で終わらせないためです。<br>3,300円は、あなたが本気で動くと決めた印です。</p>
-        <a class="line-btn" href="https://lin.ee/7U4u2mD" target="_blank" rel="noopener">LINEで「個別相談」と送る</a>
+        <button type="button" class="line-btn" id="consultOpenBtn" onclick="openConsultForm()">個別相談を申し込む（3,300円）</button>
+
+        <div id="consultForm" class="consult-form hidden">
+          <div class="consult-form-title">個別相談 申込フォーム</div>
+          <div class="consult-field">
+            <label for="consultEmail">メールアドレス<span class="req">必須</span></label>
+            <input type="email" id="consultEmail" class="consult-input" placeholder="example@gmail.com" autocomplete="email">
+          </div>
+          <div class="consult-field">
+            <label for="consultLineName">LINEの表示名<span class="opt">任意</span></label>
+            <input type="text" id="consultLineName" class="consult-input" placeholder="LINEでのお名前（ご連絡に使います）">
+          </div>
+          <div class="consult-field">
+            <label for="consultPreferred">ご希望の日時<span class="opt">任意</span></label>
+            <input type="text" id="consultPreferred" class="consult-input" placeholder="例：平日夜／土日午前など">
+          </div>
+          <div class="consult-field">
+            <label for="consultNote">いま一番困っていること<span class="opt">任意</span></label>
+            <textarea id="consultNote" class="consult-input" rows="3" placeholder="一言で大丈夫です"></textarea>
+          </div>
+          <p class="consult-note">送信後、24時間以内にメールまたはLINEで、日程と3,300円のお支払い方法をご案内します。</p>
+          <button type="button" class="line-btn" id="consultSubmitBtn" onclick="submitConsult()">この内容で申し込む</button>
+          <div id="consultError" class="consult-error hidden"></div>
+        </div>
+
+        <div id="consultDone" class="consult-done hidden">
+          <div class="consult-done-title">申込を受け付けました</div>
+          <p>24時間以内に、ご入力のメールアドレスまたはLINEへ、日程と3,300円のお支払い方法をご案内します。<br>届かない場合は迷惑メールフォルダをご確認ください。</p>
+          <p>ここまで来たあなたは、もう「いつか」の人ではありません。</p>
+        </div>
+
         <p class="cta-proof">私は、YouTubeで結果を出させる人です。<br>年商70万円の方が3,400万円に。半年の伴走で月商500万円を超えた方もいます。<br>次は、<span id="ctaName"></span>の番です。</p>
         <div class="cta-tagline">REBOOT。何度でも挑戦する。</div>
       </div>
@@ -528,7 +573,24 @@ function finishQuiz() {
     renderResult(diagnosisResult);
     clearSaved();
     window.scrollTo(0, 0);
+    notifyCompletion(diagnosisResult);
   }, 1400);
+}
+
+// 診断完了をサラさんへ通知（リード記録）。失敗しても画面には影響させない
+function notifyCompletion(r) {
+  try {
+    fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: userInfo.name || '',
+        primary: CATEGORY_LABEL[r.primaryBottleneck] || '',
+        secondary: CATEGORY_LABEL[r.secondaryBottleneck] || '',
+        scores: Object.fromEntries(Object.keys(r.scores).map(k => [CATEGORY_LABEL[k], r.scores[k]]))
+      })
+    }).catch(() => {});
+  } catch (e) {}
 }
 
 // ===================================================================
@@ -636,6 +698,59 @@ function downloadPDF() {
     pagebreak: { mode: ['css', 'legacy'], avoid: ['.result-section', '.score-section', '.bottleneck-card', '.cta-section'] }
   };
   setTimeout(() => { html2pdf().set(opt).from(element).save(); }, 200);
+}
+
+// ===================================================================
+// 個別相談 申込（結果ページCTA → /api/consult → サラさんへ通知＋本人へ受付メール）
+// ===================================================================
+function openConsultForm() {
+  document.getElementById('consultOpenBtn').classList.add('hidden');
+  document.getElementById('consultForm').classList.remove('hidden');
+  setTimeout(() => { try { document.getElementById('consultEmail').focus(); } catch (e) {} }, 50);
+}
+
+function submitConsult() {
+  const email = (document.getElementById('consultEmail').value || '').trim();
+  const errBox = document.getElementById('consultError');
+  errBox.classList.add('hidden');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errBox.textContent = 'メールアドレスを正しく入力してください。';
+    errBox.classList.remove('hidden');
+    return;
+  }
+  const btn = document.getElementById('consultSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = '送信中…';
+
+  const r = diagnosisResult || {};
+  const payload = {
+    name: userInfo.name || '',
+    email,
+    line_name: (document.getElementById('consultLineName').value || '').trim(),
+    preferred: (document.getElementById('consultPreferred').value || '').trim(),
+    note: (document.getElementById('consultNote').value || '').trim(),
+    primary: r.primaryBottleneck ? CATEGORY_LABEL[r.primaryBottleneck] : '',
+    secondary: r.secondaryBottleneck ? CATEGORY_LABEL[r.secondaryBottleneck] : '',
+    scores: r.scores ? Object.fromEntries(Object.keys(r.scores).map(k => [CATEGORY_LABEL[k], r.scores[k]])) : {}
+  };
+
+  fetch('/api/consult', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+    .then(res => res.json())
+    .then(j => {
+      if (!j || !j.ok) throw new Error('send failed');
+      document.getElementById('consultForm').classList.add('hidden');
+      document.getElementById('consultDone').classList.remove('hidden');
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.textContent = 'この内容で申し込む';
+      errBox.innerHTML = '送信に失敗しました。お手数ですが、REBOOTのLINEに「個別相談」とメッセージを送ってください。';
+      errBox.classList.remove('hidden');
+    });
 }
 
 function restartDiagnosis() {

@@ -63,14 +63,18 @@ def health():
     return "ok"
 
 
+APP_NAME = "REBOOT現在地診断"
+
+
+def _scores_text(scores):
+    return "\n".join(f"  {k}: {v}点" for k, v in (scores or {}).items()) or "  （未取得）"
+
+
 @app.route("/api/submit", methods=["POST"])
 def submit():
-    """30問回答完了時に呼ばれる。管理者通知（リード記録）のみ。メール未収集でも通知する。"""
+    """18問回答完了時に呼ばれる。管理者通知（リード記録）のみ。"""
     data = request.get_json(force=True, silent=True) or {}
-    email = (data.get("email") or "").strip()
     name = (data.get("name") or "").strip()
-    gender = GENDER_LABELS.get(data.get("gender"), "回答なし")
-    birthday = (data.get("birthday") or "").strip()
     primary = (data.get("primary") or "").strip()
     secondary = (data.get("secondary") or "").strip()
     scores = data.get("scores") or {}
@@ -80,28 +84,98 @@ def submit():
         admin_from = os.environ.get("ADMIN_FROM_EMAIL", from_email)
         admin_email = os.environ.get("ADMIN_EMAIL", "monthly@salagracia.com")
         now = datetime.now(JST).strftime("%Y-%m-%d %H:%M")
-        scores_text = "\n".join(f"  {k}: {v}点" for k, v in scores.items()) if scores else "  （未取得）"
         try:
             resend.Emails.send({
-                "from": f"業績アップ診断 <{admin_from}>",
+                "from": f"{APP_NAME} <{admin_from}>",
                 "to": [admin_email],
-                "subject": f"【業績アップ診断】新しい診断完了: {name or '名前未入力'} / 第一ボトルネック:{primary}",
+                "subject": f"【{APP_NAME}】診断完了: {name or '名前未入力'} / {primary}",
                 "text": (
-                    "業績アップ診断で新しい診断が完了しました。\n\n"
+                    f"{APP_NAME}で新しい診断が完了しました。\n\n"
                     f"日時　　　　: {now}\n"
                     f"お名前　　　: {name or '未入力'}\n"
-                    f"メール　　　: {email or '未収集'}\n"
-                    f"性別　　　　: {gender}\n"
-                    f"生年月日　　: {birthday or '未入力'}\n"
-                    f"第一ボトルネック: {primary}\n"
-                    f"第二ボトルネック: {secondary}\n"
-                    f"6領域スコア:\n{scores_text}\n"
+                    f"一番のブレーキ: {primary}\n"
+                    f"次に向き合うもの: {secondary}\n"
+                    f"4タイプスコア:\n{_scores_text(scores)}\n"
                 ),
             })
         except Exception:
             pass
 
     return jsonify({"ok": True})
+
+
+@app.route("/api/consult", methods=["POST"])
+def consult():
+    """結果ページの「個別相談を申し込む」から呼ばれる。
+    ① サラさんへ申込通知（診断結果つき） ② 申込者へ受付メール（自動返信）。"""
+    data = request.get_json(force=True, silent=True) or {}
+    name = (data.get("name") or "").strip()
+    email = (data.get("email") or "").strip()
+    line_name = (data.get("line_name") or "").strip()
+    preferred = (data.get("preferred") or "").strip()
+    note = (data.get("note") or "").strip()
+    primary = (data.get("primary") or "").strip()
+    secondary = (data.get("secondary") or "").strip()
+    scores = data.get("scores") or {}
+
+    if not email or "@" not in email:
+        return jsonify({"ok": False, "error": "email required"}), 400
+    if not _resend_ready():
+        return jsonify({"ok": False, "error": "mail not configured"}), 500
+
+    from_email = os.environ.get("FROM_EMAIL", "onboarding@resend.dev")
+    from_name = os.environ.get("FROM_NAME", APP_NAME)
+    admin_from = os.environ.get("ADMIN_FROM_EMAIL", from_email)
+    admin_email = os.environ.get("ADMIN_EMAIL", "monthly@salagracia.com")
+    now = datetime.now(JST).strftime("%Y-%m-%d %H:%M")
+
+    admin_ok = False
+    try:
+        resend.Emails.send({
+            "from": f"{APP_NAME} <{admin_from}>",
+            "to": [admin_email],
+            "reply_to": email,
+            "subject": f"【個別相談 申込】{name or '名前未入力'}さん / {primary}",
+            "text": (
+                "REBOOT現在地診断から、個別相談（3,300円）の申込がありました。\n"
+                "24時間以内に、日程とお支払い方法をご案内してください。\n\n"
+                f"日時　　　　: {now}\n"
+                f"お名前　　　: {name or '未入力'}\n"
+                f"メール　　　: {email}\n"
+                f"LINE表示名　: {line_name or '未入力'}\n"
+                f"希望日時　　: {preferred or '未入力'}\n"
+                f"困っていること: {note or '未入力'}\n\n"
+                f"一番のブレーキ: {primary}\n"
+                f"次に向き合うもの: {secondary}\n"
+                f"4タイプスコア:\n{_scores_text(scores)}\n"
+            ),
+        })
+        admin_ok = True
+    except Exception:
+        admin_ok = False
+
+    try:
+        resend.Emails.send({
+            "from": f"{from_name} <{from_email}>",
+            "to": [email],
+            "subject": "【REBOOT】個別相談のお申込を受け付けました",
+            "text": (
+                f"{name or 'あなた'}さん\n\n"
+                "REBOOT現在地診断から、個別相談のお申込をいただきありがとうございます。\n"
+                "24時間以内に、このメールアドレスまたはLINEへ、日程と3,300円のお支払い方法をご案内します。\n\n"
+                "【お申込内容】\n"
+                f"一番のブレーキ: {primary}\n"
+                f"ご希望の日時　: {preferred or '未入力'}\n"
+                f"困っていること: {note or '未入力'}\n\n"
+                "ここまで来たあなたは、もう「いつか」の人ではありません。\n"
+                "当日、お話しできるのを楽しみにしています。\n\n"
+                "REBOOT　山岡サラ\n"
+            ),
+        })
+    except Exception:
+        pass
+
+    return jsonify({"ok": admin_ok})
 
 
 @app.route("/api/seimei", methods=["POST"])
