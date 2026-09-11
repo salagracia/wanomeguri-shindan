@@ -60,7 +60,8 @@ def index():
 
 @app.route("/health")
 def health():
-    return "ok"
+    # Render が自動で入れる RENDER_GIT_COMMIT を返し、デプロイ済みコミットを外から確認できるようにする
+    return f"ok {os.environ.get('RENDER_GIT_COMMIT', 'local')[:7]}"
 
 
 APP_NAME = "REBOOT現在地診断"
