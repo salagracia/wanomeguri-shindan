@@ -11,7 +11,7 @@
 環境変数（Render に設定済みのものを再利用）:
   RESEND_API_KEY     Resend の APIキー
   FROM_EMAIL         送信元（独自ドメイン認証前は onboarding@resend.dev）
-  FROM_NAME          送信者名（未設定なら「わの巡り診断」）
+  FROM_NAME          （旧・未使用）Renderに旧チャンネル名が残っているため参照しない。送信者名は REBOOT_FROM_NAME（既定「REBOOT 山岡サラ」）
   ADMIN_EMAIL        管理者メール（デフォルト: monthly@salagracia.com）
   ADMIN_FROM_EMAIL   管理者通知の送信元（未設定なら FROM_EMAIL）
 
@@ -64,6 +64,8 @@ def health():
 
 
 APP_NAME = "REBOOT現在地診断"
+# 送信者名。Render の FROM_NAME は旧チャンネル名（信頼される男の流儀）のまま残っているため参照しない。
+SENDER_NAME = os.environ.get("REBOOT_FROM_NAME", "REBOOT 山岡サラ")
 PAYMENT_URL = os.environ.get("CONSULT_PAYMENT_URL", "https://square.link/u/B7I7bZ8r")  # 個別相談3,300円（Square）
 
 
@@ -125,7 +127,7 @@ def consult():
         return jsonify({"ok": False, "error": "mail not configured"}), 500
 
     from_email = os.environ.get("FROM_EMAIL", "onboarding@resend.dev")
-    from_name = os.environ.get("FROM_NAME", APP_NAME)
+    from_name = SENDER_NAME
     admin_from = os.environ.get("ADMIN_FROM_EMAIL", from_email)
     admin_email = os.environ.get("ADMIN_EMAIL", "monthly@salagracia.com")
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M")
@@ -213,22 +215,22 @@ def send_pdf():
         return jsonify({"ok": False})
 
     from_email = os.environ.get("FROM_EMAIL", "onboarding@resend.dev")
-    from_name = os.environ.get("FROM_NAME", "業績アップ診断")
+    from_name = SENDER_NAME
     today = datetime.now(JST).strftime("%Y-%m-%d")
     admin_email = os.environ.get("ADMIN_EMAIL", "monthly@salagracia.com")
 
     params = {
         "from": f"{from_name} <{from_email}>",
         "to": [email] if email else [admin_email],
-        "subject": f"【業績アップ診断】新しい診断結果PDF: {name or '名前未入力'} / 第一ボトルネック:{type_name}",
+        "subject": f"【{APP_NAME}】診断結果PDF: {name or '名前未入力'} / {type_name}",
         "text": (
-            f"業績アップ診断が完了しました。\n\n"
-            f"お名前　　　　: {name or '未入力'}\n"
-            f"第一ボトルネック: {type_name}\n\n"
+            f"{APP_NAME}が完了しました。\n\n"
+            f"お名前　　　: {name or '未入力'}\n"
+            f"一番のブレーキ: {type_name}\n\n"
             "詳しい結果はPDFを添付しています。\n"
         ),
         "attachments": [{
-            "filename": f"業績アップ診断_{today}.pdf",
+            "filename": f"REBOOT現在地診断_{today}.pdf",
             "content": pdf_b64,
         }],
     }
