@@ -127,9 +127,17 @@
   .cta-section h3 { font-size: 16px; margin-bottom: 14px; letter-spacing: 0.05em; color: #f5f8fb; }
   .cta-section p { font-size: 13px; line-height: 1.9; opacity: 0.95; margin-bottom: 16px; color: #f5f8fb; }
   .cta-section .line-btn {
-    display: inline-block; margin-top: 4px; padding: 14px 32px; background: #06c755; color: #ffffff;
-    border-radius: 30px; font-size: 15px; font-weight: 700; text-decoration: none;
+    display: inline-block; margin-top: 4px; padding: 16px 36px; background: #06c755; color: #ffffff;
+    border-radius: 30px; font-size: 16px; font-weight: 700; text-decoration: none;
   }
+  .cta-section .cta-eyebrow { font-size: 12px; letter-spacing: 0.15em; opacity: 0.8; margin-bottom: 10px; color: #f5f8fb; }
+  .cta-section .cta-box { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 10px; padding: 16px 18px; margin: 0 0 18px; text-align: left; }
+  .cta-section .cta-box-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: #f5f8fb; letter-spacing: 0.05em; }
+  .cta-section .cta-list { list-style: none; padding: 0; margin: 0; }
+  .cta-section .cta-list li { font-size: 13px; line-height: 1.8; color: #f5f8fb; padding-left: 1.2em; position: relative; margin-bottom: 4px; }
+  .cta-section .cta-list li::before { content: "✓"; position: absolute; left: 0; color: #9fd6ff; font-weight: 700; }
+  .cta-section .cta-proof { margin-top: 20px; font-size: 12px; opacity: 0.85; margin-bottom: 14px; }
+  .cta-section .cta-tagline { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; opacity: 0.9; margin-top: 6px; color: #f5f8fb; }
 
   .action-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
   .action-buttons .btn { width: auto; flex: 1; min-width: 140px; margin-top: 0; }
@@ -270,7 +278,21 @@
       </div>
 
       <div class="cta-section">
-        <h3>REBOOT。何度でも挑戦する。</h3>
+        <div class="cta-eyebrow">次の一手を、ここで決める</div>
+        <h3>「あなたの場合、何を変えるのか」を<br>一緒に決めませんか</h3>
+        <p>診断で分かるのは、現在地までです。<br>次の一手は、あなたの資格・経験・今の状況を聞いた上でしか決められません。</p>
+        <div class="cta-box">
+          <div class="cta-box-title">個別相談（3,300円）で決めること</div>
+          <ul class="cta-list">
+            <li id="ctaFocus"></li>
+            <li>今持っている資格・経験の中で、収入につながる一本の線</li>
+            <li>発信を始めるなら、最初の90日で何をするか</li>
+          </ul>
+        </div>
+        <p>無料相談にしていないのは、「いつか」で終わらせないためです。<br>3,300円は、あなたが本気で動くと決めた印です。</p>
+        <a class="line-btn" href="https://lin.ee/7U4u2mD" target="_blank" rel="noopener">LINEで「個別相談」と送る</a>
+        <p class="cta-proof">私は、YouTubeで結果を出させる人です。<br>年商70万円の方が3,400万円に。半年の伴走で月商500万円を超えた方もいます。<br>次は、<span id="ctaName"></span>の番です。</p>
+        <div class="cta-tagline">REBOOT。何度でも挑戦する。</div>
       </div>
 
       <div class="action-buttons" style="margin-top:24px;">
@@ -361,6 +383,14 @@ const RESULT_TEMPLATES = {
     goal30: "信頼できる相手を見極めて、実際に相談できている状態。",
     bridge: "「なるほど、私は相談相手を選べていないんだ」と分かっただけでは、現実はまだ変わりません。<br><br>本当に難しいのは、慎重さと、いつまでも動かない言い訳を見分けることだからです。<br><br>この2つは、見た目がよく似ています。<br><br>逆に、早く決めようとしすぎて、本当に見極めるべき相手を見誤ってしまう場合もあります。"
   }
+};
+
+// 個別相談CTA：タイプ別「相談で決めること」の1行目
+const CTA_FOCUS = {
+  delay: "「一段落したら」を待たずに始めるための、最初の一歩と期限",
+  unclear: "あなたの資格と経験を、人に伝わる一言にまとめる言葉",
+  resist: "罪悪感なく受け取れる、あなたの価値に見合った価格の決め方",
+  isolated: "誰の意見を聞き、誰の意見を聞かないか。あなたが信じる基準"
 };
 
 const ONE_LINER = {
@@ -587,6 +617,8 @@ function renderResult(result) {
   document.getElementById('resultGoal').textContent = t.goal30;
   document.getElementById('resultBridge').innerHTML = t.bridge;
 
+  document.getElementById('ctaFocus').textContent = CTA_FOCUS[p];
+  document.getElementById('ctaName').textContent = userInfo.name ? `${userInfo.name}さん` : 'あなた';
 }
 
 // ===================================================================
