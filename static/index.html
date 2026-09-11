@@ -320,21 +320,17 @@
             <input type="text" id="consultLineName" class="consult-input" placeholder="LINEでのお名前（ご連絡に使います）">
           </div>
           <div class="consult-field">
-            <label for="consultPreferred">ご希望の日時<span class="opt">任意</span></label>
-            <input type="text" id="consultPreferred" class="consult-input" placeholder="例：平日夜／土日午前など">
-          </div>
-          <div class="consult-field">
             <label for="consultNote">いま一番困っていること<span class="opt">任意</span></label>
             <textarea id="consultNote" class="consult-input" rows="3" placeholder="一言で大丈夫です"></textarea>
           </div>
-          <p class="consult-note">送信後、お支払いページ（3,300円）へご案内します。お支払い確認後、24時間以内に日程をご連絡します。</p>
+          <p class="consult-note">送信後、お支払いページ（3,300円）へご案内します。お支払いが完了すると、そのまま相談の日時を選べます。</p>
           <button type="button" class="line-btn" id="consultSubmitBtn" onclick="submitConsult()">この内容で申し込む</button>
           <div id="consultError" class="consult-error hidden"></div>
         </div>
 
         <div id="consultDone" class="consult-done hidden">
           <div class="consult-done-title">申込を受け付けました</div>
-          <p>続けて、下のボタンからお支払いをお願いします（3,300円）。<br>お支払いの確認後、24時間以内にメールまたはLINEで日程をご連絡します。</p>
+          <p>続けて、下のボタンからお支払いをお願いします（3,300円）。<br>お支払いが完了すると、そのまま画面で相談の日時を選べます。</p>
           <a class="line-btn pay-btn" href="https://square.link/u/B7I7bZ8r" target="_blank" rel="noopener">お支払いに進む（3,300円）</a>
           <p class="consult-small">受付メールにも同じお支払いリンクを入れています。届かない場合は迷惑メールフォルダをご確認ください。</p>
           <p>ここまで来たあなたは、もう「いつか」の人ではありません。</p>
@@ -731,7 +727,6 @@ function submitConsult() {
     name: userInfo.name || '',
     email,
     line_name: (document.getElementById('consultLineName').value || '').trim(),
-    preferred: (document.getElementById('consultPreferred').value || '').trim(),
     note: (document.getElementById('consultNote').value || '').trim(),
     primary: r.primaryBottleneck ? CATEGORY_LABEL[r.primaryBottleneck] : '',
     secondary: r.secondaryBottleneck ? CATEGORY_LABEL[r.secondaryBottleneck] : '',
